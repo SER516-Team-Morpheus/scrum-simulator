@@ -1,0 +1,18 @@
+.login-page-container {
+  background-color: #333; /* set background color to black */
+  height: 100vh;
+}
+
+.login-form-container {
+  background-color: #fff; /* set background color to white */
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* center login form */
+@media (min-width: 768px) {
+  .login-form-container {
+    width: 50%;
+  }
+}
