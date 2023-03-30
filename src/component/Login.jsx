@@ -2,6 +2,8 @@ import React from "react";
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { Formik, Field, Form } from 'formik';
+import { login } from "../apis";
 
 const Wrapper = styled.div`
 
@@ -40,17 +42,41 @@ width: 100%;
 `;
 
 
-const Login = ()=>{
-    return(
+const Login = () => {
+    return (
         <Wrapper>
-           <div className="login-screen">
-                <h1>Login</h1>
-                <TextField id="outlined-basic" className="textField" required label="Email" variant="outlined" />
-                <TextField id="outlined-basic" className="textField" required label="Password" variant="outlined" type={"password"}/>
-                <Button variant="contained" className="login-btn">Login</Button>
-           </div>
+            <div className="login-screen">
+                <Formik
+                    initialValues={{
+                        email: '',
+                        password: '',
+                        
+                    }}
+                    onSubmit={async (values) => {
+                        await new Promise((r) => setTimeout(r, 500));
+                        console.log(values.email)
+                        login(values.email,values.password)
+                        .then(res=>{
+                            console.log(res)
+                        })
+                    }}
+                >
+                    {
+                        props => (
+
+                      
+                    <Form>
+                    <h1>Login</h1>
+                    <TextField id="outlined-basic" onChange={props.handleChange} name="email" className="textField" required label="Email" variant="outlined" />
+                    <TextField id="outlined-basic" onChange={props.handleChange} name="password" className="textField" required label="Password" variant="outlined" type={"password"} />
+                    <Button variant="contained" className="login-btn" type="submit">Login</Button>
+                    </Form>
+                      )
+                    }
+                </Formik>
+            </div>
         </Wrapper>
-        
+
     )
 }
 
