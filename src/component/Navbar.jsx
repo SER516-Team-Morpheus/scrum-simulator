@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Link from '@mui/material/Link';
+import { navItems } from './navItems';
 
 
 const Navbar = () => {
@@ -69,10 +70,11 @@ a {
             <hr />
             <div className='navbar-list'>
                 <ul>
-                    <Link href="/projects"><li>Projects</li></Link>
-                    <Link href="/backlog"><li>Backlog</li></Link>
-                    <Link href="/sprints"><li>Sprints</li></Link>
-                    <Link href="/teamMembers"><li>Team members</li></Link>
+                    {
+                        navItems.map(item=>
+                            item.isVisible ?  <Link href={item.url}><li>{item.name}</li></Link> : ''
+                        )
+                    }
                 </ul>
             </div>
             <div className='bottom-bar'>

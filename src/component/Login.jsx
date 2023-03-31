@@ -1,9 +1,11 @@
-import React from "react";
+import React,{useState} from "react";
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
+import {  useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button';
 import { Formik, Field, Form } from 'formik';
 import { login } from "../apis";
+import Cookies from 'js-cookie';
 
 const Wrapper = styled.div`
 
@@ -33,9 +35,8 @@ width: 100%;
     }
     .login-btn{
         position: absolute;
-        bottom:10%;
+        bottom:5%;
         left:40%;
-        // transform: translate(-50%, -50%)
     }
   }
 
@@ -43,6 +44,8 @@ width: 100%;
 
 
 const Login = () => {
+    const navigate = useNavigate();
+    const [loginError,setLoginError] = useState('');
     return (
         <Wrapper>
             <div className="login-screen">
@@ -52,13 +55,15 @@ const Login = () => {
                         password: '',
                         
                     }}
-                    onSubmit={async (values) => {
-                        await new Promise((r) => setTimeout(r, 500));
-                        console.log(values.email)
+                    onSubmit={(values) => {
                         login(values.email,values.password)
                         .then(res=>{
-                            console.log(res)
+                            Cookies.set('token',res.data.token)
+                            Cookies.set('username',values.email)
+                            Cookies.set('password',values.password)
+                            navigate('/projects')
                         })
+                        .catch(error=>setLoginError('Unable to login. Username or Password is incorrect'))
                     }}
                 >
                     {
@@ -67,13 +72,15 @@ const Login = () => {
                       
                     <Form>
                     <h1>Login</h1>
-                    <TextField id="outlined-basic" onChange={props.handleChange} name="email" className="textField" required label="Email" variant="outlined" />
+                    <TextField id="outlined-basic" onChange={props.handleChange} name="email" className="textField" required label="Username" variant="outlined" />
                     <TextField id="outlined-basic" onChange={props.handleChange} name="password" className="textField" required label="Password" variant="outlined" type={"password"} />
+                    {loginError ? <p style={{color:'red'}}>{loginError}</p>:''}
                     <Button variant="contained" className="login-btn" type="submit">Login</Button>
                     </Form>
                       )
                     }
                 </Formik>
+                
             </div>
         </Wrapper>
 
