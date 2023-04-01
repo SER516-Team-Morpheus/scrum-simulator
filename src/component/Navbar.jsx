@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Link from '@mui/material/Link';
 import { navItems } from './navItems';
-
+import Cookies from 'js-cookie';
 
 const Navbar = () => {
-    const Wrapper = styled.div`
+
+const Wrapper = styled.div`
 
 position:fixed;
 background-color: #8C1D40;
@@ -15,11 +16,12 @@ width:20%;
 .top-nav {
     display:flex;
     flex-direction: column;
-    margin-left: 28%;
     margin-top: 10%;
+    margin-left:30%;
     hr {
         width: 100%;
         color: grey;
+        border: 1px solid grey;
         
     }
     .title {
@@ -34,11 +36,12 @@ width:20%;
     border-radius:50px;
     background-color: white;
     margin-bottom: 20px;
+    
 }
 
 .navbar-list {
     margin-top:40px;
-    margin-left: 10%;
+    margin-left: 20%;
     li {
         list-style-type: none;
         margin-bottom: 30px;
@@ -60,7 +63,15 @@ a {
     text-decoration: none;
 }
 `;
-    const [isSelected, setIsSelected] = useState({});
+    const [isOptionVisible, setIsOptionVisible] = useState(false);
+
+    useEffect(()=>{
+        console.log('nav calling')
+        if(Cookies.get('projectName')){
+            setIsOptionVisible(true);
+        }
+
+    },[])
     return (
         <Wrapper>
             <div className='top-nav'>
@@ -71,7 +82,7 @@ a {
             <div className='navbar-list'>
                 <ul>
                     {
-                        navItems.map(item=>
+                        navItems(isOptionVisible).map(item=>
                             item.isVisible ?  <Link href={item.url}><li>{item.name}</li></Link> : ''
                         )
                     }

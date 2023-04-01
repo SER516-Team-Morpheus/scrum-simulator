@@ -1,5 +1,6 @@
+import Cookies from "js-cookie";
 
-export const navItems = [
+export const navItems =()=> {return([
     {
         name:'Projects',
         url:'/projects',
@@ -9,7 +10,7 @@ export const navItems = [
     {
         name:'Backlog',
         url:'/backlog',
-        isVisible:false,
+        isVisible:Cookies.get('projectName') ? true : false,
         isActive:false
     },
     {
@@ -25,3 +26,4 @@ export const navItems = [
         isActive:false
     }
 ]
+)}

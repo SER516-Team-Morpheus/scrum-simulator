@@ -32,12 +32,8 @@ const App = () => {
           </Grid>
           <Grid item xs={8}>
             <Routes>
-              <Route exact path="/projects" element={
-                <Authentication>
-                    <Project />
-                </Authentication>
-              
-              } />
+              <Route exact path="/projects" element={<Project />} />
+              <Route path="/projects/:id" element={<Login/>}/>
             </Routes>
           </Grid>
         </Grid>

@@ -4,6 +4,9 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import projectImg from '../img/project-img.jpg';
 import CreateProject from './CreateProject';
+import Link from '@mui/material/Link';
+import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 const Wrapper = styled.div`
 
@@ -19,6 +22,7 @@ const Wrapper = styled.div`
 
 .create-btn {
     margin-top:10%;
+    background-color: #8C1D40;
 }
 
 img {
@@ -27,6 +31,13 @@ img {
     opacity:0.1;
     margin: 100px 200px;
     position:absolute;
+}
+
+.project-list {
+    margin-top:30px;
+    a {
+        text-decoration:none;
+    }        
 }
 `;
 
@@ -46,7 +57,13 @@ transform : translate(-40%, -70%)
 
 const Project = () => {
     const [showDialog, setShowDialog] = useState(false);
-    const [projectList, setProjectList] = useState([]);
+    const navigate = useNavigate();
+    const [projectList, setProjectList] = useState([
+        { projectName: 'unique', description: 'this is description' },
+        { projectName: 'unique', description: 'this is description' },
+        { projectName: 'unique', description: 'this is description' },
+        { projectName: 'unique', description: 'this is description' }
+    ]);
 
     const storeProject = (data) => {
         setProjectList([data]);
@@ -55,9 +72,13 @@ const Project = () => {
     const handleDialog = () => {
         setShowDialog(!showDialog);
     }
+    const selectProject = () => {
+        navigate('/projects/unique')
+        Cookies.set('projectName','unique')
+    }
     return (
         <Wrapper>
-            {console.log(projectList,'check p list')}
+            {console.log(projectList, 'check p list')}
             <div className='heading-bar'>
                 <Typography className="heading" variant="h3" gutterBottom>
                     Projects
@@ -69,15 +90,22 @@ const Project = () => {
             <div>
                 {
                     projectList.length > 0 ? (
-                        projectList.map(data => <li>{data.name}</li>)
+                        projectList.map(data => (
+                            <div className="project-list">
+                                <Typography className="heading" variant="h6" gutterBottom><Link onClick={selectProject}>{data.projectName}</Link></Typography>
+                                <Typography className="heading" variant="h9" gutterBottom>{data.description}</Typography>
+                            </div>
+                        ))
                     )
                         :
-                        <Typography style={{ color: '#1976d2' }} className="heading" variant="h6" gutterBottom>
-                            No Project. Please create new one.
-                        </Typography>
-                }
-                <img src={projectImg} alt="project" />
+                        <>
+                            <img src={projectImg} alt="project" />
+                            <Typography style={{ color: '#1976d2' }} className="heading" variant="h6" gutterBottom>
+                                No Project. Please create new one.
+                            </Typography>
+                        </>
 
+                }
                 {showDialog && <CreateProject dialog={handleDialog} storeProject={storeProject} />}
 
             </div>
