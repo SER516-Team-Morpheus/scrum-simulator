@@ -55,7 +55,7 @@ transform : translate(-40%, -70%)
 
 `;
 
-const Project = () => {
+const Project = ({showItem}) => {
     const [showDialog, setShowDialog] = useState(false);
     const navigate = useNavigate();
     const [projectList, setProjectList] = useState([
@@ -73,8 +73,9 @@ const Project = () => {
         setShowDialog(!showDialog);
     }
     const selectProject = () => {
-        navigate('/projects/unique')
         Cookies.set('projectName','unique')
+        navigate('/projects/'+Cookies.get('projectName'))
+        showItem();
     }
     return (
         <Wrapper>
