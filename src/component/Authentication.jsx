@@ -1,6 +1,5 @@
 import React from 'react';
 import Cookies from 'js-cookie';
-import LoginPage from './LoginPage';
 import { redirect } from 'react-router-dom';
 
 const Authentication = ({ children }) => {
