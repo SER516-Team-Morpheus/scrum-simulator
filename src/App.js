@@ -1,7 +1,6 @@
 import React,{useState, useEffect} from "react";
 import { BrowserRouter, Routes, Route, redirect } from "react-router-dom";
 import Login from "./component/Login";
-import LoginPage from "./component/LoginPage";
 import Navbar from "./component/Navbar";
 import Project from "./component/Project";
 import styled from 'styled-components';
