@@ -49,7 +49,7 @@ left: 40%;
 
 `;
 
-const CreateProject = ({dialog, storeProject}) => {
+const CreateProject = ({dialog, storeProject,name}) => {
     return (
         
         <Wrapper>
@@ -73,7 +73,7 @@ const CreateProject = ({dialog, storeProject}) => {
                 {
                     props => (
                         <Form className="project-form">
-                            <Typography className="heading" variant="h4" gutterBottom>Create Project</Typography>
+                            <Typography className="heading" variant="h4" gutterBottom>{name}</Typography>
                             <TextField id="outlined-basic" className="name-field" onChange={props.handleChange} name="name"  required label="Name" variant="outlined" />
                             <TextField id="outlined-basic" className="desc-field" onChange={props.handleChange} name="description"  required label="Description" variant="outlined" />
                             <Button variant="contained"  className="crt-btn" type="submit">Create</Button>
