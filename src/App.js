@@ -6,6 +6,7 @@ import Project from "./component/Project";
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 import Cookies from "js-cookie";
+import Backlog from "./component/Backlog";
 import Authentication from "./component/Authentication";
 import ProjectDashboard from "./component/ProjectDashboard";
 
@@ -47,6 +48,7 @@ const App = () => {
             <Routes>
               <Route exact path="/projects" element={<Project showItem={showItem}/>} />
               <Route path="/projects/:id" element={<Login/>}/>
+              <Route path="/backlog" element={<Backlog/>}/>
             </Routes>
           </Grid>
         </Grid>
