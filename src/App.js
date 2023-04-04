@@ -8,6 +8,7 @@ import Grid from '@mui/material/Grid';
 import Cookies from "js-cookie";
 import Authentication from "./component/Authentication";
 import ProjectDashboard from "./component/ProjectDashboard";
+import SprintTab from "./component/SprintTab";
 
 
 const Wrapper = styled.div`
@@ -47,6 +48,7 @@ const App = () => {
             <Routes>
               <Route exact path="/projects" element={<Project showItem={showItem}/>} />
               <Route path="/projects/:id" element={<Login/>}/>
+              <Route path="/sprints" element={<SprintTab/>}/>
             </Routes>
           </Grid>
         </Grid>
