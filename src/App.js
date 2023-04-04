@@ -14,7 +14,7 @@ import SimulatorGame from "./component/SimulatorGame";
 const Wrapper = styled.div`
 margin:0px;
 padding:0px;
-
+\
 
 `;
 
