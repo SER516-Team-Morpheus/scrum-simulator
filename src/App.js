@@ -49,7 +49,7 @@ const App = () => {
               <Route exact path="/projects" element={<Project showItem={showItem}/>} />
               <Route path="/projects/:id" element={<Login/>}/>
               <Route exact path="/backlog" element={<Backlog showItem={showItem}/>} />
-              <Route exact path="/simulator" element={<SimulatorGame/>} />
+              <Route exact path="/simulation" element={<SimulatorGame/>} />
             </Routes>
           </Grid>
         </Grid>
