@@ -3,6 +3,13 @@ import styled from 'styled-components';
 import InteractiveList from './InteractiveList'
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import CreateUserStory from './CreateUserStory';
+
+import projectImg from '../img/project-img.jpg';
+import CreateProject from './CreateProject';
+import Link from '@mui/material/Link';
+import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 const Wrapper = styled.div`
 
@@ -39,7 +46,15 @@ img {
 
 const Backlog = () => {
     console.log("backlog page called")
+    
     const [showDialog, setShowDialog] = useState(false);
+    const handleDialog = () => {
+        setShowDialog(!showDialog);
+    }
+    const storeProject = (data) => {
+        setShowDialog(false);
+    }
+    
   return (
     <Wrapper>
         <div className='heading-bar'>
@@ -50,7 +65,10 @@ const Backlog = () => {
                     <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Create User Story</Button>
                 </div>
         </div>
+        <div>
         <InteractiveList />
+        </div>
+        {showDialog && <CreateUserStory dialog={handleDialog} storeProject={storeProject} />}
     </Wrapper>
     
   )

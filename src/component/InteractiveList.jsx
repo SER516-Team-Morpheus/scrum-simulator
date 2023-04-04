@@ -47,7 +47,7 @@ export default function InteractiveList() {
                   src={`/static/images/avatar/${value + 1}.jpg`}
                 />
               </ListItemAvatar>
-              <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
+              <ListItemText id={labelId} primary={`User Story ${value + 1}`} />
             </ListItemButton>
           </ListItem>
         );
