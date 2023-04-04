@@ -8,7 +8,8 @@ import Grid from '@mui/material/Grid';
 import Cookies from "js-cookie";
 import Authentication from "./component/Authentication";
 import ProjectDashboard from "./component/ProjectDashboard";
-
+import Backlog from "./component/Backlog";
+import SimulatorGame from "./component/SimulatorGame";
 
 const Wrapper = styled.div`
 margin:0px;
@@ -47,6 +48,8 @@ const App = () => {
             <Routes>
               <Route exact path="/projects" element={<Project showItem={showItem}/>} />
               <Route path="/projects/:id" element={<Login/>}/>
+              <Route exact path="/backlog" element={<Backlog showItem={showItem}/>} />
+              <Route exact path="/simulator" element={<SimulatorGame/>} />
             </Routes>
           </Grid>
         </Grid>

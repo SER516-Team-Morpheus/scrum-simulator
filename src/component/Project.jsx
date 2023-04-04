@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -59,12 +59,13 @@ const Project = ({showItem}) => {
     const [showDialog, setShowDialog] = useState(false);
     const navigate = useNavigate();
     const [projectList, setProjectList] = useState([
-        { projectName: 'unique', description: 'this is description' },
-        { projectName: 'unique', description: 'this is description' },
-        { projectName: 'unique', description: 'this is description' },
-        { projectName: 'unique', description: 'this is description' }
+        // { projectName: 'unique', description: 'this is description' },
+        // { projectName: 'unique', description: 'this is description' },
+        // { projectName: 'unique', description: 'this is description' },
+        // { projectName: 'unique', description: 'this is description' }
     ]);
-
+    
+   
     const storeProject = (data) => {
         setProjectList([data]);
         setShowDialog(false);
@@ -107,7 +108,7 @@ const Project = ({showItem}) => {
                         </>
 
                 }
-                {showDialog && <CreateProject dialog={handleDialog} storeProject={storeProject} />}
+                {showDialog && <CreateProject dialog={handleDialog} storeProject={storeProject} name={'Create Project'}/>}
 
             </div>
 
