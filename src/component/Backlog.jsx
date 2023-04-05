@@ -8,7 +8,7 @@ import Link from '@mui/material/Link';
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import { RxDragHandleHorizontal } from "react-icons/rx";
-
+import { createStory } from '../apis';
 
 const Wrapper = styled.div`
 
@@ -62,15 +62,10 @@ transform : translate(-40%, -70%)
 const Backlog = ({ showItem }) => {
     const [showDialog, setShowDialog] = useState(false);
     const navigate = useNavigate();
-    const [storyList, setStoryList] = useState([
-        { storyName: 'Story1', description: 'this is description' },
-        { storyName: 'Story2', description: 'this is description' },
-        { storyName: 'Story3', description: 'this is description' },
-        { storyName: 'Story4', description: 'this is description' }
-    ]);
+    const [storyList, setStoryList] = useState([]);
 
-    const storeProject = (data) => {
-        setStoryList(prevData=>[...prevData,data])
+    const storeStory = (data) => {
+        setStoryList(prevData => [...prevData, data])
         setShowDialog(false);
     }
     const handleDialog = () => {
@@ -81,8 +76,24 @@ const Backlog = ({ showItem }) => {
         navigate('/projects/' + Cookies.get('projectName'))
         showItem();
     }
+
+    const createUserStory = (subject) => {
+        let email = Cookies.get('username') || 'SERtestuser';
+        let password = Cookies.get('password') || 'testuser';
+        let projectName = Cookies.get('projectName')
+        createStory(email, password, projectName, subject)
+            .then(res => {
+                setStoryList(prevState => {
+                    return [...prevState, res.data]
+                }
+
+                )
+
+            })
+    }
     return (
         <Wrapper>
+            {console.log(storyList, 'ss')}
             <div className='heading-bar'>
                 <Typography className="heading" variant="h3" gutterBottom>
                     Backlog
@@ -94,25 +105,25 @@ const Backlog = ({ showItem }) => {
             <div>
                 {
                     storyList.length > 0 ? (
-                        storyList.map((data,index) => (
+                        storyList.map((data, index) => (
                             <div className="story-list">
                                 <Typography className="heading" variant="h7" gutterBottom>
-                                   <RxDragHandleHorizontal className="drag-icon"/><Link>{index+1}. {data.storyName}</Link>
-                                    </Typography>
+                                    <RxDragHandleHorizontal className="drag-icon" /><Link>{index + 1}. {data.subject}</Link>
+                                </Typography>
                                 {/* <Typography className="heading" variant="h9" gutterBottom>{data.description}</Typography> */}
                             </div>
                         ))
                     )
-                    :
-                    <>
-                        <img src={projectImg} alt="project" />
-                        <Typography style={{ color: '#1976d2' }} className="heading" variant="h6" gutterBottom>
-                            No Story. Please create new one.
-                        </Typography>
-                    </>
+                        :
+                        <>
+                            <img src={projectImg} alt="project" />
+                            <Typography style={{ color: '#1976d2' }} className="heading" variant="h6" gutterBottom>
+                                No Story. Please create new one.
+                            </Typography>
+                        </>
 
                 }
-                {showDialog && <CreateProject dialog={handleDialog} storeProject={storeProject} name={'Create Story'}/>}
+                {showDialog && <CreateProject dialog={handleDialog} storeProject={storeStory} name={'Story'} createUserStory={createUserStory} />}
 
             </div>
 
