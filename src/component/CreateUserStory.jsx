@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Formik, Field, Form } from 'formik';
 import TextField from '@mui/material/TextField';
-import { getUserStories } from '../apis/backlog';
+import { createUserstory } from '../apis/backlog';
 import Cookies from 'js-cookie';
 
 
@@ -20,7 +20,7 @@ border-radius:20px;
 top:25%;
 left: 40%;
 
-.project-form {
+.UserStory-form {
     padding:20px;
     display:flex;
     flex-direction: column;
@@ -31,7 +31,7 @@ left: 40%;
         margin-bottom: 40px;
     }
 
-    .name-field {
+    .subject-field {
         margin-bottom: 20px;
     }
     .desc-field {
@@ -55,14 +55,13 @@ const CreateUserStory = ({dialog, storeProject}) => {
             <Formik
                 initialValues={{
                     subject: '',
-
                 }}
                 onSubmit={(values) => {
                     let email = Cookies.get('username') || 'SERtestuser';
                     let password = Cookies.get('password') || 'testuser';
-                    let project = Cookies.get('project') || 'akanshkumar25-abc';
+                    let project = Cookies.get('projectName') || 'akanshkumar25-abc';
                     console.log({'1':email,'2':password,'a':project,'b':values.subject})
-                    getUserStories(email,password,project, values.subject)
+                    createUserstory(email,password,project,values.subject)
                         .then(res => {
                             storeProject(res.data)
                         })
@@ -71,9 +70,9 @@ const CreateUserStory = ({dialog, storeProject}) => {
             >
                 {
                     props => (
-                        <Form className="project-form">
+                        <Form className="UserStory-form"> 
                             <Typography className="heading" variant="h4" gutterBottom>Add User Story</Typography>
-                            <TextField id="outlined-basic" className="Name" onChange={props.handleChange} name="name"  required label="Name" variant="outlined" />
+                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} name="subject"  variant="outlined" />
                             <Button variant="contained"  className="crt-btn" type="submit">Create</Button>
                             <Button variant="contained"  className="cancel-btn" onClick={dialog}>Cancel</Button>
                         </Form>
