@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -59,12 +59,13 @@ const Project = ({showItem}) => {
     const [showDialog, setShowDialog] = useState(false);
     const navigate = useNavigate();
     const [projectList, setProjectList] = useState([
-        { projectName: 'unique', description: 'this is description' },
-        { projectName: 'unique', description: 'this is description' },
-        { projectName: 'unique', description: 'this is description' },
-        { projectName: 'unique', description: 'this is description' }
+        // { projectName: 'unique', description: 'this is description' },
+        // { projectName: 'unique', description: 'this is description' },
+        // { projectName: 'unique', description: 'this is description' },
+        // { projectName: 'unique', description: 'this is description' }
     ]);
-
+    
+   
     const storeProject = (data) => {
         setProjectList([data]);
         setShowDialog(false);
@@ -72,8 +73,8 @@ const Project = ({showItem}) => {
     const handleDialog = () => {
         setShowDialog(!showDialog);
     }
-    const selectProject = () => {
-        Cookies.set('projectName','unique')
+    const selectProject = (projectName) => {
+        Cookies.set('projectName', projectName)
         navigate('/projects/'+Cookies.get('projectName'))
         showItem();
     }
@@ -93,7 +94,7 @@ const Project = ({showItem}) => {
                     projectList.length > 0 ? (
                         projectList.map(data => (
                             <div className="project-list">
-                                <Typography className="heading" variant="h6" gutterBottom><Link onClick={selectProject}>{data.projectName}</Link></Typography>
+                                <Typography className="heading" variant="h6" gutterBottom><Link onClick={() => selectProject(data.projectName)}>{data.projectName}</Link></Typography>
                                 <Typography className="heading" variant="h9" gutterBottom>{data.description}</Typography>
                             </div>
                         ))
@@ -107,7 +108,7 @@ const Project = ({showItem}) => {
                         </>
 
                 }
-                {showDialog && <CreateProject dialog={handleDialog} storeProject={storeProject} />}
+                {showDialog && <CreateProject dialog={handleDialog} storeProject={storeProject} name={'Create Project'}/>}
 
             </div>
 

@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 import Backlog from "./component/Backlog";
 import Authentication from "./component/Authentication";
 import ProjectDashboard from "./component/ProjectDashboard";
-
+import SimulatorGame from "./component/SimulatorGame";
 
 const Wrapper = styled.div`
 margin:0px;
@@ -48,7 +48,8 @@ const App = () => {
             <Routes>
               <Route exact path="/projects" element={<Project showItem={showItem}/>} />
               <Route path="/projects/:id" element={<Login/>}/>
-              <Route path="/backlog" element={<Backlog/>}/>
+              <Route exact path="/backlog" element={<Backlog showItem={showItem}/>} />
+              <Route exact path="/simulation" element={<SimulatorGame/>} />
             </Routes>
           </Grid>
         </Grid>
