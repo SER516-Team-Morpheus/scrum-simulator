@@ -49,7 +49,7 @@ left: 40%;
 
 `;
 
-const CreateProject = ({dialog, storeProject,name}) => {
+const CreateProject = ({dialog, storeProject,name,createUserStory,createNewProject}) => {
     return (
         
         <Wrapper>
@@ -63,17 +63,20 @@ const CreateProject = ({dialog, storeProject,name}) => {
                     let email = Cookies.get('username') || 'SERtestuser';
                     let password = Cookies.get('password') || 'testuser';
                     console.log({'1':email,'2':password,'a':values.name,'b':values.description})
-                    createProject(email,password,values.name, values.description)
-                        .then(res => {
-                            storeProject(res.data)
-                        })
+                    
+                    name == 'Project'? createNewProject(values.name,values.description)
+                    : createUserStory(values.name)
+                    // createProject(email,password,values.name, values.description)
+                    //     .then(res => {
+                    //         storeProject(res.data)
+                    //     })
                         // .catch(error => setLoginError('Unable to login. Username or Password is incorrect'))
                 }}
             >
                 {
                     props => (
                         <Form className="project-form">
-                            <Typography className="heading" variant="h4" gutterBottom>{name}</Typography>
+                            <Typography className="heading" variant="h4" gutterBottom>Create{' '+name}</Typography>
                             <TextField id="outlined-basic" className="name-field" onChange={props.handleChange} name="name"  required label="Name" variant="outlined" />
                             <TextField id="outlined-basic" className="desc-field" onChange={props.handleChange} name="description"  required label="Description" variant="outlined" />
                             <Button variant="contained"  className="crt-btn" type="submit">Create</Button>

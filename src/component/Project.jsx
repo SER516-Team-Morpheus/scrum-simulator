@@ -7,6 +7,7 @@ import CreateProject from './CreateProject';
 import Link from '@mui/material/Link';
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
+import { createProject } from '../apis';
 
 const Wrapper = styled.div`
 
@@ -35,6 +36,7 @@ img {
 
 .project-list {
     margin-top:30px;
+    cursor:pointer;
     a {
         text-decoration:none;
     }        
@@ -55,7 +57,7 @@ transform : translate(-40%, -70%)
 
 `;
 
-const Project = ({showItem}) => {
+const Project = ({ showItem }) => {
     const [showDialog, setShowDialog] = useState(false);
     const navigate = useNavigate();
     const [projectList, setProjectList] = useState([
@@ -64,8 +66,8 @@ const Project = ({showItem}) => {
         // { projectName: 'unique', description: 'this is description' },
         // { projectName: 'unique', description: 'this is description' }
     ]);
-    
-   
+
+
     const storeProject = (data) => {
         setProjectList([data]);
         setShowDialog(false);
@@ -73,14 +75,25 @@ const Project = ({showItem}) => {
     const handleDialog = () => {
         setShowDialog(!showDialog);
     }
-    const selectProject = (projectName) => {
-        Cookies.set('projectName', projectName)
-        navigate('/projects/'+Cookies.get('projectName'))
+    const selectProject = (name) => {
+        console.log(name,'check for e')
+        Cookies.set('projectName', name)
+        navigate('/projects/'+ Cookies.get('projectName'))
+        navigate('/backlog')
         showItem();
+    }
+
+
+    const createNewProject = (name, description) => {
+        let email = Cookies.get('username') || 'SERtestuser';
+        let password = Cookies.get('password') || 'testuser';
+        createProject(email, password, name, description)
+            .then(res => {
+                storeProject(res.data)
+            })
     }
     return (
         <Wrapper>
-            {console.log(projectList, 'check p list')}
             <div className='heading-bar'>
                 <Typography className="heading" variant="h3" gutterBottom>
                     Projects
@@ -108,7 +121,7 @@ const Project = ({showItem}) => {
                         </>
 
                 }
-                {showDialog && <CreateProject dialog={handleDialog} storeProject={storeProject} name={'Create Project'}/>}
+                {showDialog && <CreateProject dialog={handleDialog} storeProject={storeProject} name={'Project'} createNewProject={createNewProject} />}
 
             </div>
 
