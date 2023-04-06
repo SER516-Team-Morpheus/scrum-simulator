@@ -17,13 +17,3 @@ export const createProject =(username,password,name,description)=>{
  })
   )
 }
-
-export const createStory =(username,password,projectName,subject)=>{
-  return (axios.post("http://localhost:3003/createUserstory", {
-    username,
-    password,
-    projectName,
-    subject
- })
-  )
-}
