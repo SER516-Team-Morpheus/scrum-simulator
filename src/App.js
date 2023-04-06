@@ -10,6 +10,7 @@ import Authentication from "./component/Authentication";
 import ProjectDashboard from "./component/ProjectDashboard";
 import Backlog from "./component/Backlog";
 import SimulatorGame from "./component/SimulatorGame";
+import CreateEpic from "./component/CreateEpic";
 
 const Wrapper = styled.div`
 margin:0px;
@@ -50,6 +51,7 @@ const App = () => {
               <Route path="/projects/:id" element={<Login/>}/>
               <Route exact path="/backlog" element={<Backlog showItem={showItem}/>} />
               <Route exact path="/simulator" element={<SimulatorGame/>} />
+              <Route exact path="/create-epic" element={<CreateEpic addEpic={() => {}}/>} />
             </Routes>
           </Grid>
         </Grid>
