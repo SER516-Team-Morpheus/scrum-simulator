@@ -6,7 +6,7 @@ import { Formik, Form } from 'formik';
 import TextField from '@mui/material/TextField';
 import { createUserstory } from '../apis/backlog';
 import Cookies from 'js-cookie';
-
+import Backlog from './Backlog';
 
 const Wrapper = styled.div`
 
@@ -48,7 +48,7 @@ left: 40%;
 
 `;
 
-const CreateUserStory = ({dialog, storeProject}) => {
+const CreateUserStory = ({dialog, storeUserStory}) => {
     return (
         
         <Wrapper>
@@ -59,12 +59,15 @@ const CreateUserStory = ({dialog, storeProject}) => {
                 onSubmit={(values) => {
                     let email = Cookies.get('username') || 'SERtestuser';
                     let password = Cookies.get('password') || 'testuser';
-                    let project = Cookies.get('projectName') || 'akanshkumar25-abc';
+                    let project = Cookies.get('projectName')
                     console.log({'1':email,'2':password,'a':project,'b':values.subject})
                     createUserstory(email,password,project,values.subject)
                         .then(res => {
-                            storeProject(res.data)
-                        })
+                                Backlog.setStoryList(prevState => {
+                                    return [...prevState, res.data]
+                                }
+                                )
+                            })
                         //.catch(error => setLoginError('Unable to login. Username or Password is incorrect'))
                 }}
             >
