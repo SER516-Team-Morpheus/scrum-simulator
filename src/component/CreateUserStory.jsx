@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Formik, Field, Form } from 'formik';
+import { Formik, Form } from 'formik';
 import TextField from '@mui/material/TextField';
 import { createUserstory } from '../apis/backlog';
 import Cookies from 'js-cookie';

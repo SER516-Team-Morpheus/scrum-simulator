@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import projectImg from '../img/project-img.jpg';
-import CreateProject from './CreateProject';
 import CreateUserStory from './CreateUserStory'
 import Link from '@mui/material/Link';
 import { useNavigate } from "react-router-dom";
@@ -124,7 +123,7 @@ const Backlog = ({ showItem }) => {
                         </>
 
                 }
-                {showDialog && <CreateUserStory dialog={handleDialog} storeProject={storeProject} name={'Create Story'}/>}
+                {showDialog && <CreateUserStory dialog={handleDialog} storeProject={storeStory}/>}
 
             </div>
 
