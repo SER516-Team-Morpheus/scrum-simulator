@@ -3,12 +3,11 @@ import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import projectImg from '../img/project-img.jpg';
-import CreateProject from './CreateProject';
+import CreateUserStory from './CreateUserStory'
 import Link from '@mui/material/Link';
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import { RxDragHandleHorizontal } from "react-icons/rx";
-import { createStory } from '../apis';
 
 const Wrapper = styled.div`
 
@@ -67,6 +66,7 @@ const Backlog = ({ showItem }) => {
     const storeStory = (data) => {
         setStoryList(prevData => [...prevData, data])
         setShowDialog(false);
+        console.log(storyList);
     }
     const handleDialog = () => {
         setShowDialog(!showDialog);
@@ -77,20 +77,6 @@ const Backlog = ({ showItem }) => {
         showItem();
     }
 
-    const createUserStory = (subject) => {
-        let email = Cookies.get('username') || 'SERtestuser';
-        let password = Cookies.get('password') || 'testuser';
-        let projectName = Cookies.get('projectName')
-        createStory(email, password, projectName, subject)
-            .then(res => {
-                setStoryList(prevState => {
-                    return [...prevState, res.data]
-                }
-
-                )
-
-            })
-    }
     return (
         <Wrapper>
             {console.log(storyList, 'ss')}
@@ -123,7 +109,7 @@ const Backlog = ({ showItem }) => {
                         </>
 
                 }
-                {showDialog && <CreateProject dialog={handleDialog} storeProject={storeStory} name={'Story'} createUserStory={createUserStory} />}
+                {showDialog && <CreateUserStory dialog={handleDialog} storeProject={storeStory}/>}
 
             </div>
 

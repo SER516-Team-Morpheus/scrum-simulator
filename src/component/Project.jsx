@@ -107,7 +107,7 @@ const Project = ({ showItem }) => {
                     projectList.length > 0 ? (
                         projectList.map(data => (
                             <div className="project-list">
-                                <Typography className="heading" variant="h6" gutterBottom><Link onClick={()=>selectProject(data.projectName)}>{data.projectName}</Link></Typography>
+                                <Typography className="heading" variant="h6" gutterBottom><Link onClick={() => selectProject(data.projectName)}>{data.projectName}</Link></Typography>
                                 <Typography className="heading" variant="h9" gutterBottom>{data.description}</Typography>
                             </div>
                         ))
