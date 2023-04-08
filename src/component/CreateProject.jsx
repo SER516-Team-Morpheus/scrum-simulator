@@ -86,7 +86,7 @@ const CreateProject = ({ dialog, storeProject, name, createUserStory, createNewP
                             <TextField id="outlined-basic" className="desc-field" onChange={props.handleChange} name="description" required label="Description" variant="outlined" />
                             <Button variant="contained" className="crt-btn" type="submit">
                                 {
-                                    !isCreateLoader ?
+                                    isCreateLoader ?
                                         <ColorRing
                                             visible={true}
                                             className="loader"
