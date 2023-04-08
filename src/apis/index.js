@@ -17,3 +17,10 @@ export const createProject =(username,password,name,description)=>{
  })
   )
 }
+
+export const getProject =(username,password)=>{
+  return axios.get(`http://localhost:3002/getProject?username=${username}&password=${password}`);
+  
+}
+
+
