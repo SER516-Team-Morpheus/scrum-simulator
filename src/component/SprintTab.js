@@ -1,77 +1,80 @@
-import React, { useState } from "react";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import React, { useState } from 'react';
 
 function SprintTab() {
-  const [userStories, setUserStories] = useState([]);
-  const [storyContent, setStoryContent] = useState("");
+  const [sprintName, setSprintName] = useState('');
+  const [sprintGoal, setSprintGoal] = useState('');
+  const [sprintStartDate, setSprintStartDate] = useState('');
+  const [sprintEndDate, setSprintEndDate] = useState('');
+  const [sprintData, setSprintData] = useState(null);
+  
+  const handleSprintNameChange = (event) => {
+    setSprintName(event.target.value);
+  };
 
-  function handleAddUserStory() {
-    setUserStories([
-      ...userStories,
-      { id: userStories.length + 1, content: storyContent }
-    ]);
-    setStoryContent("");
-  }
+  const handleSprintGoalChange = (event) => {
+    setSprintGoal(event.target.value);
+  };
 
-  function handleDragStart(e, story) {
-    e.dataTransfer.setData("text/plain", story.id);
-  }
+  const handleSprintStartDateChange = (event) => {
+    setSprintStartDate(event.target.value);
+  };
 
-  function handleDragOver(e) {
-    e.preventDefault();
-  }
+  const handleSprintEndDateChange = (event) => {
+    setSprintEndDate(event.target.value);
+  };
 
-  function handleDrop(e) {
-    const storyId = e.dataTransfer.getData("text/plain");
-    const newStories = userStories.filter(story => story.id !== parseInt(storyId));
-    const storyToAdd = userStories.find(story => story.id === parseInt(storyId));
-    newStories.splice(e.target.dataset.index, 0, storyToAdd);
-    setUserStories(newStories);
-  }
-
-  function handleStoryContentChange(e, id) {
-    const newStories = userStories.map(story => {
-      if (story.id === id) {
-        return { ...story, content: e.target.value };
-      } else {
-        return story;
-      }
-    });
-    setUserStories(newStories);
-  }
+  const handleCreateSprint = () => {
+    const data = {
+      name: sprintName,
+      goal: sprintGoal,
+      startDate: sprintStartDate,
+      endDate: sprintEndDate,
+    };
+    console.log(data);
+    setSprintData(data);
+  };
 
   return (
     <div>
-      <h1>Sprint Tab</h1>
       <div>
-        <label htmlFor="storyContent">Add User Story: </label>
-        <input
-          type="text"
-          id="storyContent"
-          value={storyContent}
-          onChange={(e) => setStoryContent(e.target.value)}
-        />
-        <button onClick={handleAddUserStory}>Add</button>
+        <h1 style={{color: "#8C1D40"}}>Create Sprint</h1>
+
+        <div>
+          <label htmlFor="sprintName" style={{ marginRight: "1em", fontSize: "1.2em", color: "blue" }}>Sprint Name:</label>
+          <input type="text" id="sprintName" name="sprintName" value={sprintName} onChange={handleSprintNameChange} />
+        </div>
+
+        <div>
+          <label htmlFor="sprintGoal" style={{ marginRight: "1em", fontSize: "1.2em", color: "blue" }}>Sprint Goal:</label>
+          <input type="text" id="sprintGoal" name="sprintGoal" value={sprintGoal} onChange={handleSprintGoalChange} />
+        </div>
+
+        <div>
+          <label htmlFor="sprintStartDate" style={{ marginRight: "1em", fontSize: "1.2em", color: "blue" }} >Sprint Start Date:</label>
+          <input type="date" id="sprintStartDate" name="sprintStartDate" value={sprintStartDate} onChange={handleSprintStartDateChange} />
+        </div>
+
+        <div>
+          <label htmlFor="sprintEndDate" style={{ marginRight: "1em", fontSize: "1.2em", color: "blue" }}>Sprint End Date:</label>
+          <input type="date" id="sprintEndDate" name="sprintEndDate" value={sprintEndDate} onChange={handleSprintEndDateChange} />
+        </div>
+
+        <button onClick={handleCreateSprint} style={{ float: "left" }}>Create Sprint</button>
       </div>
-      <div
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-      >
-        {userStories.map((story, index) => (
-          <div
-            key={story.id}
-            draggable
-            onDragStart={(e) => handleDragStart(e, story)}
-            data-index={index}
-          >
-            <textarea
-              value={story.content}
-              onChange={(e) => handleStoryContentChange(e, story.id)}
-            />
-          </div>
-        ))}
+
+      {sprintData && (
+        <div>
+        <h3 style={{textAlign: "center", color: "#8C1D40"}}>Sprints Created: </h3>
+        <p>Name: {sprintData.name}</p>
+        <p>Goal: {sprintData.goal}</p>
+        <p>Start Date: {sprintData.startDate}</p>
+        <p>End Date: {sprintData.endDate}</p>
       </div>
+      )}
     </div>
   );
 }
 
 export default SprintTab;
+
