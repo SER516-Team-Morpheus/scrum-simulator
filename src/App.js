@@ -6,9 +6,9 @@ import Project from "./component/Project";
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 import Cookies from "js-cookie";
+import Backlog from "./component/Backlog";
 import Authentication from "./component/Authentication";
 import ProjectDashboard from "./component/ProjectDashboard";
-import Backlog from "./component/Backlog";
 import SimulatorGame from "./component/SimulatorGame";
 
 const Wrapper = styled.div`

@@ -2,12 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Formik, Field, Form } from 'formik';
+import { Formik, Form } from 'formik';
 import TextField from '@mui/material/TextField';
-import { createProject } from '../apis';
+import { createUserstory } from '../apis/backlog';
 import Cookies from 'js-cookie';
-import axios from 'axios';
-
+import Backlog from './Backlog';
 
 const Wrapper = styled.div`
 
@@ -21,7 +20,7 @@ border-radius:20px;
 top:25%;
 left: 40%;
 
-.project-form {
+.UserStory-form {
     padding:20px;
     display:flex;
     flex-direction: column;
@@ -32,7 +31,7 @@ left: 40%;
         margin-bottom: 40px;
     }
 
-    .name-field {
+    .subject-field {
         margin-bottom: 20px;
     }
     .desc-field {
@@ -49,36 +48,34 @@ left: 40%;
 
 `;
 
-const CreateProject = ({dialog, storeProject,name,createUserStory,createNewProject}) => {
+const CreateUserStory = ({dialog, storeUserStory}) => {
     return (
         
         <Wrapper>
             <Formik
                 initialValues={{
-                    email: '',
-                    password: '',
-
+                    subject: '',
                 }}
                 onSubmit={(values) => {
                     let email = Cookies.get('username') || 'SERtestuser';
                     let password = Cookies.get('password') || 'testuser';
-                    console.log({'1':email,'2':password,'a':values.name,'b':values.description})
-                    
-                    name == 'Project'? createNewProject(values.name,values.description)
-                    : createUserStory(values.name)
-                    // createProject(email,password,values.name, values.description)
-                    //     .then(res => {
-                    //         storeProject(res.data)
-                    //     })
-                        // .catch(error => setLoginError('Unable to login. Username or Password is incorrect'))
+                    let project = Cookies.get('projectName')
+                    console.log({'1':email,'2':password,'a':project,'b':values.subject})
+                    createUserstory(email,password,project,values.subject)
+                        .then(res => {
+                                Backlog.setStoryList(prevState => {
+                                    return [...prevState, res.data]
+                                }
+                                )
+                            })
+                        //.catch(error => setLoginError('Unable to login. Username or Password is incorrect'))
                 }}
             >
                 {
                     props => (
-                        <Form className="project-form">
-                            <Typography className="heading" variant="h4" gutterBottom>Create{' '+name}</Typography>
-                            <TextField id="outlined-basic" className="name-field" onChange={props.handleChange} name="name"  required label="Name" variant="outlined" />
-                            <TextField id="outlined-basic" className="desc-field" onChange={props.handleChange} name="description"  required label="Description" variant="outlined" />
+                        <Form className="UserStory-form"> 
+                            <Typography className="heading" variant="h4" gutterBottom>Add User Story</Typography>
+                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} name="subject"  variant="outlined" />
                             <Button variant="contained"  className="crt-btn" type="submit">Create</Button>
                             <Button variant="contained"  className="cancel-btn" onClick={dialog}>Cancel</Button>
                         </Form>
@@ -89,4 +86,4 @@ const CreateProject = ({dialog, storeProject,name,createUserStory,createNewProje
     )
 }
 
-export default CreateProject;
+export default CreateUserStory;
