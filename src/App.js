@@ -6,10 +6,11 @@ import Project from "./component/Project";
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 import Cookies from "js-cookie";
+import Backlog from "./component/Backlog";
 import Authentication from "./component/Authentication";
 import ProjectDashboard from "./component/ProjectDashboard";
+import SimulatorGame from "./component/SimulatorGame";
 import SprintTab from "./component/SprintTab";
-
 
 const Wrapper = styled.div`
 margin:0px;
@@ -48,7 +49,9 @@ const App = () => {
             <Routes>
               <Route exact path="/projects" element={<Project showItem={showItem}/>} />
               <Route path="/projects/:id" element={<Login/>}/>
-              <Route path="/sprints" element={<SprintTab/>}/>
+              <Route exact path="/backlog" element={<Backlog showItem={showItem}/>} />
+              <Route exact path="/simulation" element={<SimulatorGame/>} />
+              <Route exact path="/sprints" element={<SprintTab/>} />
             </Routes>
           </Grid>
         </Grid>
