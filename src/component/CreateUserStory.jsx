@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -68,21 +68,24 @@ const CreateUserStory = ({ dialog, storeUserStory }) => {
                     let email = Cookies.get('username') || 'SERtestuser';
                     let password = Cookies.get('password') || 'testuser';
                     let project = Cookies.get('projectName')
-                    console.log({ '1': email, '2': password, 'a': project, 'b': values.subject })
                     setIsCreateLoader(true);
+                    const storyData = {
+                        subject: values.subject
+                    }
+
                     createUserstory(email, password, project, values.subject)
                         .then(res => {
                             setIsCreateLoader(false);
-                            dialog();
-                            Backlog.setStoryList(prevState => {
-                                return [...prevState, res.data]
+                            const storyData = {
+                                subject: values.subject
                             }
-                            )
+                            storeUserStory(storyData)
+                            setIsCreateLoader(false)
                         })
-                        .catch(error=>{
+                        .catch(error => {
                             setIsCreateLoader(false);
                         })
-                    //.catch(error => setLoginError('Unable to login. Username or Password is incorrect'))
+                        // .catch(error => setLoginError('Unable to login. Username or Password is incorrect'))
                 }}
             >
                 {
