@@ -24,6 +24,12 @@ export const navItems =()=> {return([
         url:'/simulation',
         isVisible:Cookies.get('projectName') ? true : false,
         isActive:false
+    },
+    {
+        name: 'Settings',
+        url: '/settings',
+        isVisible:Cookies.get('projectName') ? true : false,
+        isActive:false
     }
 ]
 )}

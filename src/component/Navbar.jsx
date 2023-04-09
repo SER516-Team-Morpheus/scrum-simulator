@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Link from '@mui/material/Link';
 import { navItems } from './navItems';
 import Cookies from 'js-cookie';
+import { DiScrum } from "react-icons/di";
+
 
 const Navbar = () => {
 
@@ -36,6 +38,15 @@ width:20%;
     border-radius:50px;
     background-color: white;
     margin-bottom: 20px;
+    position: relative;
+    svg {
+        position:absolute;
+        height: 80px;
+        width: 100px;
+        color: #8C1D40;
+        left:2%;
+        top:3%;
+    }
     
 }
 
@@ -75,7 +86,9 @@ a {
     return (
         <Wrapper>
             <div className='top-nav'>
-                <div className='logo'></div>
+                <div className='logo'>
+                <DiScrum/>
+                </div>
                 <div className='title'>MORPHEUS</div>
             </div>
             <hr />
