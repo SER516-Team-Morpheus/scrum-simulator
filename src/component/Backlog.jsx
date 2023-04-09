@@ -109,7 +109,12 @@ const Backlog = ({ showItem }) => {
                         </>
 
                 }
-                {showDialog && <CreateUserStory dialog={handleDialog} storeProject={storeStory}/>}
+                {showDialog &&
+                    <CreateUserStory
+                        dialog={handleDialog}
+                        storeProject={storeStory}
+                    />
+                }
 
             </div>
 

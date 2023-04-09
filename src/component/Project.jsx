@@ -71,12 +71,7 @@ const Project = ({ showItem }) => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [isCreateLoader, setIsCreateLoader] = useState(false);
-    const [projectList, setProjectList] = useState([
-        // { projectName: 'unique', description: 'this is description' },
-        // { projectName: 'unique', description: 'this is description' },
-        // { projectName: 'unique', description: 'this is description' },
-        // { projectName: 'unique', description: 'this is description' }
-    ]);
+    const [projectList, setProjectList] = useState([]);
 
 
     const storeProject = (data) => {
@@ -87,7 +82,6 @@ const Project = ({ showItem }) => {
         setShowDialog(!showDialog);
     }
     const selectProject = (name) => {
-        console.log(name, 'check for e')
         Cookies.set('projectName', name)
         navigate('/projects/' + Cookies.get('projectName'))
         navigate('/backlog')
@@ -170,7 +164,6 @@ const Project = ({ showItem }) => {
                                 dialog={handleDialog}
                                 createNewProject={createNewProject}
                                 name={'Project'}
-                                createNewProject={createNewProject}
                                 isCreateLoader={isCreateLoader}
                             />
                         }
