@@ -10,6 +10,7 @@ import Backlog from "./component/Backlog";
 import Authentication from "./component/Authentication";
 import ProjectDashboard from "./component/ProjectDashboard";
 import SimulatorGame from "./component/SimulatorGame";
+import SprintTab from "./component/SprintTab";
 import StoryDetails from "./component/StoryDetails";
 
 const Wrapper = styled.div`
@@ -48,6 +49,7 @@ const App = () => {
               <Route path="/projects/:id" element={<Login/>}/>
               <Route exact path="/backlog" element={<Backlog showItem={showItem}/>} />
               <Route exact path="/simulation" element={<SimulatorGame/>} />
+              <Route exact path="/sprints" element={<SprintTab/>} />
               <Route exact path="/storyDetails/:name" element={<StoryDetails/>} />
             </Routes>
           </Grid>
