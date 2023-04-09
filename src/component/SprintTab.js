@@ -65,7 +65,7 @@ function SprintTab() {
 
       {sprintData && (
         <div>
-        <h3 style={{textAlign: "center", color: "#8C1D40"}}>Sprints Created: </h3>
+        <h3 style={{textAlign: "center", color: "#8C1D40"}}>Sprint Created! </h3>
         <p>Name: {sprintData.name}</p>
         <p>Goal: {sprintData.goal}</p>
         <p>Start Date: {sprintData.startDate}</p>
