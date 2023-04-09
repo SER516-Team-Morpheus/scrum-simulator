@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import { createProject } from '../apis';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { ColorRing } from 'react-loader-spinner';
 
 
 const Wrapper = styled.div`
@@ -47,11 +48,15 @@ left: 40%;
     }
 }
 
+svg {
+    height:30px;
+}
+
 `;
 
-const CreateProject = ({dialog, storeProject,name,createUserStory,createNewProject}) => {
+const CreateProject = ({ dialog, storeProject, name, createUserStory, createNewProject, isCreateLoader }) => {
     return (
-        
+
         <Wrapper>
             <Formik
                 initialValues={{
@@ -62,25 +67,41 @@ const CreateProject = ({dialog, storeProject,name,createUserStory,createNewProje
                 onSubmit={(values) => {
                     let email = Cookies.get('username') || 'SERtestuser';
                     let password = Cookies.get('password') || 'testuser';
-                    console.log({'1':email,'2':password,'a':values.name,'b':values.description})
-                    
-                    name == 'Project'? createNewProject(values.name,values.description)
-                    : createUserStory(values.name)
+                    console.log({ '1': email, '2': password, 'a': values.name, 'b': values.description })
+
+                    name == 'Project' ? createNewProject(values.name, values.description)
+                        : createUserStory(values.name)
                     // createProject(email,password,values.name, values.description)
                     //     .then(res => {
                     //         storeProject(res.data)
                     //     })
-                        // .catch(error => setLoginError('Unable to login. Username or Password is incorrect'))
+                    // .catch(error => setLoginError('Unable to login. Username or Password is incorrect'))
                 }}
             >
                 {
                     props => (
                         <Form className="project-form">
-                            <Typography className="heading" variant="h4" gutterBottom>Create{' '+name}</Typography>
-                            <TextField id="outlined-basic" className="name-field" onChange={props.handleChange} name="name"  required label="Name" variant="outlined" />
-                            <TextField id="outlined-basic" className="desc-field" onChange={props.handleChange} name="description"  required label="Description" variant="outlined" />
-                            <Button variant="contained"  className="crt-btn" type="submit">Create</Button>
-                            <Button variant="contained"  className="cancel-btn" onClick={dialog}>Cancel</Button>
+                            <Typography className="heading" variant="h4" gutterBottom>Create{' ' + name}</Typography>
+                            <TextField id="outlined-basic" className="name-field" onChange={props.handleChange} name="name" required label="Name" variant="outlined" />
+                            <TextField id="outlined-basic" className="desc-field" onChange={props.handleChange} name="description" required label="Description" variant="outlined" />
+                            <Button variant="contained" className="crt-btn" type="submit">
+                                {
+                                    isCreateLoader ?
+                                        <ColorRing
+                                            visible={true}
+                                            className="loader"
+                                            height="80"
+                                            width="80"
+                                            ariaLabel="blocks-loading"
+                                            wrapperClass="loaders"
+                                            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                                        />
+                                        :
+                                        'Create'
+                                }
+
+                            </Button>
+                            <Button variant="contained" className="cancel-btn" onClick={dialog}>Cancel</Button>
                         </Form>
                     )
                 }
