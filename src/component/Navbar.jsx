@@ -61,15 +61,6 @@ width:20%;
     }
 }
 
-.bottom-bar {
-    position: absolute;
-    bottom: 5%;
-    height:100px;
-    width:80%;
-    border-radius: 25px;
-    background-color:white;
-    left:10%;
-}
 a {
     text-decoration: none;
 }
