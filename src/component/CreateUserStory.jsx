@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Formik, Field, Form } from 'formik';
+import { Formik, Form } from 'formik';
 import TextField from '@mui/material/TextField';
-import { createProject } from '../apis';
+import { createUserstory } from '../apis/backlog';
 import Cookies from 'js-cookie';
-import axios from 'axios';
+import Backlog from './Backlog';
 import { ColorRing } from 'react-loader-spinner';
 
 
 const Wrapper = styled.div`
 
-height: 400px;
+height: 300px;
 width:600px;
 background-color: #f7f3f2;
 border: 2px solid #8C1D40;
@@ -22,7 +22,11 @@ border-radius:20px;
 top:25%;
 left: 40%;
 
-.project-form {
+.loaders {
+    height:30px;
+}
+
+.UserStory-form {
     padding:20px;
     display:flex;
     flex-direction: column;
@@ -33,7 +37,7 @@ left: 40%;
         margin-bottom: 40px;
     }
 
-    .name-field {
+    .subject-field {
         margin-bottom: 20px;
     }
     .desc-field {
@@ -48,42 +52,47 @@ left: 40%;
     }
 }
 
-svg {
-    height:30px;
-}
-
 `;
 
-const CreateProject = ({ dialog, storeProject, name, createUserStory, createNewProject, isCreateLoader }) => {
+const CreateUserStory = ({ dialog, storeUserStory }) => {
+    const [isCreateLoader, setIsCreateLoader] = useState(false);
+
     return (
 
         <Wrapper>
             <Formik
                 initialValues={{
-                    email: '',
-                    password: '',
-
+                    subject: '',
                 }}
                 onSubmit={(values) => {
                     let email = Cookies.get('username') || 'SERtestuser';
                     let password = Cookies.get('password') || 'testuser';
-                    console.log({ '1': email, '2': password, 'a': values.name, 'b': values.description })
+                    let project = Cookies.get('projectName')
+                    setIsCreateLoader(true);
+                    const storyData = {
+                        subject: values.subject
+                    }
 
-                    name == 'Project' ? createNewProject(values.name, values.description)
-                        : createUserStory(values.name)
-                    // createProject(email,password,values.name, values.description)
-                    //     .then(res => {
-                    //         storeProject(res.data)
-                    //     })
-                    // .catch(error => setLoginError('Unable to login. Username or Password is incorrect'))
+                    createUserstory(email, password, project, values.subject)
+                        .then(res => {
+                            setIsCreateLoader(false);
+                            const storyData = {
+                                subject: values.subject
+                            }
+                            storeUserStory(storyData)
+                            setIsCreateLoader(false)
+                        })
+                        .catch(error => {
+                            setIsCreateLoader(false);
+                        })
+                        // .catch(error => setLoginError('Unable to login. Username or Password is incorrect'))
                 }}
             >
                 {
                     props => (
-                        <Form className="project-form">
-                            <Typography className="heading" variant="h4" gutterBottom>Create{' ' + name}</Typography>
-                            <TextField id="outlined-basic" className="name-field" onChange={props.handleChange} name="name" required label="Name" variant="outlined" />
-                            <TextField id="outlined-basic" className="desc-field" onChange={props.handleChange} name="description" required label="Description" variant="outlined" />
+                        <Form className="UserStory-form">
+                            <Typography className="heading" variant="h4" gutterBottom>Add User Story</Typography>
+                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} name="subject" variant="outlined" />
                             <Button variant="contained" className="crt-btn" type="submit">
                                 {
                                     isCreateLoader ?
@@ -99,7 +108,6 @@ const CreateProject = ({ dialog, storeProject, name, createUserStory, createNewP
                                         :
                                         'Create'
                                 }
-
                             </Button>
                             <Button variant="contained" className="cancel-btn" onClick={dialog}>Cancel</Button>
                         </Form>
@@ -110,4 +118,4 @@ const CreateProject = ({ dialog, storeProject, name, createUserStory, createNewP
     )
 }
 
-export default CreateProject;
+export default CreateUserStory;

@@ -17,3 +17,13 @@ export const createProject =(username,password,name,description)=>{
  })
   )
 }
+
+export const getProject =(username,password)=>{
+  return axios.get(`http://localhost:3002/getProject?username=${username}&password=${password}`);
+}
+
+export const getUserStory =(username,password,projectName)=>{
+  return axios.get(`http://localhost:3003/getUserStory?username=${username}&password=${password}&projectName=${projectName}`);
+}
+
+

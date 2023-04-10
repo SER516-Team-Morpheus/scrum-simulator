@@ -3,6 +3,7 @@ import TabNavItem from "./TabNavItem";
 import TabContent from "./TabContent";
 import ProjectTab from "../AllTabs/ProjectTab";
 import SprintTab from "../AllTabs/SprintTab";
+import BacklogTab from "../AllTabs/BacklogTab";
 
 const Tabs = () => {
   const [activeTab, setActiveTab] = useState("tab1");
@@ -22,6 +23,12 @@ const Tabs = () => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
+        <TabNavItem
+          title="Backlog"
+          id="backlog"
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
       </ul>
       <div className="outlet">
         <TabContent id="project" activeTab={activeTab}>
@@ -29,6 +36,9 @@ const Tabs = () => {
         </TabContent>
         <TabContent id="sprint" activeTab={activeTab}>
           <SprintTab />
+        </TabContent>
+        <TabContent id="backlog" activeTab={activeTab}>
+          <BacklogTab />
         </TabContent>
       </div>
     </div>
