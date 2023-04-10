@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -7,8 +7,9 @@ import CreateProject from './CreateProject';
 import Link from '@mui/material/Link';
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-import { createProject, getProject } from '../apis';
+import { createProject, getMembers, getProject } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
+import CreateMember from './CreateMember';
 
 const Wrapper = styled.div`
 
@@ -48,85 +49,45 @@ img {
     top:50%;
     left:30%;
 }
-`;
-
-const CreateDialog = styled.div`
-
-height: 400px;
-width:600px;
-background-color: #d7dbd8;
-position:absolute;
-top:50%;
-left: 50%;
-transform : translate(-40%, -70%)
-
 
 
 `;
 
-const Project = ({ showItem }) => {
-    let email = Cookies.get('username') || 'SERtestuser';
-    let password = Cookies.get('password') || 'testuser';
+
+const Members = () => {
+    let username = Cookies.get('username');
+    let password = Cookies.get('password');
+    let projectName = Cookies.get('projectName');
+    let projectId = Cookies.get('projectId')
     const [showDialog, setShowDialog] = useState(false);
-    const navigate = useNavigate();
+    const [memberList, setMemberList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [isCreateLoader, setIsCreateLoader] = useState(false);
-    const [projectList, setProjectList] = useState([]);
 
-
-    const storeProject = (data) => {
-        setProjectList([data]);
-        setShowDialog(false);
-    }
     const handleDialog = () => {
         setShowDialog(!showDialog);
     }
-    const selectProject = (name, projectId) => {
-        Cookies.set('projectName', name)
-        Cookies.set('projectId',projectId)
-        navigate('/projects/' + Cookies.get('projectName'))
-        navigate('/backlog')
-        showItem();
-    }
-
-
-    const createNewProject = (name, description) => {
-        setIsCreateLoader(true);
-        createProject(email, password, name, description)
-            .then(res => {
-                const data={
-                    name:res.data.projectName,
-                    description:res.data.description
-                }
-                setProjectList(prevState => [...prevState, data])
-                setIsCreateLoader(false);
-                setShowDialog(false);
-            })
-            .catch(function(error){
-                setIsCreateLoader(false);
-            })
+    const addMember = (data) => {
+        setMemberList(prevState => [...prevState, data])
     }
 
     useEffect(() => {
-        getProject(email, password)
+        getMembers(username, password, projectId)
             .then(res => {
-                setProjectList(res.data.projects)
+                setMemberList(res.data.data)
                 setIsLoading(false);
             })
-            .catch(function (error) {
+            .catch(function(error){
                 setIsLoading(false);
             })
-
     }, [])
-
     return (
         <Wrapper>
             <div className='heading-bar'>
                 <Typography className="heading" variant="h3" gutterBottom>
-                    Projects
+                    Members
                 </Typography>
                 <div>
-                    <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Create Project</Button>
+                    <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Add Members</Button>
                 </div>
             </div>
             {
@@ -143,11 +104,10 @@ const Project = ({ showItem }) => {
                     :
                     <div>
                         {
-                            projectList.length > 0 ? (
-                                projectList.map(data => (
+                            memberList.length > 0 ? (
+                                memberList.map(data => (
                                     <div className="project-list">
-                                        <Typography className="heading" variant="h6" gutterBottom><Link onClick={() => selectProject(data.name,data.id)}>{data.name}</Link></Typography>
-                                        <Typography className="heading" variant="h9" gutterBottom>{data.description}</Typography>
+                                        <Typography className="heading" variant="h9" gutterBottom>{data.full_name}</Typography>
                                     </div>
                                 ))
                             )
@@ -155,28 +115,26 @@ const Project = ({ showItem }) => {
                                 <>
                                     <img src={projectImg} alt="project" />
                                     <Typography style={{ color: '#1976d2' }} className="heading" variant="h6" gutterBottom>
-                                        No Project. Please create new one.
+                                        No Members. Please create new one.
                                     </Typography>
                                 </>
 
                         }
                         {showDialog &&
-                            <CreateProject
+                            <CreateMember
                                 dialog={handleDialog}
-                                createNewProject={createNewProject}
-                                name={'Project'}
-                                isCreateLoader={isCreateLoader}
+                                addMember={addMember}
                             />
                         }
 
-                    </div>
 
+
+                    </div>
             }
 
 
         </Wrapper>
-
     )
 }
 
-export default Project;
+export default Members;
