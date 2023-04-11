@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { InputLabel } from '@mui/material';
+import { updateUserstory } from '../apis';
 
 const Wrapper = styled.div`
 margin-top:20px;
@@ -80,6 +81,10 @@ padding: 20px 20px 50px 20px;
     height: 30px;
     width:250px;
 }
+.create-btn {
+    margin-top:10%;
+    background-color: #8C1D40;
+}
 
 
 `;
@@ -95,6 +100,9 @@ const StoryDetails = () => {
     }
     const handleStoryPoints = (event) => {
         setStoryPoints(event.target.value);
+    }
+    const handleUpdateUserStory = (event) => {
+        console.log("update user story activated");
     }
     return (
         <Wrapper>
@@ -180,6 +188,9 @@ const StoryDetails = () => {
                         <MenuItem value={'3'}>Assignee 2</MenuItem>
 
                     </Select>
+                </div>
+                <div>
+                    <Button className="create-btn" variant="contained" onClick={handleUpdateUserStory}>Update</Button>
                 </div>
 
             </StoryInfo>
