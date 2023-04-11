@@ -6,6 +6,8 @@ import Button from '@mui/material/Button';
 import { Formik, Field, Form } from 'formik';
 import { login } from "../apis";
 import Cookies from 'js-cookie';
+import { ColorRing } from 'react-loader-spinner';
+
 
 const Wrapper = styled.div`
 
@@ -39,6 +41,15 @@ width: 100%;
         left:40%;
     }
   }
+  svg {
+    height:30px;
+}
+  .loader {
+    height: 30px;
+    position: relative;
+    top:50%;
+    left:30%;
+}
 
 `;
 
@@ -46,6 +57,8 @@ width: 100%;
 const Login = () => {
     const navigate = useNavigate();
     const [loginError,setLoginError] = useState('');
+    const [isCreateLoader, setIsCreateLoader] = useState(false);
+ 
     return (
         <Wrapper>
             <div className="login-screen">
@@ -56,14 +69,21 @@ const Login = () => {
                         
                     }}
                     onSubmit={(values) => {
+                        setIsCreateLoader(true);
+                        setLoginError('');
                         login(values.email,values.password)
                         .then(res=>{
                             Cookies.set('token',res.data.token)
                             Cookies.set('username',values.email)
                             Cookies.set('password',values.password)
+                            setIsCreateLoader(false);
+                           
                             navigate('/projects')
                         })
-                        .catch(error=>setLoginError('Unable to login. Username or Password is incorrect'))
+                        .catch(error=>{
+                            setIsCreateLoader(false);
+                            setLoginError('Unable to login. Username or Password is incorrect')
+                        })
                     }}
                 >
                     {
@@ -75,7 +95,22 @@ const Login = () => {
                     <TextField id="outlined-basic" onChange={props.handleChange} name="email" className="textField" required label="Username" variant="outlined" />
                     <TextField id="outlined-basic" onChange={props.handleChange} name="password" className="textField" required label="Password" variant="outlined" type={"password"} />
                     {loginError ? <p style={{color:'red'}}>{loginError}</p>:''}
-                    <Button variant="contained" className="login-btn" type="submit">Login</Button>
+                    <Button variant="contained" className="login-btn" type="submit">
+                    {
+                                    isCreateLoader ?
+                                        <ColorRing
+                                            visible={true}
+                                            className="loader"
+                                            height="80"
+                                            width="80"
+                                            ariaLabel="blocks-loading"
+                                            wrapperClass="loaders"
+                                            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                                        />
+                                        :
+                                        'Create'
+                                }
+                    </Button>
                     </Form>
                       )
                     }

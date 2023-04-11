@@ -93,7 +93,14 @@ a {
                 </ul>
             </div>
             <div className='bottom-bar'>
+                    <div className="user-details">
+                        <div className="user-circle">
 
+                        </div>
+                        <div>
+                            <p>{Cookies.get('username')|| 'Guest User'}</p>
+                        </div>
+                    </div>
             </div>
 
 
