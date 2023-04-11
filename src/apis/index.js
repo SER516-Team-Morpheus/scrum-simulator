@@ -41,5 +41,15 @@ export const getMembers =(username,password,projectId)=>{
   `)
 }
 
+export const updateUserstory =(username, password, projectname, userstoryname, storypoints)=>{
+  return axios.patch(`http://localhost:3003/updateUserstory`, {
+    username,
+    password,
+    projectname,
+    userstoryname,
+    storypoints,
+  })
+}
+
 
 

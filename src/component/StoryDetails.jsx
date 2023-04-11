@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import { useNavigate, useParams } from "react-router-dom";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { InputLabel } from '@mui/material';
 
 const Wrapper = styled.div`
 margin-top:20px;
@@ -88,6 +89,7 @@ const StoryDetails = () => {
     const { name } = useParams();
     const [taskState, setTaskState] = useState('New');
     const [storyPoints, setStoryPoints] = useState('3');
+    const [showDialog, setShowDialog] = useState(false);
     const handleChange = (event) => {
         setTaskState(event.target.value)
     }
@@ -103,6 +105,52 @@ const StoryDetails = () => {
             <StoryInfo>
                 <div className="info-left">
                     <h4>Story points</h4>
+                    <InputLabel id="demo-simple-select-label-1">UX</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label-1"
+                        id="demo-simple-select"
+                        className="points-select"
+                        value={storyPoints}
+                        label="Points"
+                        onChange={handleStoryPoints}
+                    >
+                        <MenuItem value={'1'}>1</MenuItem>
+                        <MenuItem value={'3'}>3</MenuItem>
+                        <MenuItem value={'5'}>5</MenuItem>
+                        <MenuItem value={'8'}>8</MenuItem>
+
+                    </Select>
+                    <InputLabel id="demo-simple-select-label-2">Front</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label-2"
+                        id="demo-simple-select"
+                        className="points-select"
+                        value={storyPoints}
+                        label="Points"
+                        onChange={handleStoryPoints}
+                    >
+                        <MenuItem value={'1'}>1</MenuItem>
+                        <MenuItem value={'3'}>3</MenuItem>
+                        <MenuItem value={'5'}>5</MenuItem>
+                        <MenuItem value={'8'}>8</MenuItem>
+
+                    </Select>
+                    <InputLabel id="demo-simple-select-label-3">Back</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label-3"
+                        id="demo-simple-select"
+                        className="points-select"
+                        value={storyPoints}
+                        label="Points"
+                        onChange={handleStoryPoints}
+                    >
+                        <MenuItem value={'1'}>1</MenuItem>
+                        <MenuItem value={'3'}>3</MenuItem>
+                        <MenuItem value={'5'}>5</MenuItem>
+                        <MenuItem value={'8'}>8</MenuItem>
+
+                    </Select>
+                    <InputLabel id="demo-simple-select-label-4">Design</InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
