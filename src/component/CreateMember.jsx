@@ -8,6 +8,7 @@ import { createUserstory } from '../apis/backlog';
 import Cookies from 'js-cookie';
 import Backlog from './Backlog';
 import { ColorRing } from 'react-loader-spinner';
+import { createMember } from '../apis';
 
 
 const Wrapper = styled.div`
@@ -54,7 +55,11 @@ left: 40%;
 
 `;
 
-const CreateUserStory = ({ dialog, storeUserStory }) => {
+const CreateMember = ({ dialog, addMember }) => {
+    let username = Cookies.get('username');
+    let password = Cookies.get('password');
+    let projectName = Cookies.get('projectName');
+    let projectId = Cookies.get('projectId')
     const [isCreateLoader, setIsCreateLoader] = useState(false);
 
     return (
@@ -62,37 +67,21 @@ const CreateUserStory = ({ dialog, storeUserStory }) => {
         <Wrapper>
             <Formik
                 initialValues={{
-                    subject: '',
+                    memberName: '',
                 }}
                 onSubmit={(values) => {
-                    let email = Cookies.get('username') || 'SERtestuser';
-                    let password = Cookies.get('password') || 'testuser';
-                    let project = Cookies.get('projectName')
-                    setIsCreateLoader(true);
-                    const storyData = {
-                        subject: values.subject
-                    }
-
-                    createUserstory(email, password, project, values.subject)
-                        .then(res => {
-                            setIsCreateLoader(false);
-                            const storyData = {
-                                subject: values.subject
-                            }
-                            storeUserStory(storyData)
-                            setIsCreateLoader(false)
-                        })
-                        .catch(error => {
-                            setIsCreateLoader(false);
-                        })
-                        // .catch(error => setLoginError('Unable to login. Username or Password is incorrect'))
+                    createMember(username,password,values.memberName,projectId)
+                    .then(res=>{
+                        dialog();
+                        addMember(values.memberName)
+                    })
                 }}
             >
                 {
                     props => (
                         <Form className="UserStory-form">
-                            <Typography className="heading" variant="h4" gutterBottom>Add User Story</Typography>
-                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} name="subject" variant="outlined" />
+                            <Typography className="heading" variant="h4" gutterBottom>Add Member</Typography>
+                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} label="Username" name="memberName" variant="outlined" />
                             <Button variant="contained" className="crt-btn" type="submit">
                                 {
                                     isCreateLoader ?
@@ -106,7 +95,7 @@ const CreateUserStory = ({ dialog, storeUserStory }) => {
                                             colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
                                         />
                                         :
-                                        'Create'
+                                        'Add'
                                 }
                             </Button>
                             <Button variant="contained" className="cancel-btn" onClick={dialog}>Cancel</Button>
@@ -118,4 +107,4 @@ const CreateUserStory = ({ dialog, storeUserStory }) => {
     )
 }
 
-export default CreateUserStory;
+export default CreateMember;

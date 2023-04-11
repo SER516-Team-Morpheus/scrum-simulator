@@ -3,16 +3,13 @@ import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import projectImg from '../img/project-img.jpg';
-import CreateUserStory from './CreateUserStory'
+import CreateProject from './CreateProject';
 import Link from '@mui/material/Link';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-import { RxDragHandleHorizontal } from "react-icons/rx";
-import { createUserstory } from '../apis/backlog';
-import { getUserStory } from '../apis/index';
+import { createProject, getMembers, getProject } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
-
-
+import CreateMember from './CreateMember';
 
 const Wrapper = styled.div`
 
@@ -22,6 +19,7 @@ const Wrapper = styled.div`
     margin-top:20px
 }
 .heading{
+    // margin-top: 10px;
     color: #8C1D40;
 }
 
@@ -38,11 +36,9 @@ img {
     position:absolute;
 }
 
-.story-list {
-    height: 30px;
-    padding:10px;
-    background-color: #e8e7e6;
-    margin-bottom: 7px;
+.project-list {
+    margin-top:30px;
+    cursor:pointer;
     a {
         text-decoration:none;
     }        
@@ -54,61 +50,44 @@ img {
     left:30%;
 }
 
-.click-details {
-    cursor: pointer;
-}
-`;
-
-const CreateDialog = styled.div`
-
-height: 400px;
-width:600px;
-background-color: #d7dbd8;
-position:absolute;
-top:50%;
-left: 50%;
-transform : translate(-40%, -70%)
-
-
 
 `;
 
-const Backlog = ({ showItem }) => {
-    let email = Cookies.get('username') || 'SERtestuser';
-    let password = Cookies.get('password') || 'testuser';
-    let projectName = Cookies.get('projectName')
+
+const Members = () => {
+    let username = Cookies.get('username');
+    let password = Cookies.get('password');
+    let projectName = Cookies.get('projectName');
+    let projectId = Cookies.get('projectId')
     const [showDialog, setShowDialog] = useState(false);
-    const navigate = useNavigate();
-    const [storyList, setStoryList] = useState([]);
+    const [memberList, setMemberList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const storeStory = (data) => {
-        setStoryList(prevData => [...prevData, data])
-        setShowDialog(false);
-    }
     const handleDialog = () => {
         setShowDialog(!showDialog);
     }
-    const selectStory = (name) => {
-        navigate(`/storyDetails/${name}`)   
+    const addMember = (data) => {
+        setMemberList(prevState => [...prevState, data])
     }
 
     useEffect(() => {
-        getUserStory(email, password, projectName)
+        getMembers(username, password, projectId)
             .then(res => {
+                setMemberList(res.data.data)
                 setIsLoading(false);
-                setStoryList(res.data.userStory)
+            })
+            .catch(function(error){
+                setIsLoading(false);
             })
     }, [])
-
     return (
         <Wrapper>
             <div className='heading-bar'>
                 <Typography className="heading" variant="h3" gutterBottom>
-                    Backlog
+                    Members
                 </Typography>
                 <div>
-                    <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Create User Story</Button>
+                    <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Add Members</Button>
                 </div>
             </div>
             {
@@ -123,16 +102,12 @@ const Backlog = ({ showItem }) => {
                         colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
                     />
                     :
-
                     <div>
                         {
-                            storyList.length > 0 ? (
-                                storyList.map((data, index) => (
-                                    <div className="story-list">
-                                        <Typography className="heading" variant="h7" gutterBottom>
-                                            <RxDragHandleHorizontal className="drag-icon" /><Link onClick={()=>selectStory(data.subject)} className="click-details">{index + 1}. {data.subject}</Link>
-                                        </Typography>
-                                        {/* <Typography className="heading" variant="h9" gutterBottom>{data.description}</Typography> */}
+                            memberList.length > 0 ? (
+                                memberList.map(data => (
+                                    <div className="project-list">
+                                        <Typography className="heading" variant="h9" gutterBottom>{data.full_name}</Typography>
                                     </div>
                                 ))
                             )
@@ -140,25 +115,26 @@ const Backlog = ({ showItem }) => {
                                 <>
                                     <img src={projectImg} alt="project" />
                                     <Typography style={{ color: '#1976d2' }} className="heading" variant="h6" gutterBottom>
-                                        No Story. Please create new one.
+                                        No Members. Please create new one.
                                     </Typography>
                                 </>
 
                         }
-
                         {showDialog &&
-                            <CreateUserStory
+                            <CreateMember
                                 dialog={handleDialog}
-                                storeUserStory={storeStory}
+                                addMember={addMember}
                             />
                         }
+
+
 
                     </div>
             }
 
-        </Wrapper>
 
+        </Wrapper>
     )
 }
 
-export default Backlog;
+export default Members;

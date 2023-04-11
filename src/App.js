@@ -11,6 +11,9 @@ import Authentication from "./component/Authentication";
 import ProjectDashboard from "./component/ProjectDashboard";
 import SimulatorGame from "./component/SimulatorGame";
 import SprintTab from "./component/SprintTab";
+import StoryDetails from "./component/StoryDetails";
+import Members from "./component/Members"
+
 
 const Wrapper = styled.div`
 margin:0px;
@@ -26,12 +29,9 @@ const App = () => {
     setItemVisible(true);
   }
   
-  console.log('app')
   useEffect(()=>{
-    console.log('nav calling')
     if(Cookies.get('projectName')){
         setItemVisible(true);
-        console.log('app calling')
     }
 
 },[Cookies.get('projectName')])
@@ -52,6 +52,9 @@ const App = () => {
               <Route exact path="/backlog" element={<Backlog showItem={showItem}/>} />
               <Route exact path="/simulation" element={<SimulatorGame/>} />
               <Route exact path="/sprints" element={<SprintTab/>} />
+              <Route exact path="/storyDetails/:name" element={<StoryDetails/>} />
+              <Route exact path="/members" element={<Members/>} />
+
             </Routes>
           </Grid>
         </Grid>

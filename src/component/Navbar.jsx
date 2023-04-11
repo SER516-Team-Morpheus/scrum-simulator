@@ -69,6 +69,17 @@ width:20%;
     border-radius: 25px;
     background-color:white;
     left:10%;
+    .user-details {
+        display:flex;
+        justify-content:space-evenly;
+        padding:20px;
+        .user-circle {
+            height:50px;
+            width: 50px;
+            border-radius: 30px;
+            background-color: #8C1D40;
+        }
+    }
 }
 a {
     text-decoration: none;
@@ -102,7 +113,14 @@ a {
                 </ul>
             </div>
             <div className='bottom-bar'>
+                    <div className="user-details">
+                        <div className="user-circle">
 
+                        </div>
+                        <div>
+                            <p>{Cookies.get('username')|| 'Guest User'}</p>
+                        </div>
+                    </div>
             </div>
 
 

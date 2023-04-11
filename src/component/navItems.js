@@ -25,9 +25,15 @@ export const navItems =()=> {return([
         isVisible:Cookies.get('projectName') ? true : false,
         isActive:false
     },
+    // {
+    //     name: 'Settings',
+    //     url: '/settings',
+    //     isVisible:Cookies.get('projectName') ? true : false,
+    //     isActive:false
+    // },
     {
-        name: 'Settings',
-        url: '/settings',
+        name: 'Members',
+        url: '/members',
         isVisible:Cookies.get('projectName') ? true : false,
         isActive:false
     }
