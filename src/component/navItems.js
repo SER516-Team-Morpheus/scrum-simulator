@@ -8,6 +8,13 @@ export const navItems =()=> {return([
         isActive:false
     },
     {
+    
+        name: 'Epics',
+        url: '/create-epic',
+        isVisible:true,
+        isActive:false  
+    },
+    {
         name:'Backlog',
         url:'/backlog',
         isVisible:Cookies.get('projectName') ? true : false,

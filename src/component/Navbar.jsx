@@ -61,26 +61,6 @@ width:20%;
     }
 }
 
-.bottom-bar {
-    position: absolute;
-    bottom: 5%;
-    height:100px;
-    width:80%;
-    border-radius: 25px;
-    background-color:white;
-    left:10%;
-    .user-details {
-        display:flex;
-        justify-content:space-evenly;
-        padding:20px;
-        .user-circle {
-            height:50px;
-            width: 50px;
-            border-radius: 30px;
-            background-color: #8C1D40;
-        }
-    }
-}
 a {
     text-decoration: none;
 }
