@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export const login =(username,password)=>{
-   return (axios.post("http://localhost:8080/authenticate", {
+   return (axios.post("http://localhost:3001/authenticate", {
      username,
      password,
   })
