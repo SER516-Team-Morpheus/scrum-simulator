@@ -10,6 +10,27 @@ import Cookies from 'js-cookie';
 import { createProject, getMembers, getProject } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import CreateMember from './CreateMember';
+import MaterialTable from 'material-table';
+import { ThemeProvider, createTheme } from '@mui/material';
+
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
+import { forwardRef } from 'react';
+
+
 
 const Wrapper = styled.div`
 
@@ -49,9 +70,34 @@ img {
     top:50%;
     left:30%;
 }
+.table {
+    margin-top:30px;
+}
 
 
 `;
+
+
+
+const tableIcons = {
+    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+};
 
 
 const Members = () => {
@@ -62,6 +108,14 @@ const Members = () => {
     const [showDialog, setShowDialog] = useState(false);
     const [memberList, setMemberList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const defaultMaterialTheme = createTheme();
+
+    const [columns, setColumns] = useState([
+        { title: 'Name', field: 'full_name' },
+        { title: 'Email', field: 'email' },
+        { title: 'Role', field: 'role' }
+    ]);
+
 
     const handleDialog = () => {
         setShowDialog(!showDialog);
@@ -76,7 +130,7 @@ const Members = () => {
                 setMemberList(res.data.data)
                 setIsLoading(false);
             })
-            .catch(function(error){
+            .catch(function (error) {
                 setIsLoading(false);
             })
     }, [])
@@ -102,35 +156,58 @@ const Members = () => {
                         colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
                     />
                     :
-                    <div>
-                        {
-                            memberList.length > 0 ? (
-                                memberList.map(data => (
-                                    <div className="project-list">
-                                        <Typography className="heading" variant="h9" gutterBottom>{data.full_name}</Typography>
-                                    </div>
-                                ))
-                            )
-                                :
-                                <>
-                                    <img src={projectImg} alt="project" />
-                                    <Typography style={{ color: '#1976d2' }} className="heading" variant="h6" gutterBottom>
-                                        No Members. Please create new one.
-                                    </Typography>
-                                </>
+                    <div className="table">
+                        <ThemeProvider theme={defaultMaterialTheme}>
 
-                        }
+                            <MaterialTable
+                                icons={tableIcons}
+                                title=""
+                                columns={columns}
+                                data={memberList}
+                            // editable={{
+                            //     onRowAdd: newData =>
+                            //         new Promise((resolve, reject) => {
+                            //             setTimeout(() => {
+                            //                 setData([...data, newData]);
+
+                            //                 resolve();
+                            //             }, 1000)
+                            //         }),
+                            //     onRowUpdate: (newData, oldData) =>
+                            //         new Promise((resolve, reject) => {
+                            //             setTimeout(() => {
+                            //                 const dataUpdate = [...data];
+                            //                 const index = oldData.tableData.id;
+                            //                 dataUpdate[index] = newData;
+                            //                 setData([...dataUpdate]);
+
+                            //                 resolve();
+                            //             }, 1000)
+                            //         }),
+                            //     onRowDelete: oldData =>
+                            //         new Promise((resolve, reject) => {
+                            //             setTimeout(() => {
+                            //                 const dataDelete = [...data];
+                            //                 const index = oldData.tableData.id;
+                            //                 dataDelete.splice(index, 1);
+                            //                 setData([...dataDelete]);
+
+                            //                 resolve()
+                            //             }, 1000)
+                            //         }),
+                            // }}
+                            />
+                        </ThemeProvider>
                         {showDialog &&
                             <CreateMember
                                 dialog={handleDialog}
                                 addMember={addMember}
                             />
                         }
-
-
-
-                    </div>
+                         </div>
+                        
             }
+                   
 
 
         </Wrapper>

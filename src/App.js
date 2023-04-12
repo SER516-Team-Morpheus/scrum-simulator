@@ -10,6 +10,7 @@ import Backlog from "./component/Backlog";
 import Authentication from "./component/Authentication";
 import ProjectDashboard from "./component/ProjectDashboard";
 import SimulatorGame from "./component/SimulatorGame";
+import CreateEpic from "./component/CreateEpic";
 import SprintTab from "./component/SprintTab";
 import StoryDetails from "./component/StoryDetails";
 import Members from "./component/Members"
@@ -18,7 +19,7 @@ import Members from "./component/Members"
 const Wrapper = styled.div`
 margin:0px;
 padding:0px;
-
+\
 
 `;
 
@@ -50,6 +51,8 @@ const App = () => {
               <Route exact path="/projects" element={<Project showItem={showItem}/>} />
               <Route path="/projects/:id" element={<Login/>}/>
               <Route exact path="/backlog" element={<Backlog showItem={showItem}/>} />
+              <Route exact path="/simulator" element={<SimulatorGame/>} />
+              <Route exact path="/create-epic" element={<CreateEpic addEpic={() => {}}/>} />
               <Route exact path="/simulation" element={<SimulatorGame/>} />
               <Route exact path="/sprints" element={<SprintTab/>} />
               <Route exact path="/storyDetails/:name" element={<StoryDetails/>} />

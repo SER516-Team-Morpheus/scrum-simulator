@@ -96,7 +96,8 @@ const Project = ({ showItem }) => {
             .then(res => {
                 const data={
                     name:res.data.projectName,
-                    description:res.data.description
+                    description:res.data.description,
+                    id:res.data.projectId
                 }
                 setProjectList(prevState => [...prevState, data])
                 setIsCreateLoader(false);
