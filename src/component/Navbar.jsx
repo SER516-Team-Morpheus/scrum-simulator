@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
+import { Link } from "react-router-dom";
+
 import { navItems } from './navItems';
 import Cookies from 'js-cookie';
 import { DiScrum } from "react-icons/di";
@@ -108,7 +110,7 @@ a {
                 <ul>
                     {
                         navItems(isOptionVisible).map(item=>
-                            item.isVisible ?  <Link href={item.url}><li>{item.name}</li></Link> : ''
+                            item.isVisible ?  <Link to={item.url}><li>{item.name}</li></Link> : ''
                         )
                     }
                 </ul>
