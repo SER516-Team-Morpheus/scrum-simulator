@@ -114,14 +114,22 @@ const StoryDetails = () => {
     }
     const handleStoryPoints = (event) => {
         const { name, value } = event.target;
-        console.log(name, value)
         setData(prevState => ({
-          ...prevState.storypoints,
-          [name]: value
-        }));
-    }
+          ...prevState,
+          storypoints: {
+            ...prevState.storypoints,
+            [name]: value
+          }
+        }))
+      }
     const handleUpdateUserStory = (event) => {
         updateUserstory(data)
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
     return (
         <Wrapper>

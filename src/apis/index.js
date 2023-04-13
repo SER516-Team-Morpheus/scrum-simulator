@@ -42,8 +42,7 @@ export const getMembers =(username,password,projectId)=>{
 }
 
 export const updateUserstory =(data)=>{
-  return axios.patch(`http://localhost:3003/updateUserstory?username=${data.username}&password=${data.password}&projectname=${data.projectname}&userstoryname=${data.userstoryname}&storypoints=${data.storypoints}
-  `)
+  return axios.patch("http://example.com/api/update", data)
 }
 
 
