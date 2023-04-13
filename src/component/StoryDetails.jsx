@@ -103,20 +103,20 @@ const StoryDetails = () => {
         projectname: Cookies.get('projectName'),
         userstoryname: name,
         storypoints: {
-          UX: '0',
-          Back: '0',
-          Front: '0',
-          Design: '0'
+          UX: "0",
+          Back: "0",
+          Front: "0",
+          Design: "0"
         }
       });
     const handleChange = (event) => {
         setTaskState(event.target.value)
     }
     const handleStoryPoints = (event) => {
-        console.log("handle story points called on click")
         const { name, value } = event.target;
+        console.log(name, value)
         setData(prevState => ({
-          ...prevState,
+          ...prevState.storypoints,
           [name]: value
         }));
     }
@@ -137,9 +137,11 @@ const StoryDetails = () => {
                         labelId="demo-simple-select-label-1"
                         id="demo-simple-select"
                         className="points-select"
+                        name="UX"
                         value={data.storypoints.UX}
                         label="Points"
                         onChange={handleStoryPoints}
+                        defaultValue={"0"}
                     >
                         <MenuItem value={'1'}>1</MenuItem>
                         <MenuItem value={'3'}>3</MenuItem>
@@ -155,6 +157,8 @@ const StoryDetails = () => {
                         value={data.storypoints.Front}
                         label="Points"
                         onChange={handleStoryPoints}
+                        name="Front"
+                        defaultValue={"0"}
                     >
                         <MenuItem value={'1'}>1</MenuItem>
                         <MenuItem value={'3'}>3</MenuItem>
@@ -169,7 +173,9 @@ const StoryDetails = () => {
                         className="points-select"
                         value={data.storypoints.Back}
                         label="Points"
+                        name="Back"
                         onChange={handleStoryPoints}
+                        defaultValue={"0"}
                     >
                         <MenuItem value={'1'}>1</MenuItem>
                         <MenuItem value={'3'}>3</MenuItem>
@@ -184,7 +190,9 @@ const StoryDetails = () => {
                         className="points-select"
                         value={data.storypoints.Design}
                         label="Points"
+                        name="Design"
                         onChange={handleStoryPoints}
+                        defaultValue={"0"}
                     >
                         <MenuItem value={'1'}>1</MenuItem>
                         <MenuItem value={'3'}>3</MenuItem>
