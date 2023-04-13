@@ -7,6 +7,15 @@ function SprintTab() {
   const [sprintStartDate, setSprintStartDate] = useState('');
   const [sprintEndDate, setSprintEndDate] = useState('');
   const [sprintData, setSprintData] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   
   const handleSprintNameChange = (event) => {
     setSprintName(event.target.value);
@@ -36,10 +45,17 @@ function SprintTab() {
   };
 
   return (
-    <div>
-      <div>
+    <div style={{padding: '3%'}}>
+      <div> 
         <h1 style={{color: "#8C1D40"}}>Create Sprint</h1>
-
+      </div>
+      <div style={{textAlign: 'right'}}>
+      <Button variant="contained" color="primary" onClick={handleOpen}>Create Sprint</Button>
+      </div>
+    
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>Create Sprint</DialogTitle>
+      <DialogContent>
         <div>
           <label htmlFor="sprintName" style={{ marginRight: "1em", fontSize: "1.2em", color: "blue" }}>Sprint Name:</label>
           <input type="text" id="sprintName" name="sprintName" value={sprintName} onChange={handleSprintNameChange} />
@@ -61,7 +77,7 @@ function SprintTab() {
         </div>
 
         <button onClick={handleCreateSprint} style={{ float: "left" }}>Create Sprint</button>
-      </div>
+      <div/>
 
       {sprintData && (
         <div>
@@ -72,6 +88,11 @@ function SprintTab() {
         <p>End Date: {sprintData.endDate}</p>
       </div>
       )}
+      </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
