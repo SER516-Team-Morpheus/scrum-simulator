@@ -7,6 +7,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { InputLabel } from '@mui/material';
 import { updateUserstory } from '../apis';
+import { Cookie } from '@mui/icons-material';
+import Cookies from 'js-cookie';
 
 const Wrapper = styled.div`
 margin-top:20px;
@@ -95,14 +97,31 @@ const StoryDetails = () => {
     const [taskState, setTaskState] = useState('New');
     const [storyPoints, setStoryPoints] = useState('3');
     const [showDialog, setShowDialog] = useState(false);
+    const [data, setData] = useState({
+        username: Cookies.get('username'),
+        password: Cookies.get('password'),
+        projectname: Cookies.get('projectName'),
+        userstoryname: name,
+        storypoints: {
+          UX: '0',
+          Back: '0',
+          Front: '0',
+          Design: '0'
+        }
+      });
     const handleChange = (event) => {
         setTaskState(event.target.value)
     }
     const handleStoryPoints = (event) => {
-        setStoryPoints(event.target.value);
+        console.log("handle story points called on click")
+        const { name, value } = event.target;
+        setData(prevState => ({
+          ...prevState,
+          [name]: value
+        }));
     }
     const handleUpdateUserStory = (event) => {
-        console.log("update user story activated");
+        updateUserstory(data)
     }
     return (
         <Wrapper>
@@ -118,7 +137,7 @@ const StoryDetails = () => {
                         labelId="demo-simple-select-label-1"
                         id="demo-simple-select"
                         className="points-select"
-                        value={storyPoints}
+                        value={data.storypoints.UX}
                         label="Points"
                         onChange={handleStoryPoints}
                     >
@@ -133,7 +152,7 @@ const StoryDetails = () => {
                         labelId="demo-simple-select-label-2"
                         id="demo-simple-select"
                         className="points-select"
-                        value={storyPoints}
+                        value={data.storypoints.Front}
                         label="Points"
                         onChange={handleStoryPoints}
                     >
@@ -148,7 +167,7 @@ const StoryDetails = () => {
                         labelId="demo-simple-select-label-3"
                         id="demo-simple-select"
                         className="points-select"
-                        value={storyPoints}
+                        value={data.storypoints.Back}
                         label="Points"
                         onChange={handleStoryPoints}
                     >
@@ -163,7 +182,7 @@ const StoryDetails = () => {
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         className="points-select"
-                        value={storyPoints}
+                        value={data.storypoints.Design}
                         label="Points"
                         onChange={handleStoryPoints}
                     >
