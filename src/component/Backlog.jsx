@@ -12,6 +12,7 @@ import { createUserstory } from '../apis/backlog';
 import { getUserStory } from '../apis/index';
 import { ColorRing } from 'react-loader-spinner';
 import Chip from '@mui/material/Chip';
+import CreateSprintButton from './createSprintButton';
 
 
 
@@ -137,6 +138,7 @@ const Backlog = ({ showItem }) => {
                     <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Create User Story</Button>
                 </div>
             </div>
+            <div className="create-sprnt-btn" style={{textAlign: 'right'}}><CreateSprintButton></CreateSprintButton></div>
             {
                 isLoading ?
                     <ColorRing
