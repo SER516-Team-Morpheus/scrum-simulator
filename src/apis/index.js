@@ -47,8 +47,9 @@ export const updateUserstory =(username, password, projectname, userstoryname, s
     password,
     projectname,
     userstoryname,
-    storypoints,
+    storypoints
   })
+}
 export const getRoles =(username,password,projectName)=>{
   return axios.get(`http://localhost:3008/getroles?username=${username}&password=${password}&projectName=${projectName}
   `)
@@ -62,6 +63,7 @@ export const getStoryTask =(username,password,projectname,userstoryname)=>{
     userstoryname
  })
   )
+}
 
 
 
