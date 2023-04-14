@@ -41,5 +41,20 @@ export const getMembers =(username,password,projectId)=>{
   `)
 }
 
+export const getRoles =(username,password,projectName)=>{
+  return axios.get(`http://localhost:3008/getroles?username=${username}&password=${password}&projectName=${projectName}
+  `)
+}
+
+export const getStoryTask =(username,password,projectname,userstoryname)=>{
+  return (axios.post("http://localhost:3005/getUserStoryTaskDetails", {
+    username,
+    password,
+    projectname,
+    userstoryname
+ })
+  )
+}
+
 
 

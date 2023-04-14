@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate, useParams } from "react-router-dom";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { getStoryTask } from '../apis';
+import Cookies from 'js-cookie';
 
 const Wrapper = styled.div`
 margin-top:20px;
@@ -27,28 +29,33 @@ const TaskList = styled.div`
 
 .task-item {
     display:flex;
-    justify-content:space-between
+    justify-content:space-between;
     // margin-bottom: 20px;
 }
 .item-right {
+    width:40%;
     display:flex;
     justify-content: space-evenly;
 }
 .item-left {
+    width:40%
     h4 {
         margin:0px;
         padding: 5px;
     }
 }
+
 .assignee-select {
     width: 130px;
     height: 30px;
     margin-right:30px;
 }
 .assigned {
+    width:20px;
     p {
         margin:0px;
         padding: 0px;
+        text-align:center;
     }
 }
 hr {
@@ -84,16 +91,27 @@ padding: 20px 20px 50px 20px;
 `;
 
 const StoryDetails = () => {
-
+    let username = Cookies.get('username');
+    let password = Cookies.get('password');
+    let projectName = Cookies.get('projectName');
+    let projectId = Cookies.get('projectId')
     const { name } = useParams();
     const [taskState, setTaskState] = useState('New');
     const [storyPoints, setStoryPoints] = useState('3');
+    const [taskList, setTaskList] = useState([]);
     const handleChange = (event) => {
         setTaskState(event.target.value)
     }
     const handleStoryPoints = (event) => {
         setStoryPoints(event.target.value);
     }
+
+    useEffect(() => {
+        getStoryTask(username, password, projectName, name)
+            .then(res => {
+                setTaskList(res.data.details)
+            })
+    }, [])
     return (
         <Wrapper>
             {console.log(name, 'qparams')}
@@ -126,7 +144,7 @@ const StoryDetails = () => {
                         className="assignee-select"
                         value={storyPoints}
                         label="Assignee"
-                        // onChange={handleAssignee}
+                    // onChange={handleAssignee}
                     >
                         <MenuItem value={'1'}> Assignee 1</MenuItem>
                         <MenuItem value={'3'}>Assignee 2</MenuItem>
@@ -135,64 +153,48 @@ const StoryDetails = () => {
                 </div>
 
             </StoryInfo>
+
             <TaskList>
                 <div className='task-heading'>
                     <h3>Tasks</h3>
-                    <div className='task-item'>
-                        <div className='item-left'>
-                            <h4>Create Sprint button</h4>
-                        </div>
-                        <div className='item-right'>
-                            <div className='item-drpdwn'>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    className="assignee-select"
-                                    value={taskState}
-                                    label="Age"
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value={'New'}>New</MenuItem>
-                                    <MenuItem value={'Working'}>Working</MenuItem>
-                                    <MenuItem value={'Testing'}>Testing</MenuItem>
-                                    <MenuItem value={'Done'}>Done</MenuItem>
+                    {
+                        taskList.map((taskData, index) => {
+                            return (
+                                <>
+                                    <div className='task-item'>
+                                        <div className='item-left'>
+                                            <h4>{index + 1 + ')' + ' '}{taskData.taskName ?? 'No task name'}</h4>
+                                        </div>
+                                        <div className='item-right'>
+                                            <div className='item-drpdwn'>
+                                                <Select
+                                                    labelId="demo-simple-select-label"
+                                                    id="demo-simple-select"
+                                                    className="assignee-select"
+                                                    value={taskState}
+                                                    label="Age"
+                                                    onChange={handleChange}
+                                                >
+                                                    <MenuItem value={'New'}>New</MenuItem>
+                                                    <MenuItem value={'Working'}>Working</MenuItem>
+                                                    <MenuItem value={'Testing'}>Testing</MenuItem>
+                                                    <MenuItem value={'Done'}>Done</MenuItem>
 
-                                </Select>
-                            </div>
-                            <div className='assigned'>
-                                <p>Unique Chhetri</p>
-                            </div>
-                        </div>
+                                                </Select>
+                                            </div>
+                                            <div className='assigned'>
+                                                <p>{taskData.assigned_to_extra_info ? taskData.assigned_to_extra_info.full_name_display : 'No assignee'}</p>
+                                            </div>
+                                        </div>
 
-                    </div>
-                    <hr />
-                    <div className='task-item'>
-                        <div className='item-left'>
-                            <h4>Create Sprint button</h4>
-                        </div>
-                        <div className='item-right'>
-                            <div className='item-drpdwn'>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    className="assignee-select"
-                                    value={taskState}
-                                    label="Age"
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value={'New'}>New</MenuItem>
-                                    <MenuItem value={'Working'}>Working</MenuItem>
-                                    <MenuItem value={'Testing'}>Testing</MenuItem>
-                                    <MenuItem value={'Done'}>Done</MenuItem>
+                                    </div>
+                                    <hr />
 
-                                </Select>
-                            </div>
-                            <div className='assigned'>
-                                <p>Unique Chhetri</p>
-                            </div>
-                        </div>
+                                </>
+                            )
+                        })
+                    }
 
-                    </div>
                 </div>
             </TaskList>
 
