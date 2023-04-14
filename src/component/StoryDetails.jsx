@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { InputLabel } from '@mui/material';
 import { updateUserstory } from '../apis';
 import { getStoryTask } from '../apis';
+import { Cookie } from '@mui/icons-material';
 import Cookies from 'js-cookie';
 
 const Wrapper = styled.div`
@@ -106,14 +107,39 @@ const StoryDetails = () => {
     const [storyPoints, setStoryPoints] = useState('3');
     const [showDialog, setShowDialog] = useState(false);
     const [taskList, setTaskList] = useState([]);
+    const [data, setData] = useState({
+        username: Cookies.get('username'),
+        password: Cookies.get('password'),
+        projectname: Cookies.get('projectName'),
+        userstoryname: name,
+        storypoints: {
+          UX: "0",
+          Back: "0",
+          Front: "0",
+          Design: "0"
+        }
+      });
     const handleChange = (event) => {
         setTaskState(event.target.value)
     }
     const handleStoryPoints = (event) => {
-        setStoryPoints(event.target.value);
-    }
+        const { name, value } = event.target;
+        setData(prevState => ({
+          ...prevState,
+          storypoints: {
+            ...prevState.storypoints,
+            [name]: value
+          }
+        }))
+      }
     const handleUpdateUserStory = (event) => {
-        console.log("update user story activated");
+        updateUserstory(data)
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     useEffect(() => {
@@ -136,9 +162,11 @@ const StoryDetails = () => {
                         labelId="demo-simple-select-label-1"
                         id="demo-simple-select"
                         className="points-select"
-                        value={storyPoints}
+                        name="UX"
+                        value={data.storypoints.UX}
                         label="Points"
                         onChange={handleStoryPoints}
+                        defaultValue={"0"}
                     >
                         <MenuItem value={'1'}>1</MenuItem>
                         <MenuItem value={'3'}>3</MenuItem>
@@ -151,9 +179,11 @@ const StoryDetails = () => {
                         labelId="demo-simple-select-label-2"
                         id="demo-simple-select"
                         className="points-select"
-                        value={storyPoints}
+                        value={data.storypoints.Front}
                         label="Points"
                         onChange={handleStoryPoints}
+                        name="Front"
+                        defaultValue={"0"}
                     >
                         <MenuItem value={'1'}>1</MenuItem>
                         <MenuItem value={'3'}>3</MenuItem>
@@ -166,9 +196,11 @@ const StoryDetails = () => {
                         labelId="demo-simple-select-label-3"
                         id="demo-simple-select"
                         className="points-select"
-                        value={storyPoints}
+                        value={data.storypoints.Back}
                         label="Points"
+                        name="Back"
                         onChange={handleStoryPoints}
+                        defaultValue={"0"}
                     >
                         <MenuItem value={'1'}>1</MenuItem>
                         <MenuItem value={'3'}>3</MenuItem>
@@ -181,9 +213,11 @@ const StoryDetails = () => {
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         className="points-select"
-                        value={storyPoints}
+                        value={data.storypoints.Design}
                         label="Points"
+                        name="Design"
                         onChange={handleStoryPoints}
+                        defaultValue={"0"}
                     >
                         <MenuItem value={'1'}>1</MenuItem>
                         <MenuItem value={'3'}>3</MenuItem>
