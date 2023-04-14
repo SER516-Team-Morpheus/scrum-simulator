@@ -92,7 +92,7 @@ const CreateUserStory = ({ dialog, storeUserStory }) => {
                     props => (
                         <Form className="UserStory-form">
                             <Typography className="heading" variant="h4" gutterBottom>Add User Story</Typography>
-                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} name="subject" variant="outlined" />
+                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} name="subject" label="Story name" variant="outlined" />
                             <Button variant="contained" className="crt-btn" type="submit">
                                 {
                                     isCreateLoader ?

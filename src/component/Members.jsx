@@ -7,11 +7,11 @@ import CreateProject from './CreateProject';
 import Link from '@mui/material/Link';
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-import { createProject, getMembers, getProject } from '../apis';
+import { createProject, getMembers, getRoles } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import CreateMember from './CreateMember';
 import MaterialTable from 'material-table';
-import { ThemeProvider, createTheme } from '@mui/material';
+import { ThemeProvider, createTheme, Select, MenuItem } from '@mui/material';
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -108,12 +108,15 @@ const Members = () => {
     const [showDialog, setShowDialog] = useState(false);
     const [memberList, setMemberList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [roleData, setRoleData] = useState([]);
     const defaultMaterialTheme = createTheme();
 
     const [columns, setColumns] = useState([
         { title: 'Name', field: 'full_name' },
         { title: 'Email', field: 'email' },
-        { title: 'Role', field: 'role' }
+        {
+            title: 'Role', field: 'role'
+        }
     ]);
 
 
@@ -127,12 +130,21 @@ const Members = () => {
     useEffect(() => {
         getMembers(username, password, projectId)
             .then(res => {
-                setMemberList(res.data.data)
-                setIsLoading(false);
+                getRoles(username, password, projectName)
+                    .then(roleData => {
+                        setRoleData(roleData.roles)
+                        setMemberList(res.data.data)
+                        setIsLoading(false);
+                    })
+                    .catch(function (error) {
+                        setIsLoading(false);
+                    })
+
             })
             .catch(function (error) {
                 setIsLoading(false);
             })
+
     }, [])
     return (
         <Wrapper>
@@ -204,10 +216,10 @@ const Members = () => {
                                 addMember={addMember}
                             />
                         }
-                         </div>
-                        
+                    </div>
+
             }
-                   
+
 
 
         </Wrapper>

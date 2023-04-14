@@ -1,12 +1,64 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import React, { useState } from 'react';
+import styled from 'styled-components';
+import Typography from '@mui/material/Typography';
+
+const Wrapper = styled.div`
+
+.heading-bar {
+    display:flex;
+    justify-content: space-between;
+    margin-top:20px
+}
+.heading{
+    // margin-top: 10px;
+    color: #8C1D40;
+}
+
+.create-btn {
+    margin-top:10%;
+    background-color: #8C1D40;
+}
+
+img {
+    height:300px;
+    width: 500px;
+    opacity:0.1;
+    margin: 100px 200px;
+    position:absolute;
+}
+
+.project-list {
+    margin-top:30px;
+    cursor:pointer;
+    a {
+        text-decoration:none;
+    }        
+}
+
+.loader {
+    position: relative;
+    top:50%;
+    left:30%;
+}
+`;
 
 function SprintTab() {
+
   const [sprintName, setSprintName] = useState('');
   const [sprintGoal, setSprintGoal] = useState('');
   const [sprintStartDate, setSprintStartDate] = useState('');
   const [sprintEndDate, setSprintEndDate] = useState('');
-  const [sprintData, setSprintData] = useState(null);
+  const [sprintData, setSprintData] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   
   const handleSprintNameChange = (event) => {
     setSprintName(event.target.value);
@@ -32,49 +84,96 @@ function SprintTab() {
       endDate: sprintEndDate,
     };
     console.log(data);
-    setSprintData(data);
+    setSprintData([data]);
   };
 
   return (
-    <div>
-      <div>
+    <div style={{padding: '3%'}}>
+      <div> 
         <h1 style={{color: "#8C1D40"}}>Create Sprint</h1>
+      </div>
+      <div style={{textAlign: 'right'}}>
+      <Button variant="contained" color="primary" onClick={handleOpen}>Create Sprint</Button>
+      </div>
+      <div>
+        {
+          sprintData.map(data=>{
+            return <div> 
+              <h3 style={{color: "#8C1D40"}} >Sprint Created!</h3>
+              <p>Sprint Name: {data.name}</p>
+              <p>Sprint Goal: {data.goal}</p>
+              <p>Sprint Start Date: {data.startDate}</p>
+              <p>Sprint End Date: {data.endDate}</p>
+            </div> 
+          })
+        }
+      </div>
 
+    
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>Create Sprint</DialogTitle>
+      <DialogContent>
         <div>
-          <label htmlFor="sprintName" style={{ marginRight: "1em", fontSize: "1.2em", color: "blue" }}>Sprint Name:</label>
-          <input type="text" id="sprintName" name="sprintName" value={sprintName} onChange={handleSprintNameChange} />
+          <TextField
+          id="sprintName"
+          label="Sprint Name"
+          variant="outlined"
+          margin="normal"
+          value={sprintName}
+          onChange={handleSprintNameChange}
+          fullWidth
+          />
         </div>
-
         <div>
-          <label htmlFor="sprintGoal" style={{ marginRight: "1em", fontSize: "1.2em", color: "blue" }}>Sprint Goal:</label>
-          <input type="text" id="sprintGoal" name="sprintGoal" value={sprintGoal} onChange={handleSprintGoalChange} />
+          <TextField
+          id="sprintGoal"
+          label="Sprint Goal"
+          variant="outlined"
+          margin="normal"
+          value={sprintGoal}
+          onChange={handleSprintGoalChange}
+          fullWidth
+          />
         </div>
-
         <div>
-          <label htmlFor="sprintStartDate" style={{ marginRight: "1em", fontSize: "1.2em", color: "blue" }} >Sprint Start Date:</label>
-          <input type="date" id="sprintStartDate" name="sprintStartDate" value={sprintStartDate} onChange={handleSprintStartDateChange} />
+          <TextField
+          id="sprintStartDate"
+          label="Sprint Start Date"
+          variant="outlined"
+          margin="normal"
+          type="date"
+          value={sprintStartDate}
+          onChange={handleSprintStartDateChange}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          fullWidth
+          />
         </div>
-
         <div>
-          <label htmlFor="sprintEndDate" style={{ marginRight: "1em", fontSize: "1.2em", color: "blue" }}>Sprint End Date:</label>
-          <input type="date" id="sprintEndDate" name="sprintEndDate" value={sprintEndDate} onChange={handleSprintEndDateChange} />
+          <TextField
+          id="sprintEndDate"
+          label="Sprint End Date"
+          variant="outlined"
+          margin="normal"
+          type="date"
+          value={sprintEndDate}
+          onChange={handleSprintEndDateChange}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          fullWidth
+          />
         </div>
-
         <button onClick={handleCreateSprint} style={{ float: "left" }}>Create Sprint</button>
-      </div>
-
-      {sprintData && (
-        <div>
-        <h3 style={{textAlign: "center", color: "#8C1D40"}}>Sprint Created! </h3>
-        <p>Name: {sprintData.name}</p>
-        <p>Goal: {sprintData.goal}</p>
-        <p>Start Date: {sprintData.startDate}</p>
-        <p>End Date: {sprintData.endDate}</p>
-      </div>
-      )}
+      <div/>
+      </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
 
 export default SprintTab;
-
