@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export const login =(username,password)=>{
-   return (axios.post("http://localhost:8080/authenticate", {
+   return (axios.post("http://localhost:3001/authenticate", {
      username,
      password,
   })
@@ -49,6 +49,19 @@ export const updateUserstory =(username, password, projectname, userstoryname, s
     userstoryname,
     storypoints,
   })
+export const getRoles =(username,password,projectName)=>{
+  return axios.get(`http://localhost:3008/getroles?username=${username}&password=${password}&projectName=${projectName}
+  `)
+}
+
+export const getStoryTask =(username,password,projectname,userstoryname)=>{
+  return (axios.post("http://localhost:3005/getUserStoryTaskDetails", {
+    username,
+    password,
+    projectname,
+    userstoryname
+ })
+  )
 }
 
 
