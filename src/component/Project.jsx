@@ -81,8 +81,9 @@ const Project = ({ showItem }) => {
     const handleDialog = () => {
         setShowDialog(!showDialog);
     }
-    const selectProject = (name) => {
+    const selectProject = (name, projectId) => {
         Cookies.set('projectName', name)
+        Cookies.set('projectId',projectId)
         navigate('/projects/' + Cookies.get('projectName'))
         navigate('/backlog')
         showItem();
@@ -95,7 +96,8 @@ const Project = ({ showItem }) => {
             .then(res => {
                 const data={
                     name:res.data.projectName,
-                    description:res.data.description
+                    description:res.data.description,
+                    id:res.data.projectId
                 }
                 setProjectList(prevState => [...prevState, data])
                 setIsCreateLoader(false);
@@ -145,7 +147,7 @@ const Project = ({ showItem }) => {
                             projectList.length > 0 ? (
                                 projectList.map(data => (
                                     <div className="project-list">
-                                        <Typography className="heading" variant="h6" gutterBottom><Link onClick={() => selectProject(data.name)}>{data.name}</Link></Typography>
+                                        <Typography className="heading" variant="h6" gutterBottom><Link onClick={() => selectProject(data.name,data.id)}>{data.name}</Link></Typography>
                                         <Typography className="heading" variant="h9" gutterBottom>{data.description}</Typography>
                                     </div>
                                 ))

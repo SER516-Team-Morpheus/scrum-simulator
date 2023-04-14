@@ -8,6 +8,13 @@ export const navItems =()=> {return([
         isActive:false
     },
     {
+    
+        name: 'Epics',
+        url: '/create-epic',
+        isVisible:true,
+        isActive:false  
+    },
+    {
         name:'Backlog',
         url:'/backlog',
         isVisible:Cookies.get('projectName') ? true : false,
@@ -25,9 +32,15 @@ export const navItems =()=> {return([
         isVisible:Cookies.get('projectName') ? true : false,
         isActive:false
     },
+    // {
+    //     name: 'Settings',
+    //     url: '/settings',
+    //     isVisible:Cookies.get('projectName') ? true : false,
+    //     isActive:false
+    // },
     {
-        name: 'Settings',
-        url: '/settings',
+        name: 'Members',
+        url: '/members',
         isVisible:Cookies.get('projectName') ? true : false,
         isActive:false
     }
