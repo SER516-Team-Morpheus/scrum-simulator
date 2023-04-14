@@ -5,7 +5,10 @@ import Button from '@mui/material/Button';
 import { useNavigate, useParams } from "react-router-dom";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { InputLabel } from '@mui/material';
+import { updateUserstory } from '../apis';
 import { getStoryTask } from '../apis';
+import { Cookie } from '@mui/icons-material';
 import Cookies from 'js-cookie';
 
 const Wrapper = styled.div`
@@ -86,6 +89,10 @@ padding: 20px 20px 50px 20px;
     height: 30px;
     width:250px;
 }
+.create-btn {
+    margin-top:10%;
+    background-color: #8C1D40;
+}
 
 
 `;
@@ -98,12 +105,41 @@ const StoryDetails = () => {
     const { name } = useParams();
     const [taskState, setTaskState] = useState('New');
     const [storyPoints, setStoryPoints] = useState('3');
+    const [showDialog, setShowDialog] = useState(false);
     const [taskList, setTaskList] = useState([]);
+    const [data, setData] = useState({
+        username: Cookies.get('username'),
+        password: Cookies.get('password'),
+        projectname: Cookies.get('projectName'),
+        userstoryname: name,
+        storypoints: {
+          UX: "0",
+          Back: "0",
+          Front: "0",
+          Design: "0"
+        }
+      });
     const handleChange = (event) => {
         setTaskState(event.target.value)
     }
     const handleStoryPoints = (event) => {
-        setStoryPoints(event.target.value);
+        const { name, value } = event.target;
+        setData(prevState => ({
+          ...prevState,
+          storypoints: {
+            ...prevState.storypoints,
+            [name]: value
+          }
+        }))
+      }
+    const handleUpdateUserStory = (event) => {
+        updateUserstory(data)
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     useEffect(() => {
@@ -121,13 +157,67 @@ const StoryDetails = () => {
             <StoryInfo>
                 <div className="info-left">
                     <h4>Story points</h4>
+                    <InputLabel id="demo-simple-select-label-1">UX</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label-1"
+                        id="demo-simple-select"
+                        className="points-select"
+                        name="UX"
+                        value={data.storypoints.UX}
+                        label="Points"
+                        onChange={handleStoryPoints}
+                        defaultValue={"0"}
+                    >
+                        <MenuItem value={'1'}>1</MenuItem>
+                        <MenuItem value={'3'}>3</MenuItem>
+                        <MenuItem value={'5'}>5</MenuItem>
+                        <MenuItem value={'8'}>8</MenuItem>
+
+                    </Select>
+                    <InputLabel id="demo-simple-select-label-2">Front</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label-2"
+                        id="demo-simple-select"
+                        className="points-select"
+                        value={data.storypoints.Front}
+                        label="Points"
+                        onChange={handleStoryPoints}
+                        name="Front"
+                        defaultValue={"0"}
+                    >
+                        <MenuItem value={'1'}>1</MenuItem>
+                        <MenuItem value={'3'}>3</MenuItem>
+                        <MenuItem value={'5'}>5</MenuItem>
+                        <MenuItem value={'8'}>8</MenuItem>
+
+                    </Select>
+                    <InputLabel id="demo-simple-select-label-3">Back</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label-3"
+                        id="demo-simple-select"
+                        className="points-select"
+                        value={data.storypoints.Back}
+                        label="Points"
+                        name="Back"
+                        onChange={handleStoryPoints}
+                        defaultValue={"0"}
+                    >
+                        <MenuItem value={'1'}>1</MenuItem>
+                        <MenuItem value={'3'}>3</MenuItem>
+                        <MenuItem value={'5'}>5</MenuItem>
+                        <MenuItem value={'8'}>8</MenuItem>
+
+                    </Select>
+                    <InputLabel id="demo-simple-select-label-4">Design</InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         className="points-select"
-                        value={storyPoints}
+                        value={data.storypoints.Design}
                         label="Points"
+                        name="Design"
                         onChange={handleStoryPoints}
+                        defaultValue={"0"}
                     >
                         <MenuItem value={'1'}>1</MenuItem>
                         <MenuItem value={'3'}>3</MenuItem>
@@ -150,6 +240,9 @@ const StoryDetails = () => {
                         <MenuItem value={'3'}>Assignee 2</MenuItem>
 
                     </Select>
+                </div>
+                <div>
+                    <Button className="create-btn" variant="contained" onClick={handleUpdateUserStory}>Update</Button>
                 </div>
 
             </StoryInfo>
