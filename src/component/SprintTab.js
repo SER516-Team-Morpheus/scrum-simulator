@@ -88,12 +88,14 @@ function SprintTab() {
   };
 
   return (
-    <div style={{padding: '3%'}}>
-      <div> 
-        <h1 style={{color: "#8C1D40"}}>Create Sprint</h1>
-      </div>
-      <div style={{textAlign: 'right'}}>
-      <Button variant="contained" color="primary" onClick={handleOpen}>Create Sprint</Button>
+    <Wrapper>
+      <div className='heading-bar'>
+        <Typography className="heading" variant="h3" gutterBottom>
+          Sprints
+        </Typography>
+        <div>
+          <Button className="create-btn" variant="contained" onClick={handleOpen}>Create Sprint</Button>
+        </div>
       </div>
       <div>
         {
@@ -108,8 +110,6 @@ function SprintTab() {
           })
         }
       </div>
-
-    
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Create Sprint</DialogTitle>
       <DialogContent>
@@ -172,7 +172,7 @@ function SprintTab() {
           <Button onClick={handleClose}>Cancel</Button>
         </DialogActions>
       </Dialog>
-    </div>
+  </Wrapper>
   );
 }
 
