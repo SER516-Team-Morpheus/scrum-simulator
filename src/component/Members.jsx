@@ -10,6 +10,7 @@ import Cookies from 'js-cookie';
 import { createProject, getMembers, getProject } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import CreateMember from './CreateMember';
+import CreateRoles from './CreateRoles';
 
 const Wrapper = styled.div`
 
@@ -62,19 +63,27 @@ const Members = () => {
     const [showDialog, setShowDialog] = useState(false);
     const [showDialogRoles, setShowDialogRoles] = useState(false);
     const [memberList, setMemberList] = useState([]);
+    const [RoleList, setRoleList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const handleDialog = () => {
         setShowDialog(!showDialog);
     }
+    const handleDialogRoles = () => {
+        setShowDialogRoles(!showDialogRoles);
+    }
     const addMember = (data) => {
         setMemberList(prevState => [...prevState, data])
+    }
+    const addRoles= (data) => {
+        setRoleList(prevState => [...prevState, data])
     }
 
     useEffect(() => {
         getMembers(username, password, projectId)
             .then(res => {
                 setMemberList(res.data.data)
+                setRoleList(res.data.data)
                 setIsLoading(false);
             })
             .catch(function(error){
@@ -90,6 +99,7 @@ const Members = () => {
                 <div>
                     <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Add Members</Button>
                     <Button className="create-btn" variant="contained" onClick={() => setShowDialogRoles(true)}>Add roles</Button>
+
                 </div>
             </div>
             {
@@ -128,8 +138,13 @@ const Members = () => {
                                 addMember={addMember}
                             />
                         }
-
-
+                         {showDialogRoles &&
+                            <CreateRoles
+                                dialog={handleDialogRoles}
+                                addRoles={addRoles}
+                            />
+                        }
+                       
 
                     </div>
             }
