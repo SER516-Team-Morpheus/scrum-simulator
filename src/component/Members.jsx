@@ -60,6 +60,7 @@ const Members = () => {
     let projectName = Cookies.get('projectName');
     let projectId = Cookies.get('projectId')
     const [showDialog, setShowDialog] = useState(false);
+    const [showDialogRoles, setShowDialogRoles] = useState(false);
     const [memberList, setMemberList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -88,6 +89,7 @@ const Members = () => {
                 </Typography>
                 <div>
                     <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Add Members</Button>
+                    <Button className="create-btn" variant="contained" onClick={() => setShowDialogRoles(true)}>Add roles</Button>
                 </div>
             </div>
             {
