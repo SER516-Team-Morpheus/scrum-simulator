@@ -21,6 +21,12 @@ export const navItems =()=> {return([
         isActive:false
     },
     {
+        name:'Current Sprint',
+        url:'/current-sprint',
+        isVisible:Cookies.get('projectName') ? true : false,
+        isActive:false
+    },
+    {
         name:'Sprints',
         url:'/sprints',
         isVisible:Cookies.get('projectName') ? true : false,

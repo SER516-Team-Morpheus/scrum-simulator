@@ -14,6 +14,7 @@ import CreateEpic from "./component/CreateEpic";
 import SprintTab from "./component/SprintTab";
 import StoryDetails from "./component/StoryDetails";
 import Members from "./component/Members"
+import CurrentSprint from "./component/CurrentSprint";
 
 
 const Wrapper = styled.div`
@@ -55,6 +56,8 @@ const App = () => {
               <Route  path="/create-epic" element={<CreateEpic addEpic={() => {}}/>} />
               <Route  path="/simulation" element={<SimulatorGame/>} />
               <Route  path="/sprints" element={<SprintTab/>} />
+              <Route  path="/current-sprint" element={<CurrentSprint/>} />
+
               <Route  path="/storyDetails/:name" element={<StoryDetails/>} />
               <Route  path="/members" element={<Members/>} />
 
