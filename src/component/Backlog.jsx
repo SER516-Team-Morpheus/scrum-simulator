@@ -5,10 +5,9 @@ import Button from '@mui/material/Button';
 import projectImg from '../img/project-img.jpg';
 import CreateUserStory from './CreateUserStory'
 import Link from '@mui/material/Link';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import Cookies from 'js-cookie';
 import { RxDragHandleHorizontal } from "react-icons/rx";
-import { createUserstory } from '../apis/backlog';
 import { getUserStory } from '../apis/index';
 import { ColorRing } from 'react-loader-spinner';
 import Chip from '@mui/material/Chip';
