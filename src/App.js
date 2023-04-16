@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from "react";
-import { BrowserRouter, Routes, Route, redirect, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./component/Login";
 import Navbar from "./component/Navbar";
 import Project from "./component/Project";
@@ -7,8 +7,6 @@ import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 import Cookies from "js-cookie";
 import Backlog from "./component/Backlog";
-import Authentication from "./component/Authentication";
-import ProjectDashboard from "./component/ProjectDashboard";
 import SimulatorGame from "./component/SimulatorGame";
 import CreateEpic from "./component/CreateEpic";
 import SprintTab from "./component/SprintTab";
@@ -25,7 +23,7 @@ padding:0px;
 `;
 
 const App = () => {
-  const [itemVisible, setItemVisible]=useState(false);
+  const [setItemVisible]=useState(false);
   
   const showItem = ()=>{
     setItemVisible(true);

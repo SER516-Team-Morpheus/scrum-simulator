@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Formik, Form } from 'formik';
 import TextField from '@mui/material/TextField';
-import { createUserstory } from '../apis/backlog';
+// import { createUserstory } from '../apis/backlog';
 import Cookies from 'js-cookie';
-import Backlog from './Backlog';
+// import Backlog from './Backlog';
 import { ColorRing } from 'react-loader-spinner';
 import { createMember } from '../apis';
 
@@ -58,9 +58,8 @@ left: 40%;
 const CreateMember = ({ dialog, addMember }) => {
     let username = Cookies.get('username');
     let password = Cookies.get('password');
-    let projectName = Cookies.get('projectName');
     let projectId = Cookies.get('projectId')
-    const [isCreateLoader, setIsCreateLoader] = useState(false);
+    const [isCreateLoader] = useState(false);
 
     return (
 
