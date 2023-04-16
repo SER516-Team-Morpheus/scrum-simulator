@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useNavigate, useParams } from "react-router-dom";
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { useParams } from "react-router-dom";
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { InputLabel } from '@mui/material';
-import { updateUserstory } from '../apis';
-import { getStoryTask } from '../apis';
-import { Cookie } from '@mui/icons-material';
+import { updateUserstory, getStoryTask } from '../apis';
 import Cookies from 'js-cookie';
 
 const Wrapper = styled.div`
@@ -101,11 +99,9 @@ const StoryDetails = () => {
     let username = Cookies.get('username');
     let password = Cookies.get('password');
     let projectName = Cookies.get('projectName');
-    let projectId = Cookies.get('projectId')
     const { name } = useParams();
     const [taskState, setTaskState] = useState('New');
     const [storyPoints, setStoryPoints] = useState('3');
-    const [showDialog, setShowDialog] = useState(false);
     const [taskList, setTaskList] = useState([]);
     const [data, setData] = useState({
         username: Cookies.get('username'),
