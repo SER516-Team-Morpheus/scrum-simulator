@@ -72,7 +72,14 @@ img {
         padding: 0px;
     }
     margin-top:5px;
+    .subheading {
+        font-weight:bold;
+        font-size:18px;
+    }
     
+}
+.story-status {
+    width:200px;
 }
 `;
 
@@ -111,9 +118,9 @@ const Backlog = ({ showItem }) => {
     }
 
     const getStatus = (data) => {
-        if(data == "New") return <Chip label="New" color="primary" />
-        else if( data == "In progress" ) return <Chip label="In progress" color="primary" />
-        else if( data == "Ready for test" ) return <Chip label="Ready for test" color="primary" />
+        if (data == "New") return <Chip label="New" color="primary" />
+        else if (data == "In progress") return <Chip label="In progress" color="primary" />
+        else if (data == "Ready for test") return <Chip label="Ready for test" color="primary" />
         else return <Chip label="Done" color="success" />
 
     }
@@ -151,19 +158,39 @@ const Backlog = ({ showItem }) => {
                     :
 
                     <div>
+                        <div className="story-list">
+                            <div className='story-assignee' style={{width:'40%'}}>
+                                <p className="subheading">Story name</p>
+                            </div>
+                            <div className="story-assignee" style={{width:'20%'}}>
+                                <p className="subheading">Status</p>
+
+                            </div>
+                            <div className="story-assignee" style={{width:'20%'}}>
+                                <p className="subheading">Points</p>
+
+                            </div>
+                            <div className='story-assignee' style={{width:'20%'}}>
+                                <p className="subheading">Assignee</p>
+                            </div>
+
+                        </div>
                         {
                             storyList.length > 0 ? (
                                 storyList.map((data, index) => (
-                                    <div className="story-list">
-                                        <div className='story-title'>
+                                    <div className="story-list" >
+                                        <div className='story-title' style={{width:'40%'}}>
                                             <Typography className="heading" variant="h7" gutterBottom>
                                                 <RxDragHandleHorizontal className="drag-icon" /><Link onClick={() => selectStory(data.subject)} className="click-details">{index + 1}. {data.subject}</Link>
                                             </Typography>
                                         </div>
-                                        <div className="story-status">
-                                           {getStatus(data.status)}
+                                        <div className="story-status" style={{width:'20%'}}>
+                                            {getStatus(data.status)}
                                         </div>
-                                        <div className='story-assignee'>
+                                        <div className="story-status" style={{width:'20%'}}>
+                                        <p>{data.totalPoints}</p>
+                                        </div>
+                                        <div className='story-assignee' style={{width:'20%'}}>
                                             <p>{data.assignee}</p>
                                         </div>
                                     </div>
