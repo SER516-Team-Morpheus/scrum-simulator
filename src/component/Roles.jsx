@@ -139,7 +139,7 @@ const Roles = () => {
                     Roles
                 </Typography>
                 <div>
-                    <Button className="create-btn" variant="contained" onClick={() => setShowDialogRoles(false)}>Add roles</Button>
+                    <Button className="create-btn" variant="contained" onClick={() => setShowDialogRoles(true)}>Add roles</Button>
 
                 </div>
             </div>
