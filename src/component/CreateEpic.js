@@ -44,9 +44,6 @@ const useStyles = makeStyles((theme) => ({
     alert: {
         marginTop: theme.spacing(2),
     },
-    alert: {
-        marginTop: theme.spacing(2),
-    },
     statusNew: {
         color: red[500],
     },

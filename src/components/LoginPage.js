@@ -20,6 +20,7 @@ const LoginPage = () => {
       password,
     });
     if (response.data.success) {
+      // eslint-disable-next-line
       localStorage.setItem("token", response.data.token);
       navigate("/dashboard");
     } else {
