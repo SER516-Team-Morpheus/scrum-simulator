@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import { getMembers, getRoles } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import CreateMember from './CreateMember';
+import CreateRoles from './CreateRoles';
 import MaterialTable from 'material-table';
 import { ThemeProvider, createTheme, } from '@mui/material';
 
@@ -124,14 +125,14 @@ const Members = () => {
     const addMember = (data) => {
         setMemberList(prevState => [...prevState, data])
     }
-    const addRoles= (data) => {
+    const addRoles = (data) => {
         setRoleList(prevState => [...prevState, data])
     }
 
     useEffect(() => {
         getMembers(username, password, projectId)
             .then(res => {
-                 setMemberList(res.data.data)
+                setMemberList(res.data.data)
                 setRoleList(res.data.data)
                 setIsLoading(false);
                 getRoles(username, password, projectName)
@@ -222,7 +223,7 @@ const Members = () => {
                             />
                         }
 
- {showDialogRoles &&
+                        {showDialogRoles &&
                             <CreateRoles
                                 dialog={handleDialogRoles}
                                 addRoles={addRoles}

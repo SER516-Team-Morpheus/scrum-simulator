@@ -23,7 +23,7 @@ padding:0px;
 `;
 
 const App = () => {
-  const [setItemVisible]=useState(false);
+  const [itemVisible,setItemVisible]=useState(false);
   
   const showItem = ()=>{
     setItemVisible(true);
