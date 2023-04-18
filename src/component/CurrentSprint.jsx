@@ -19,9 +19,18 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import SimulatorGame from './SimulatorGame';
 
 const Wrapper = styled.div`
 margin-left:-30px;
+.top-heading {
+    display:flex;
+    justify-content: space-between;
+}
+.simulator-game {
+    height:50px;
+    position: relative;
+}
 .heading {
     color: #8C1D40;
     margin-top:20px;
@@ -144,9 +153,15 @@ const CurrentSprint = () => {
     }, [])
     return (
         <Wrapper>
-            <Typography className="heading" variant="h6" gutterBottom>
-                Sprint
-            </Typography>
+            <div className="top-heading">
+                <Typography className="heading" variant="h6" gutterBottom>
+                    Sprint
+                </Typography>
+                <div className="simulator-game">
+        <SimulatorGame/>
+                </div>
+            </div>
+
             <div className="top-bar">
             </div>
             {
@@ -197,11 +212,11 @@ const CurrentSprint = () => {
                                                         {data.taskName}
                                                     </Typography>
                                                     <div className="arrow">
-                                                    <ArrowForwardIosIcon color="grey" fontSize='5px'
-                                                        onClick={() => updatingTask(data.taskName, 'In progress')}
-                                                    />
+                                                        <ArrowForwardIosIcon color="grey" fontSize='5px'
+                                                            onClick={() => updatingTask(data.taskName, 'In progress')}
+                                                        />
                                                     </div>
-                                                    
+
 
                                                 </CardContent>
                                             </Card>
@@ -224,15 +239,15 @@ const CurrentSprint = () => {
                                                         {data.taskName}
                                                     </Typography>
                                                     <div className="arrow">
-                                                    <ArrowBackIosNewIcon color="grey" fontSize='5px'
-                                                        onClick={() => updatingTask(data.taskName, 'New')}
-                                                    />
+                                                        <ArrowBackIosNewIcon color="grey" fontSize='5px'
+                                                            onClick={() => updatingTask(data.taskName, 'New')}
+                                                        />
 
-                                                    <ArrowForwardIosIcon color="grey" fontSize='5px'
-                                                        onClick={() => updatingTask(data.taskName, 'Ready for test')}
-                                                    />
+                                                        <ArrowForwardIosIcon color="grey" fontSize='5px'
+                                                            onClick={() => updatingTask(data.taskName, 'Ready for test')}
+                                                        />
                                                     </div>
-                                                   
+
                                                 </CardContent>
                                             </Card>
                                         ))
@@ -253,15 +268,15 @@ const CurrentSprint = () => {
                                                         {data.taskName}
                                                     </Typography>
                                                     <div className="arrow">
-                                                    <ArrowBackIosNewIcon color="grey" fontSize='5px'
-                                                        onClick={() => updatingTask(data.taskName, 'In progress')}
-                                                    />
+                                                        <ArrowBackIosNewIcon color="grey" fontSize='5px'
+                                                            onClick={() => updatingTask(data.taskName, 'In progress')}
+                                                        />
 
-                                                    <ArrowForwardIosIcon color="grey" fontSize='5px'
-                                                        onClick={() => updatingTask(data.taskName, 'Done')}
-                                                    />
+                                                        <ArrowForwardIosIcon color="grey" fontSize='5px'
+                                                            onClick={() => updatingTask(data.taskName, 'Done')}
+                                                        />
                                                     </div>
-                                                   
+
                                                 </CardContent>
                                             </Card>
                                         ))
