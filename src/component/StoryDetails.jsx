@@ -8,6 +8,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { InputLabel } from '@mui/material';
 import { updateUserstory, getStoryTask } from '../apis';
 import Cookies from 'js-cookie';
+import AddIcon from '@mui/icons-material/Add';
+import CreateTask from './CreateTask';
 
 const Wrapper = styled.div`
 margin-top:20px;
@@ -103,6 +105,8 @@ const StoryDetails = () => {
     const [taskState, setTaskState] = useState('New');
     const [storyPoints, setStoryPoints] = useState('3');
     const [taskList, setTaskList] = useState([]);
+    const [showDialog, setShowDialog] = useState(false);
+
     const [data, setData] = useState({
         username: Cookies.get('username'),
         password: Cookies.get('password'),
@@ -137,6 +141,13 @@ const StoryDetails = () => {
                 console.log(error);
             });
     }
+    const storeTask = (data) => {
+        setTaskList(prevData => [...prevData, data])
+        setShowDialog(false);
+    }
+    const handleDialog = () => {
+        setShowDialog(!showDialog);
+    }
 
     useEffect(() => {
         getStoryTask(username, password, projectName, name)
@@ -146,7 +157,6 @@ const StoryDetails = () => {
     }, [])
     return (
         <Wrapper>
-            {console.log(name, 'qparams')}
             <Typography className="heading" variant="h3" gutterBottom>
                 {name}
             </Typography>
@@ -245,7 +255,10 @@ const StoryDetails = () => {
 
             <TaskList>
                 <div className='task-heading'>
-                    <h3>Tasks</h3>
+                    <h3>
+                        Tasks <AddIcon size='10px' style={{cursor:'pointer'}} onClick={()=>{setShowDialog(true)}}/>
+                        </h3>
+                    
                     {
                         taskList.map((taskData, index) => {
                             return (
@@ -286,6 +299,13 @@ const StoryDetails = () => {
 
                 </div>
             </TaskList>
+            {showDialog &&
+                            <CreateTask
+                                dialog={handleDialog}
+                                storeTask={storeTask}
+                                name={name}
+                            />
+                        }
 
         </Wrapper>
     )

@@ -1,0 +1,122 @@
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import { Formik, Form } from 'formik';
+import TextField from '@mui/material/TextField';
+import { createUserstory } from '../apis/backlog';
+import Cookies from 'js-cookie';
+import { ColorRing } from 'react-loader-spinner';
+import { createTask } from '../apis';
+
+
+const Wrapper = styled.div`
+
+height: 300px;
+width:600px;
+background-color: #f7f3f2;
+border: 2px solid #8C1D40;
+position:absolute;
+z-index:100;
+border-radius:20px;
+top:25%;
+left: 40%;
+
+.loaders {
+    height:30px;
+}
+
+.UserStory-form {
+    padding:20px;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .heading {
+        color: #8C1D40;
+        margin-bottom: 40px;
+    }
+
+    .subject-field {
+        margin-bottom: 20px;
+    }
+    .desc-field {
+        margin-bottom: 40px;
+    }
+    .crt-btn {
+        background-color:#8C1D40;
+    }
+    .cancel-btn {
+        margin-top:20px;
+        background-color:grey;
+    }
+}
+
+`;
+
+const CreateTask = ({ dialog, storeTask,name }) => {
+    const [isCreateLoader, setIsCreateLoader] = useState(false);
+
+    return (
+
+        <Wrapper>
+            <Formik
+                initialValues={{
+                    subject: '',
+                }}
+                onSubmit={(values) => {
+                    let email = Cookies.get('username') || 'SERtestuser';
+                    let password = Cookies.get('password') || 'testuser';
+                    let project = Cookies.get('projectName')
+                    setIsCreateLoader(true);
+                    const storyData = {
+                        subject: values.subject
+                    }
+
+                    createTask(email, password, project,name, values.subject)
+                        .then(res => {
+                            setIsCreateLoader(false);
+                            const storyData = {
+                                taskName: values.subject,
+                                taskState:'New'
+                            }
+                            storeTask(storyData)
+                            setIsCreateLoader(false)
+                        })
+                        .catch(error => {
+                            setIsCreateLoader(false);
+                        })
+                        // .catch(error => setLoginError('Unable to login. Username or Password is incorrect'))
+                }}
+            >
+                {
+                    props => (
+                        <Form className="UserStory-form">
+                            <Typography className="heading" variant="h4" gutterBottom>Add Task</Typography>
+                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} name="subject" label="Task name" variant="outlined" />
+                            <Button variant="contained" className="crt-btn" type="submit">
+                                {
+                                    isCreateLoader ?
+                                        <ColorRing
+                                            visible={true}
+                                            className="loader"
+                                            height="80"
+                                            width="80"
+                                            ariaLabel="blocks-loading"
+                                            wrapperClass="loaders"
+                                            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                                        />
+                                        :
+                                        'Create'
+                                }
+                            </Button>
+                            <Button variant="contained" className="cancel-btn" onClick={dialog}>Cancel</Button>
+                        </Form>
+                    )
+                }
+            </Formik>
+        </Wrapper>
+    )
+}
+
+export default CreateTask;
