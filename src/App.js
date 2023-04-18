@@ -23,6 +23,7 @@ padding:0px;
 `;
 
 const App = () => {
+  // eslint-disable-next-line
   const [itemVisible,setItemVisible]=useState(false);
   
   const showItem = ()=>{
