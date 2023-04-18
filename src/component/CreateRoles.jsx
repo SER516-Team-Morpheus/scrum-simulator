@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Formik, Form } from 'formik';
 import TextField from '@mui/material/TextField';
-// import { createUserstory } from '../apis/backlog';
+import { createUserstory } from '../apis/backlog';
 import Cookies from 'js-cookie';
-// import Backlog from './Backlog';
+import Backlog from './Backlog';
 import { ColorRing } from 'react-loader-spinner';
-import { createMember } from '../apis';
+import { createRoles } from '../apis';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 
 const Wrapper = styled.div`
@@ -55,11 +57,12 @@ left: 40%;
 
 `;
 
-const CreateMember = ({ dialog, addMember }) => {
+const CreateRoles = ({ dialog, addRoles }) => {
     let username = Cookies.get('username');
     let password = Cookies.get('password');
+    let projectName = Cookies.get('projectName');
     let projectId = Cookies.get('projectId')
-    const [isCreateLoader] = useState(false);
+    const [isCreateLoader, setIsCreateLoader] = useState(false);
 
     return (
 
@@ -67,20 +70,28 @@ const CreateMember = ({ dialog, addMember }) => {
             <Formik
                 initialValues={{
                     memberName: '',
+                    roleName:'',
                 }}
                 onSubmit={(values) => {
-                    createMember(username,password,values.memberName,projectId)
+                    CreateRoles(username,password,values.memberName,projectId,values.roleName)
                     .then(res=>{
                         dialog();
-                        addMember(values.memberName)
+                        addRoles(values.memberName,values.roleName)
                     })
                 }}
             >
                 {
                     props => (
                         <Form className="UserStory-form">
-                            <Typography className="heading" variant="h4" gutterBottom>Add Member</Typography>
+                            <Typography className="heading" variant="h4" gutterBottom>Add Role</Typography>
                             <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} label="Username" name="memberName" variant="outlined" />
+                            <Select id="role-name" className="subject-field" onChange={props.handleChange} value={props.values.roleName} label="Roles" name="roleName" variant="outlined">
+                                <MenuItem value="">Select a role</MenuItem>
+                                <MenuItem value="role1">Developer</MenuItem>
+                                <MenuItem value="role2">Stakeholer</MenuItem>
+                                <MenuItem value="role3">UX Designer</MenuItem>
+                            </Select>
+
                             <Button variant="contained" className="crt-btn" type="submit">
                                 {
                                     isCreateLoader ?
@@ -106,4 +117,4 @@ const CreateMember = ({ dialog, addMember }) => {
     )
 }
 
-export default CreateMember;
+export default CreateRoles;

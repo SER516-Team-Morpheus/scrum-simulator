@@ -65,6 +65,29 @@ export const getStoryTask =(username,password,projectname,userstoryname)=>{
   )
 }
 
+export const updateTask =(username,password,projectname,userstoryname,taskname,status)=>{
+  return (axios.post("http://localhost:3005/updateTask", {
+    username,
+    password,
+    projectname,
+    userstoryname,
+    taskname,
+    status
+ })
+  )
+}
+
+export const createTask =(username,password,projectname,userstoryname,taskname,status)=>{
+  return (axios.post("http://localhost:3005/createTask", {
+    username,
+    password,
+    projectname,
+    userstoryname,
+    taskname
+ })
+  )
+}
+
 
 
 

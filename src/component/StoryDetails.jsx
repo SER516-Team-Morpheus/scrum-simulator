@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useNavigate, useParams } from "react-router-dom";
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { useParams } from "react-router-dom";
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { InputLabel } from '@mui/material';
-import { updateUserstory } from '../apis';
-import { getStoryTask } from '../apis';
-import { Cookie } from '@mui/icons-material';
+import { updateUserstory, getStoryTask } from '../apis';
 import Cookies from 'js-cookie';
+import AddIcon from '@mui/icons-material/Add';
+import CreateTask from './CreateTask';
 
 const Wrapper = styled.div`
 margin-top:20px;
@@ -101,12 +101,12 @@ const StoryDetails = () => {
     let username = Cookies.get('username');
     let password = Cookies.get('password');
     let projectName = Cookies.get('projectName');
-    let projectId = Cookies.get('projectId')
     const { name } = useParams();
     const [taskState, setTaskState] = useState('New');
     const [storyPoints, setStoryPoints] = useState('3');
-    const [showDialog, setShowDialog] = useState(false);
     const [taskList, setTaskList] = useState([]);
+    const [showDialog, setShowDialog] = useState(false);
+
     const [data, setData] = useState({
         username: Cookies.get('username'),
         password: Cookies.get('password'),
@@ -141,6 +141,13 @@ const StoryDetails = () => {
                 console.log(error);
             });
     }
+    const storeTask = (data) => {
+        setTaskList(prevData => [...prevData, data])
+        setShowDialog(false);
+    }
+    const handleDialog = () => {
+        setShowDialog(!showDialog);
+    }
 
     useEffect(() => {
         getStoryTask(username, password, projectName, name)
@@ -150,7 +157,6 @@ const StoryDetails = () => {
     }, [])
     return (
         <Wrapper>
-            {console.log(name, 'qparams')}
             <Typography className="heading" variant="h3" gutterBottom>
                 {name}
             </Typography>
@@ -249,7 +255,10 @@ const StoryDetails = () => {
 
             <TaskList>
                 <div className='task-heading'>
-                    <h3>Tasks</h3>
+                    <h3>
+                        Tasks <AddIcon size='10px' style={{cursor:'pointer'}} onClick={()=>{setShowDialog(true)}}/>
+                        </h3>
+                    
                     {
                         taskList.map((taskData, index) => {
                             return (
@@ -290,6 +299,13 @@ const StoryDetails = () => {
 
                 </div>
             </TaskList>
+            {showDialog &&
+                            <CreateTask
+                                dialog={handleDialog}
+                                storeTask={storeTask}
+                                name={name}
+                            />
+                        }
 
         </Wrapper>
     )

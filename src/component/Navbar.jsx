@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-// import Link from '@mui/material/Link';
 import { Link } from "react-router-dom";
 
 import { navItems } from './navItems';

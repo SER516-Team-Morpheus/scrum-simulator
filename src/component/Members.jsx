@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import projectImg from '../img/project-img.jpg';
-import CreateProject from './CreateProject';
-import Link from '@mui/material/Link';
-import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-import { createProject, getMembers, getRoles } from '../apis';
+import { getMembers, getRoles } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import CreateMember from './CreateMember';
+import CreateRoles from './CreateRoles';
 import MaterialTable from 'material-table';
-import { ThemeProvider, createTheme, Select, MenuItem } from '@mui/material';
+import { ThemeProvider, createTheme, } from '@mui/material';
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -28,9 +25,6 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import { forwardRef } from 'react';
-
-
 
 const Wrapper = styled.div`
 
@@ -106,7 +100,9 @@ const Members = () => {
     let projectName = Cookies.get('projectName');
     let projectId = Cookies.get('projectId')
     const [showDialog, setShowDialog] = useState(false);
+    const [showDialogRoles, setShowDialogRoles] = useState(false);
     const [memberList, setMemberList] = useState([]);
+    const [RoleList, setRoleList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [roleData, setRoleData] = useState([]);
     const defaultMaterialTheme = createTheme();
@@ -123,13 +119,22 @@ const Members = () => {
     const handleDialog = () => {
         setShowDialog(!showDialog);
     }
+    const handleDialogRoles = () => {
+        setShowDialogRoles(!showDialogRoles);
+    }
     const addMember = (data) => {
         setMemberList(prevState => [...prevState, data])
+    }
+    const addRoles = (data) => {
+        setRoleList(prevState => [...prevState, data])
     }
 
     useEffect(() => {
         getMembers(username, password, projectId)
             .then(res => {
+                setMemberList(res.data.data)
+                setRoleList(res.data.data)
+                setIsLoading(false);
                 getRoles(username, password, projectName)
                     .then(roleData => {
                         setRoleData(roleData.roles)
@@ -139,7 +144,6 @@ const Members = () => {
                     .catch(function (error) {
                         setIsLoading(false);
                     })
-
             })
             .catch(function (error) {
                 setIsLoading(false);
@@ -154,6 +158,8 @@ const Members = () => {
                 </Typography>
                 <div>
                     <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Add Members</Button>
+                    <Button className="create-btn" variant="contained" onClick={() => setShowDialogRoles(true)}>Add roles</Button>
+
                 </div>
             </div>
             {
@@ -214,6 +220,13 @@ const Members = () => {
                             <CreateMember
                                 dialog={handleDialog}
                                 addMember={addMember}
+                            />
+                        }
+
+                        {showDialogRoles &&
+                            <CreateRoles
+                                dialog={handleDialogRoles}
+                                addRoles={addRoles}
                             />
                         }
                     </div>

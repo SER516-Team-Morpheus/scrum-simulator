@@ -99,14 +99,16 @@ function SprintTab() {
       </div>
       <div>
         {
-          sprintData.map(data=>{
-            return <div> 
-              <h3 style={{color: "#8C1D40"}} >Sprint Created!</h3>
-              <p>Sprint Name: {data.name}</p>
-              <p>Sprint Goal: {data.goal}</p>
-              <p>Sprint Start Date: {data.startDate}</p>
-              <p>Sprint End Date: {data.endDate}</p>
-            </div> 
+          sprintData.map((data, index) => {
+            return (
+              <div key={index}>
+                <h3 style={{color: "#8C1D40"}} >Sprint Created!</h3>
+                <p>Sprint Name: {data.name}</p>
+                <p>Sprint Goal: {data.goal}</p>
+                <p>Sprint Start Date: {data.startDate}</p>
+                <p>Sprint End Date: {data.endDate}</p>
+              </div> 
+            );
           })
         }
       </div>
