@@ -51,10 +51,11 @@ export const navItems =()=> {return([
         isActive:false
     },
     {
+    
         name: 'Roles',
         url: '/roles',
-        isVisible:Cookies.get('projectName') ? true : false,
-        isActive:false
+        isVisible:true,
+        isActive:false  
     }
 ]
 )}
