@@ -35,3 +35,5 @@ docker images
 docker run -p 3000:3000 -d < image name from step 1 >
 
 Eg: docker run -p 3000:3000 -d scrum-react
+
+### Please give at least 1minute to load the application after the image is built.
