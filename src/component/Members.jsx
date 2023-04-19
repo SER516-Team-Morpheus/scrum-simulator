@@ -158,7 +158,7 @@ const Members = () => {
                 </Typography>
                 <div>
                     <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Add Members</Button>
-                    <Button className="create-btn" variant="contained" onClick={() => setShowDialogRoles(true)}>Add roles</Button>
+                    <Button className="create-btn" variant="contained" onClick={() => setShowDialogRoles(true)}>Add Roles</Button>
 
                 </div>
             </div>
