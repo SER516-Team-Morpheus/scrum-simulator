@@ -77,7 +77,7 @@ const CreateEpic = ({ addEpic }) => {
                 token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgxNDM0NjQwLCJqdGkiOiJhYzkyMDBjMDEyYTM0ZGQ1ODQ0NjMzY2MyYjNjNmQ1YyIsInVzZXJfaWQiOjU1OTIxNX0._W4lEK9zTQQK1Jl01Sg9I2Xw75skJm6sTQiV92FuMBQ',
                 projectId: 733810,
             });
-            setEpics(response.data);
+            setEpics(response.data.epics);
         };
 
         fetchEpics();
@@ -99,26 +99,32 @@ const CreateEpic = ({ addEpic }) => {
             projectId: 733810,
         };
         try {
+            
             const createEpicResponse = await axios.post('http://localhost:3006/createEpic', epicData);
             const createdEpic = createEpicResponse.data;
+            const epicInfo ={
+                subject:createdEpic.epicName,
+                status:createdEpic.epicId,
+                description:createdEpic.description
+            }
             addEpic(createdEpic);
-            setEpics([...epics, createdEpic]);
+            setEpics([...epics, epicInfo]);
             setName('');
             setStatus('New');
             setDescription('');
             setTasks([]);
 
-            const listEpicsResponse = await axios.post('http://localhost:3006/listEpics', {
-                username: 'SERtestuser',
-                password: 'testuser',
-                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgxNDM0NjQwLCJqdGkiOiJhYzkyMDBjMDEyYTM0ZGQ1ODQ0NjMzY2MyYjNjNmQ1YyIsInVzZXJfaWQiOjU1OTIxNX0._W4lEK9zTQQK1Jl01Sg9I2Xw75skJm6sTQiV92FuMBQ',
-                projectId: 733810,
-            });
-            setEpics(listEpicsResponse.data);
-            setName('');
-            setStatus('New');
-            setDescription('');
-            setTasks([]);
+        //     const listEpicsResponse = await axios.post('http://localhost:3006/listEpics', {
+        //         username: 'SERtestuser',
+        //         password: 'testuser',
+        //         token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgxNDM0NjQwLCJqdGkiOiJhYzkyMDBjMDEyYTM0ZGQ1ODQ0NjMzY2MyYjNjNmQ1YyIsInVzZXJfaWQiOjU1OTIxNX0._W4lEK9zTQQK1Jl01Sg9I2Xw75skJm6sTQiV92FuMBQ',
+        //         projectId: 733810,
+        //     });
+        //     setEpics(listEpicsResponse.data);
+        //     setName('');
+        //     setStatus('New');
+        //     setDescription('');
+        //     setTasks([]);
         } catch (error) {
             console.error(error);
         }
@@ -158,11 +164,10 @@ const CreateEpic = ({ addEpic }) => {
                 rows={4}
                 className={classes.input}
             />
-
             <div>
-                {Array.isArray(epics) && epics.map(epic => (
+                {epics.map(epic => (
                     <div key = {epic.id}>
-                        <Typography>{epic.name}</Typography>
+                        <Typography>{epic.subject}</Typography>
                         <Typography>{epic.status}</Typography>
                         <Typography>{epic.description}</Typography>
                     </div>
