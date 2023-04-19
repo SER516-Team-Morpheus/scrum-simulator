@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { InputLabel } from '@mui/material';
@@ -10,6 +10,7 @@ import { updateUserstory, getStoryTask, updateTask } from '../apis';
 import Cookies from 'js-cookie';
 import AddIcon from '@mui/icons-material/Add';
 import CreateTask from './CreateTask';
+import AddAssignee from './AddAsignee';
 
 const Wrapper = styled.div`
 margin-top:20px;
@@ -17,6 +18,7 @@ margin-top:20px;
     color: #8C1D40;
     opacity:1
 }
+
 
 `;
 const TaskList = styled.div`
@@ -55,10 +57,19 @@ const TaskList = styled.div`
 }
 .assigned {
     width:20px;
+    a {
+        text-decoration:none;
+
+    }
     p {
         margin:0px;
         padding: 0px;
         text-align:center;
+
+    }
+    .assignee-change {
+        font-size: 12px;
+        color: #8C1D40
     }
 }
 hr {
@@ -95,6 +106,8 @@ padding: 20px 20px 50px 20px;
 }
 
 
+
+
 `;
 
 const StoryDetails = () => {
@@ -106,7 +119,7 @@ const StoryDetails = () => {
     const [storyPoints, setStoryPoints] = useState('3');
     const [taskList, setTaskList] = useState([]);
     const [showDialog, setShowDialog] = useState(false);
-
+    const [showAssignee,setShowAssignee]=useState(false)
     const [data, setData] = useState({
         username: Cookies.get('username'),
         password: Cookies.get('password'),
@@ -123,7 +136,6 @@ const StoryDetails = () => {
         setTaskState(true)
         updateTask(username, password, projectName, name, taskName, event.target.value)
             .then(res => {
-                
                 getStoryTask(username, password, projectName, name)
                     .then(res => {
                         setTaskList(res.data.details)
@@ -301,6 +313,10 @@ const StoryDetails = () => {
                                             </div>
                                             <div className='assigned'>
                                                 <p>{taskData.assigned_to_extra_info ? taskData.assigned_to_extra_info.full_name_display : 'No assignee'}</p>
+                                                <Link onClick={()=>setShowAssignee(true)}>
+                                                <p className="assignee-change">Change assignee</p>
+                                                </Link>
+
                                             </div>
                                         </div>
 
@@ -319,6 +335,12 @@ const StoryDetails = () => {
                     dialog={handleDialog}
                     storeTask={storeTask}
                     name={name}
+                />
+            }
+             {showAssignee &&
+                <AddAssignee
+                    dialog={()=>setShowAssignee(!showAssignee)}
+                   
                 />
             }
 

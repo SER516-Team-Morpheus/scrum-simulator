@@ -56,7 +56,6 @@ const App = () => {
               <Route  path="/simulation" element={<SimulatorGame/>} />
               <Route  path="/sprints" element={<SprintTab/>} />
               <Route  path="/current-sprint" element={<CurrentSprint/>} />
-
               <Route  path="/storyDetails/:name" element={<StoryDetails/>} />
               <Route  path="/members" element={<Members/>} />
 
