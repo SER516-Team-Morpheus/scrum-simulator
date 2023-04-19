@@ -78,7 +78,9 @@ const CreateTask = ({ dialog, storeTask,name }) => {
                             setIsCreateLoader(false);
                             const storyData = {
                                 taskName: values.subject,
-                                taskState:'New'
+                                status_extra_info:{
+                                    name:'New'
+                                }
                             }
                             storeTask(storyData)
                             setIsCreateLoader(false)
