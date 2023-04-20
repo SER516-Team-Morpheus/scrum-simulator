@@ -55,12 +55,12 @@ export const getRoles =(username,password,projectName)=>{
   `)
 }
 
-export const createRoles =(username,password,name,projectId)=>{
+export const createRoles =(username,password,roleName,projectName)=>{
   return (axios.post("http://localhost:3008/createRoles", {
     username,
     password,
-    name,
-    projectId
+    roleName,
+    projectName
  })
   )
 }
