@@ -15,8 +15,9 @@ import MenuItem from '@mui/material/MenuItem';
 
 const Wrapper = styled.div`
 
-height: 300px;
-width:600px;
+// height: 300px;
+// width:600px;
+width: 30%;
 background-color: #f7f3f2;
 border: 2px solid #8C1D40;
 position:absolute;
@@ -90,6 +91,7 @@ const CreateRoles = ({ dialog, addRoles }) => {
                                 <MenuItem value="role1">Developer</MenuItem>
                                 <MenuItem value="role2">Stakeholer</MenuItem>
                                 <MenuItem value="role3">UX Designer</MenuItem>
+                                <MenuItem value="role3">Product Owner</MenuItem>
                             </Select>
 
                             <Button variant="contained" className="crt-btn" type="submit">
