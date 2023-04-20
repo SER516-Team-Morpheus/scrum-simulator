@@ -55,15 +55,7 @@ export const getRoles =(username,password,projectName)=>{
   `)
 }
 
-export const createRoles =(username,password,roleName,projectName)=>{
-  return (axios.post("http://localhost:3008/createRoles", {
-    username,
-    password,
-    roleName,
-    projectName
- })
-  )
-}
+
 
 export const getStoryTask =(username,password,projectname,userstoryname)=>{
   return (axios.post("http://localhost:3005/getUserStoryTaskDetails", {
