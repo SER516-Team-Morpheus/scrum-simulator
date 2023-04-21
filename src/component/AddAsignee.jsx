@@ -11,7 +11,7 @@ import { ColorRing } from 'react-loader-spinner';
 import { createRoles } from '../apis';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { getMembers } from '../apis';
+import { getMembers,getRoles } from '../apis';
 
 const Wrapper = styled.div`
 
@@ -69,6 +69,10 @@ const AddAssignee = ({ dialog }) => {
         getMembers(username,password,projectId)
         .then(res=>{
             setAssigneeList(res.data.data)
+        })
+        getRoles(username,password,projectName)
+        .then(res=>{
+            console.log(res.data,'roles')
         })
     },[])
 
