@@ -68,28 +68,6 @@ img {
 `;
 
 
-
-const tableIcons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-};
-
-
 const Roles = () => {
     let username = Cookies.get('username');
     let password = Cookies.get('password');
@@ -108,30 +86,60 @@ const Roles = () => {
     ]);
     const handleDialogRoles = () => {
         setShowDialogRoles(!showDialogRoles);}
-    const addRoles = (data) => {
-        setRoleList(prevState => [...prevState, data])
+    // const addRoles = (data) => {
+    //     setRoleList(prevState => [...prevState, data])
+    // }
+
+    const addRoles = (roleName) => {
+        setIsCreateLoader(true);
+        createProject(username, password, roleName, projectName)
+            .then(res => {
+                const data={
+                    Id:res.data.roleId,
+                    roleName:res.data.roleName
+                }
+                setRoleList(prevState => [...prevState, data])
+                setIsCreateLoader(false);
+                setShowDialog(false);
+            })
+            .catch(function(error){
+                setIsCreateLoader(false);
+            })
     }
 
     useEffect(() => {
-        getMembers(username, password, projectId)
+        getRoles(username, password, projectName)
             .then(res => {
-                
-                setRoleList(res.data.data)
+                setRoleList(res.data.roles)
                 setIsLoading(false);
-                getRoles(username, password, projectName)
-                    .then(roleData => {
-                        setRoleData(roleData.roles)
-                        setIsLoading(false);
-                    })
-                    .catch(function (error) {
-                        setIsLoading(false);
-                    })
             })
             .catch(function (error) {
                 setIsLoading(false);
             })
 
     }, [])
+
+    // useEffect(() => {
+    //     getMembers(username, password, projectId)
+    //         .then(res => {
+    //             setIsLoading(false);
+    //             getRoles(username, password, projectName)
+    //                 .then(roleData => {
+    //                     setRoleData(roleData.roles)
+    //                     setRoleList(roleData.roles.roleName)
+    //                     setIsLoading(false);
+    //                     console.log(roleData)
+    //                     console.log(RoleList)
+    //                 })
+    //                 .catch(function (error) {
+    //                     setIsLoading(false);
+    //                 })
+    //         })
+    //         .catch(function (error) {
+    //             setIsLoading(false);
+    //         })
+
+    // }, [])
     return (
         <Wrapper>
             <div className='heading-bar'>
@@ -155,7 +163,23 @@ const Roles = () => {
                         colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
                     />
                     :
-                    <div className="table">
+                    <div>
+                        {
+                            RoleList.length > 0 ? (
+                                RoleList.map(data => (
+                                    <div className="project-list">
+                                        <Typography className="heading" variant="h6" gutterBottom>{data.roleName}</Typography>
+                                    </div>
+                                ))
+                            )
+                                :
+                                <>
+                                    <Typography style={{ color: '#1976d2' }} className="heading" variant="h6" gutterBottom>
+                                        No Roles Added. Please create new one.
+                                    </Typography>
+                                </>
+
+                        }
                         {showDialogRoles &&
                             <CreateRoles
                                 dialog={handleDialogRoles}
