@@ -53,7 +53,7 @@ left: 40%;
 
 `;
 
-const EditRoles = ({ dialog }) => {
+const EditRole = ({ dialog }) => {
     let username = Cookies.get('username');
     let password = Cookies.get('password');
     let projectName = Cookies.get('projectName')
@@ -126,4 +126,4 @@ const EditRoles = ({ dialog }) => {
     )
 }
 
-export default EditRoles;
+export default EditRole;

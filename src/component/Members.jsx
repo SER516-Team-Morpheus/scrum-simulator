@@ -25,6 +25,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import EditRole from './EditRole';
 
 const Wrapper = styled.div`
 
@@ -101,6 +102,7 @@ const Members = () => {
     let projectId = Cookies.get('projectId')
     const [showDialog, setShowDialog] = useState(false);
     const [showDialogRoles, setShowDialogRoles] = useState(false);
+    const [showEditRole,setshowEditRole]=useState(false)
     const [memberList, setMemberList] = useState([]);
     const [RoleList, setRoleList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -233,7 +235,12 @@ const Members = () => {
 
             }
 
-
+            {showEditRole &&
+                <EditRole
+                    dialog={()=>setShowAssignee(!showEditRole)}
+                   
+                />
+            }   
 
         </Wrapper>
     )
