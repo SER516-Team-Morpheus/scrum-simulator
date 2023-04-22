@@ -68,6 +68,8 @@ const CreateEpic = ({ addEpic }) => {
     const [open, setOpen] = useState(false);
     const [epics, setEpics] = useState([]);
     const [deletingEpic, setDeletingEpic] = useState(null);
+    const [showEpics, setShowEpics] = useState(false);
+
     const handleDeleteEpic = async () => {
         try {
             const response = await axios.delete(`http://localhost:3006/deleteEpic/`, {
@@ -172,7 +174,10 @@ const CreateEpic = ({ addEpic }) => {
                 rows={4}
                 className={classes.input}
             />
+            <Button onClick={() => setShowEpics(!showEpics)}>Show Epics</Button>
+            <Collapse in={showEpics}>
             <div>
+            
                 {epics.map(epic => (
                     <div key = {epic.id}>
                         <Typography>{epic.subject}</Typography>
@@ -181,6 +186,7 @@ const CreateEpic = ({ addEpic }) => {
                     </div>
                 ))}
             </div>
+            </Collapse>
 
         
             {tasks.map((task, index) => (
