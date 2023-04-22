@@ -1,14 +1,14 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Cookies from 'js-cookie';
 import { createRoles, getRoles } from '../apis';
+import { createRoles, getRoles } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import CreateRoles from './CreateRoles';
 
 const Wrapper = styled.div`
-
 .heading-bar {
     display:flex;
     justify-content: space-between;
@@ -18,12 +18,10 @@ const Wrapper = styled.div`
     // margin-top: 10px;
     color: #8C1D40;
 }
-
 .create-btn {
     margin-top:10%;
     background-color: #8C1D40;
 }
-
 img {
     height:300px;
     width: 500px;
@@ -45,15 +43,19 @@ img {
     top:50%;
     left:30%;
 }
-.table {
-    margin-top:30px;
-}
+`;
+const CreateDialog = styled.div`
 
-
+height: 400px;
+width:600px;
+background-color: #d7dbd8;
+position:absolute;
+top:50%;
+left: 50%;
+transform : translate(-40%, -70%)
 `;
 
-
-const Roles = () => {
+const Roles = ({ showItem }) => {
     let username = Cookies.get('username');
     let password = Cookies.get('password');
     let projectName = Cookies.get('projectName');
@@ -86,9 +88,9 @@ const Roles = () => {
     }
 
     useEffect(() => {
-        getRoles(username, password, projectName)
+        getRoles(username,password,projectName)
             .then(res => {
-                setRoleList(res.data.roles)
+                setRoleList(res.data.roles.roleName)
                 setIsLoading(false);
             })
             .catch(function (error) {
@@ -96,28 +98,6 @@ const Roles = () => {
             })
 
     }, [])
-
-    // useEffect(() => {
-    //     getMembers(username, password, projectId)
-    //         .then(res => {
-    //             setIsLoading(false);
-    //             getRoles(username, password, projectName)
-    //                 .then(roleData => {
-    //                     setRoleData(roleData.roles)
-    //                     setRoleList(roleData.roles.roleName)
-    //                     setIsLoading(false);
-    //                     console.log(roleData)
-    //                     console.log(RoleList)
-    //                 })
-    //                 .catch(function (error) {
-    //                     setIsLoading(false);
-    //                 })
-    //         })
-    //         .catch(function (error) {
-    //             setIsLoading(false);
-    //         })
-
-    // }, [])
     return (
         <Wrapper>
             <div className='heading-bar'>
@@ -125,8 +105,7 @@ const Roles = () => {
                     Roles
                 </Typography>
                 <div>
-                    <Button className="create-btn" variant="contained" onClick={() => setShowDialogRoles(true)}>Add roles</Button>
-
+                    <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Create Role</Button>
                 </div>
             </div>
             {
@@ -145,34 +124,32 @@ const Roles = () => {
                         {
                             RoleList.length > 0 ? (
                                 RoleList.map(data => (
-                                    <div className="project-list">
-                                        <Typography className="heading" variant="h6" gutterBottom>{data.roleName}</Typography>
+                                    <div className="role-list">
+                                        <Typography className="heading" variant="h6" gutterBottom><Link onClick={() => selectRole(data.name,data.id)}>{data.name}</Link></Typography>
+                                        <Typography className="heading" variant="h9" gutterBottom>{data.description}</Typography>
                                     </div>
                                 ))
                             )
                                 :
                                 <>
-                                    <Typography style={{ color: '#1976d2' }} className="heading" variant="h6" gutterBottom>
-                                        No Roles Added. Please create new one.
-                                    </Typography>
+                                 
+ 
                                 </>
 
                         }
-                        {showDialogRoles &&
+                        {showDialog &&
                             <CreateRoles
                                 dialog={handleDialogRoles}
                                 addRoles={addRoles}
                                 isCreateLoader={isCreateLoader}
                             />
                         }
+
                     </div>
 
             }
-
-
-
         </Wrapper>
+
     )
 }
-
 export default Roles;
