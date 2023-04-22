@@ -57,55 +57,48 @@ left: 50%;
 transform : translate(-40%, -70%)
 `;
 
-
-
-const tableIcons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-};
-
-
-const Roles = () => {
+const Roles = ({ showItem }) => {
     let username = Cookies.get('username');
     let password = Cookies.get('password') || 'testuser';
     let projectName=Cookies.get('projectName');
     const [showDialog, setShowDialog] = useState(false);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
-    const [roleData, setRoleData] = useState([]);
-    const [columns, setColumns] = useState([
-        { title: 'Name', field: 'full_name' },
-        { title: 'Email', field: 'email' },
-        {
-            title: 'Role', field: 'role'
-        }
-    ]);
-    const handleDialogRoles = () => {
-        setShowDialogRoles(!showDialogRoles);}
-    const addRoles = (data) => {
-        setRoleList(prevState => [...prevState, data])
+    const [isCreateLoader, setRolesLoading] = useState(false);
+    const [RoleList, setRoleList] = useState([]);
+
+    const storeRole = (data) => {
+        setRoleList([data]);
+        setShowDialog(false);
+    }
+    const handleDialog = () => {
+        setShowDialog(!showDialog);
+    }
+    /*const selectRole = (roleName, projectName) => {
+        Cookies.set('roleName', roleName)
+        Cookies.set('projectName',projectName)
+        navigate('/roles/' + Cookies.get('roleName'))
+        navigate('/backlog')
+        showItem();
+    }*/
+    const createNewRole = (roleName, projectName) => {
+        setRolesLoading(true);
+        createRoles(username, password, roleName, projectName)
+          .then(res => {
+            const newRole = res.data.roles;
+            setRoleList(prevState => [...prevState, newRole]);
+            setRolesLoading(false);
+            setShowDialog(false);
+          })
+          .catch(function (error) {
+            setRolesLoading(false);
+          })
     }
     
     useEffect(() => {
-        getMembers(username, password, projectId)
+        getRoles(username,password,projectName)
             .then(res => {
-                
-                setRoleList(res.data.data)
+                setRoleList(res.data.roles.roleName)
                 setIsLoading(false);
             })
             .catch(function (error) {
@@ -113,28 +106,6 @@ const Roles = () => {
             })
 
     }, [])
-
-    // useEffect(() => {
-    //     getMembers(username, password, projectId)
-    //         .then(res => {
-    //             setIsLoading(false);
-    //             getRoles(username, password, projectName)
-    //                 .then(roleData => {
-    //                     setRoleData(roleData.roles)
-    //                     setRoleList(roleData.roles.roleName)
-    //                     setIsLoading(false);
-    //                     console.log(roleData)
-    //                     console.log(RoleList)
-    //                 })
-    //                 .catch(function (error) {
-    //                     setIsLoading(false);
-    //                 })
-    //         })
-    //         .catch(function (error) {
-    //             setIsLoading(false);
-    //         })
-
-    // }, [])
     return (
         <Wrapper>
             <div className='heading-bar'>
@@ -157,8 +128,24 @@ const Roles = () => {
                         colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
                     />
                     :
-                    <div className="table">
-                        {showDialogRoles &&
+                    <div>
+                        {
+                            RoleList.length > 0 ? (
+                                RoleList.map(data => (
+                                    <div className="role-list">
+                                        <Typography className="heading" variant="h6" gutterBottom><Link onClick={() => selectRole(data.name,data.id)}>{data.name}</Link></Typography>
+                                        <Typography className="heading" variant="h9" gutterBottom>{data.description}</Typography>
+                                    </div>
+                                ))
+                            )
+                                :
+                                <>
+                                 
+ 
+                                </>
+
+                        }
+                        {showDialog &&
                             <CreateRoles
                                 dialog={handleDialog}
                                 createNewRole={createNewRole}
