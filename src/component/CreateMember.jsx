@@ -72,7 +72,7 @@ const CreateMember = ({ dialog, addMember }) => {
                     createMember(username,password,values.memberName,projectId)
                     .then(res=>{
                         dialog();
-                        addMember(values.memberName)
+                        addMember(res.memberName)
                     })
                 }}
             >

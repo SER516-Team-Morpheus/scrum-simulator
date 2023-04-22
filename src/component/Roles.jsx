@@ -1,14 +1,15 @@
+//import React, { useEffect, useState } from 'react';
 import React, { useState, useEffect, forwardRef } from 'react';
 import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Cookies from 'js-cookie';
-import { getMembers } from '../apis';
+import { createRoles, getRoles } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
-import CreateMember from './CreateMember';
-import MaterialTable from 'material-table';
+import CreateRoles from './CreateRoles';
 import { ThemeProvider, createTheme, } from '@mui/material';
-
+import Search from '@material-ui/icons/Search';
+import MaterialTable from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -22,11 +23,9 @@ import FirstPage from '@material-ui/icons/FirstPage';
 import LastPage from '@material-ui/icons/LastPage';
 import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
+//import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-
 const Wrapper = styled.div`
-
 .heading-bar {
     display:flex;
     justify-content: space-between;
@@ -36,12 +35,10 @@ const Wrapper = styled.div`
     // margin-top: 10px;
     color: #8C1D40;
 }
-
 .create-btn {
     margin-top:10%;
     background-color: #8C1D40;
 }
-
 img {
     height:300px;
     width: 500px;
@@ -63,15 +60,17 @@ img {
     top:50%;
     left:30%;
 }
-.table {
-    margin-top:30px;
-}
-
-
 `;
+const CreateDialog = styled.div`
 
-
-
+height: 400px;
+width:600px;
+background-color: #d7dbd8;
+position:absolute;
+top:50%;
+left: 50%;
+transform : translate(-40%, -70%)
+`;
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -92,40 +91,69 @@ const tableIcons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-
-const Members = () => {
+const Roles = ({ showItem }) => {
     let username = Cookies.get('username');
     let password = Cookies.get('password');
     let projectName = Cookies.get('projectName');
-    let projectId = Cookies.get('projectId')
-    const [showDialog, setShowDialog] = useState(false);
     const [showDialogRoles, setShowDialogRoles] = useState(false);
-    const [memberList, setMemberList] = useState([]);
     const [RoleList, setRoleList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [roleData, setRoleData] = useState([]);
+    const [isCreateLoader, setIsCreateLoader] = useState(false);
     const defaultMaterialTheme = createTheme();
-
-    const [columns, setColumns] = useState([
-        { title: 'Name', field: 'full_name' },
-        { title: 'Email', field: 'email' },
+    const columns = [
+       {
+          title: 'Role',
+          field: 'roleName'
+        },
         {
-            title: 'Role', field: 'role'
-        }
-    ]);
+          title: 'Delete Role',
+          field: 'delete',
+          render: rowData => (
+            <button onClick={() => handleDelete(rowData)}>Delete</button>
+          )
+        },
+        {
+            title: 'Edit Role',
+            field: 'edit',
+            render: rowData => (
+              <button onClick={() => handleEdit(rowData)}>Edit</button>
+            )
+          }
+      ];
+      function handleDelete(rowData) {
+        // Implement the code to delete the role
+      }
 
+      function handleEdit(rowData) {
+        // Implement the code to edit the role
+      }
+    const handleDialogRoles = () => {
+        setShowDialogRoles(!showDialogRoles);}
+    // const addRoles = (data) => {
+    //     setRoleList(prevState => [...prevState, data])
+    // }
 
-    const handleDialog = () => {
-        setShowDialog(!showDialog);
-    }
-    const addMember = (data) => {
-        setMemberList(prevState => [...prevState, data])
+    const addRoles = (roleName) => {
+        setIsCreateLoader(true);
+        createRoles(username, password, roleName, projectName)
+            .then(res => {
+                const data={
+                    Id:res.data.roleId,
+                    roleName:res.data.roleName
+                }
+                setRoleList(prevState => [...prevState, data])
+                setIsCreateLoader(false);
+                setShowDialogRoles(false);
+            })
+            .catch(function(error){
+                setIsCreateLoader(false);
+            })
     }
 
     useEffect(() => {
-        getMembers(username, password, projectId)
+        getRoles(username,password,projectName)
             .then(res => {
-                setMemberList(res.data.data)
+                setRoleList(res.data.roles)
                 setIsLoading(false);
             })
             .catch(function (error) {
@@ -137,10 +165,10 @@ const Members = () => {
         <Wrapper>
             <div className='heading-bar'>
                 <Typography className="heading" variant="h3" gutterBottom>
-                    Members
+                    Roles
                 </Typography>
                 <div>
-                    <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Add Members</Button>
+                    <Button className="create-btn" variant="contained" onClick={() => setShowDialogRoles(true)}>Create Role</Button>
                 </div>
             </div>
             {
@@ -156,62 +184,43 @@ const Members = () => {
                     />
                     :
                     <div className="table">
-                        <ThemeProvider theme={defaultMaterialTheme}>
-
+                        {
+                            <ThemeProvider theme={defaultMaterialTheme}>
                             <MaterialTable
                                 icons={tableIcons}
                                 title=""
                                 columns={columns}
-                                data={memberList}
-                            // editable={{
-                            //     onRowAdd: newData =>
-                            //         new Promise((resolve, reject) => {
-                            //             setTimeout(() => {
-                            //                 setData([...data, newData]);
+                                data={RoleList}
+                            /*RoleList.length > 0 ? (
+                                RoleList.map(data => (
+                                    <div className="role-list">
+                                        <Typography className="heading" variant="h6" gutterBottom>{data.roleName}</Typography>
 
-                            //                 resolve();
-                            //             }, 1000)
-                            //         }),
-                            //     onRowUpdate: (newData, oldData) =>
-                            //         new Promise((resolve, reject) => {
-                            //             setTimeout(() => {
-                            //                 const dataUpdate = [...data];
-                            //                 const index = oldData.tableData.id;
-                            //                 dataUpdate[index] = newData;
-                            //                 setData([...dataUpdate]);
-
-                            //                 resolve();
-                            //             }, 1000)
-                            //         }),
-                            //     onRowDelete: oldData =>
-                            //         new Promise((resolve, reject) => {
-                            //             setTimeout(() => {
-                            //                 const dataDelete = [...data];
-                            //                 const index = oldData.tableData.id;
-                            //                 dataDelete.splice(index, 1);
-                            //                 setData([...dataDelete]);
-
-                            //                 resolve()
-                            //             }, 1000)
-                            //         }),
-                            // }}
-                            />
+                                    </div>
+                                ))
+                            )
+                                :
+                                <>
+                                 
+ 
+                                </>*/
+                                 />
                         </ThemeProvider>
-                        {showDialog &&
-                            <CreateMember
-                                dialog={handleDialog}
-                                addMember={addMember}
+
+                        }
+                        {showDialogRoles &&
+                            <CreateRoles
+                                dialog={handleDialogRoles}
+                                addRoles={addRoles}
+                                isCreateLoader={isCreateLoader}
                             />
                         }
 
                     </div>
 
             }
-
-
-
         </Wrapper>
+
     )
 }
-
-export default Members;
+export default Roles;
