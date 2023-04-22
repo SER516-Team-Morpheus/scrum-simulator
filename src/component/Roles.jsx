@@ -3,24 +3,9 @@ import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Cookies from 'js-cookie';
-import { getMembers, getRoles } from '../apis';
+import { createRoles, getRoles } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import CreateRoles from './CreateRoles';
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
 
 const Wrapper = styled.div`
 
@@ -72,18 +57,19 @@ const Roles = () => {
     let username = Cookies.get('username');
     let password = Cookies.get('password');
     let projectName = Cookies.get('projectName');
-    let projectId = Cookies.get('projectId')
+    // let projectId = Cookies.get('projectId')
     const [showDialogRoles, setShowDialogRoles] = useState(false);
     const [RoleList, setRoleList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [roleData, setRoleData] = useState([]);
-    const [columns, setColumns] = useState([
-        { title: 'Name', field: 'full_name' },
-        { title: 'Email', field: 'email' },
-        {
-            title: 'Role', field: 'role'
-        }
-    ]);
+    const [isCreateLoader, setIsCreateLoader] = useState(false);
+    // const [roleData, setRoleData] = useState([]);
+    // const [columns, setColumns] = useState([
+    //     { title: 'Name', field: 'full_name' },
+    //     { title: 'Email', field: 'email' },
+    //     {
+    //         title: 'Role', field: 'role'
+    //     }
+    // ]);
     const handleDialogRoles = () => {
         setShowDialogRoles(!showDialogRoles);}
     // const addRoles = (data) => {
@@ -92,7 +78,7 @@ const Roles = () => {
 
     const addRoles = (roleName) => {
         setIsCreateLoader(true);
-        createProject(username, password, roleName, projectName)
+        createRoles(username, password, roleName, projectName)
             .then(res => {
                 const data={
                     Id:res.data.roleId,
@@ -100,7 +86,7 @@ const Roles = () => {
                 }
                 setRoleList(prevState => [...prevState, data])
                 setIsCreateLoader(false);
-                setShowDialog(false);
+                setShowDialogRoles(false);
             })
             .catch(function(error){
                 setIsCreateLoader(false);
@@ -184,6 +170,7 @@ const Roles = () => {
                             <CreateRoles
                                 dialog={handleDialogRoles}
                                 addRoles={addRoles}
+                                isCreateLoader={isCreateLoader}
                             />
                         }
                     </div>
