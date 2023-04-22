@@ -57,19 +57,11 @@ const Roles = () => {
     let username = Cookies.get('username');
     let password = Cookies.get('password');
     let projectName = Cookies.get('projectName');
-    // let projectId = Cookies.get('projectId')
     const [showDialogRoles, setShowDialogRoles] = useState(false);
     const [RoleList, setRoleList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isCreateLoader, setIsCreateLoader] = useState(false);
-    // const [roleData, setRoleData] = useState([]);
-    // const [columns, setColumns] = useState([
-    //     { title: 'Name', field: 'full_name' },
-    //     { title: 'Email', field: 'email' },
-    //     {
-    //         title: 'Role', field: 'role'
-    //     }
-    // ]);
+
     const handleDialogRoles = () => {
         setShowDialogRoles(!showDialogRoles);}
     // const addRoles = (data) => {

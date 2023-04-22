@@ -4,9 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Formik, Form } from 'formik';
 import TextField from '@mui/material/TextField';
-import Cookies from 'js-cookie';
 import { ColorRing } from 'react-loader-spinner';
-import { createRoles } from '../apis';
 
 
 const Wrapper = styled.div`
@@ -54,11 +52,7 @@ left: 40%;
 
 `;
 
-const CreateRoles = ({ dialog, addRoles }) => {
-    let username = Cookies.get('username');
-    let password = Cookies.get('password');
-    let projectName = Cookies.get('projectName');
-    const [isCreateLoader, setIsCreateLoader] = useState(false);
+const CreateRoles = ({ dialog, addRoles, isCreateLoader }) => {
 
     return (
 
