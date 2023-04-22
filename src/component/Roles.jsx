@@ -103,7 +103,7 @@ const Roles = ({ showItem }) => {
     const columns = [
        {
           title: 'Role',
-          field: 'role'
+          field: 'roleName'
         },
         {
           title: 'Delete Role',
@@ -111,25 +111,19 @@ const Roles = ({ showItem }) => {
           render: rowData => (
             <button onClick={() => handleDelete(rowData)}>Delete</button>
           )
-        }
+        },
+        {
+            title: 'Edit Role',
+            field: 'edit',
+            render: rowData => (
+              <button onClick={() => handleEdit(rowData)}>Edit</button>
+            )
+          }
       ];
       function handleDelete(rowData) {
         // Implement the code to delete the role
       }
-   
-    const columns1 = [
-       {
-          title: 'Role',
-          field: 'role'
-        },
-        {
-          title: 'Edit Role',
-          field: 'edit',
-          render: rowData => (
-            <button onClick={() => handleEdit(rowData)}>Edit</button>
-          )
-        }
-      ];
+
       function handleEdit(rowData) {
         // Implement the code to edit the role
       }
