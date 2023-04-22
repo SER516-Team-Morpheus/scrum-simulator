@@ -139,6 +139,7 @@ const CreateEpic = ({ addEpic }) => {
             console.error(error);
         }
     };
+    
 
 
     const handleAddTask = () => {
@@ -174,7 +175,14 @@ const CreateEpic = ({ addEpic }) => {
                 rows={4}
                 className={classes.input}
             />
-            <Button onClick={() => setShowEpics(!showEpics)}>Show Epics</Button>
+            <Button 
+    variant="contained"
+    color="primary"
+    onClick={() => setShowEpics(!showEpics)}
+    style={{ marginTop: '1rem' }}
+>
+    {showEpics ? 'Hide Epics' : 'Show Epics'}
+</Button>
             <Collapse in={showEpics}>
             <div>
             
