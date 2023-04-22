@@ -98,10 +98,9 @@ export const createTask = (username, password, projectname, userstoryname, taskn
   )
 }
 
-export const getCFD = (username, password, projectId) => {
+export const getCFD = (token, projectId) => {
   return axios.post("http://localhost:3012/cfd", {
-    username,
-    password,
+    token,
     projectId,
   })
 }

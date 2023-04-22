@@ -14,6 +14,7 @@ import {
 import { Line } from "react-chartjs-2"
 import { getCFD } from "../apis"
 import { useLocation, useParams } from "react-router-dom"
+import { PuffLoader } from "react-spinners"
 import Cookies from "js-cookie"
 
 ChartJS.register(
@@ -71,99 +72,137 @@ function getColor(i, type){
 function CfdDiagram() {
   const chartRef = useRef()
   const { projectId } = useParams()
-  const username = Cookies.get("username")
-  const password = Cookies.get("password")
+  const token = Cookies.get("token")
   const [cfdChartData, setcfdChartData] = useState(null)
   const [cfdChartData15days, setcfdChartData15days] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [hasError, setHasError] = useState(false)
 
   useEffect(() => {
     const handleChart = async () => {
-      const { data, status } = await getCFD(username, password, projectId)
-      if (status !== 200 || !data) {
-        console.error("Error response")
-        return <div>Connection To CFDService refused.</div>;
-      }
+      getCFD(token, projectId)
+        .then((data) => {
+          data = data.data
+          const labels = data.dates
+          const datasets = data.status.map((statusObj, i) => ({
+            label: statusObj.key,
+            data: statusObj.value,
+            backgroundColor: getColor(i, "background"),
+            borderColor: getColor(i, "border"),
+            borderWidth: 1,
+            fill: true
+          }))
 
-      const labels = data.dates
+          setcfdChartData({ labels, datasets })
 
-      const datasets = data.status.map((statusObj, i) => ({
-        label: statusObj.key,
-        data: statusObj.value,
-        backgroundColor: getColor(i, "background"),
-        borderColor: getColor(i, "border"),
-        borderWidth: 1,
-        fill: true
-      }))
+          const labels2 = [...labels]
+          const labels15days = labels2.slice(-15)
+          const dataCopy = { ...data }
 
-      setcfdChartData({ labels, datasets })
-
-      const labels2 = [...labels]
-      const labels15days = labels2.slice(-15)
-      const dataCopy = { ...data }
-
-      const datasets15days = dataCopy.status.map((statusObj, i) => ({
-        label: statusObj.key,
-        data: statusObj.value.slice(-15),
-        backgroundColor: getColor(i, "background"),
-        borderColor: getColor(i, "border"),
-        borderWidth: 1,
-        fill: true
-      }))
-
-      console.log(datasets15days)
-
-      setcfdChartData15days({ labels: labels15days, datasets: datasets15days })
+          const datasets15days = dataCopy.status.map((statusObj, i) => ({
+            label: statusObj.key,
+            data: statusObj.value.slice(-15),
+            backgroundColor: getColor(i, "background"),
+            borderColor: getColor(i, "border"),
+            borderWidth: 1,
+            fill: true
+          }))
+          setcfdChartData15days({
+            labels: labels15days,
+            datasets: datasets15days,
+          })
+          setIsLoading(false)
+        })
+        .catch(function (error) {
+          setIsLoading(false)
+          setHasError(true)
+        })
     }
 
     handleChart()
-  }, [username, password, projectId])
-
-  if (!cfdChartData) {
-    return <div>Loading...</div>
-  }
+  }, [token, projectId])
 
   return (
     <div>
-      <div style={{ margin: 25 }}>
-        <Line
-          data={cfdChartData}
-          options={{
-            responsive: true,
-            plugins: {
-              title: {
-                display: true,
-                text: "Last 30 Days",
-              },
-            },
-            scales: {
-              y: {
-                stacked: true,
-              },
-            },
+      {hasError ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
           }}
-        />
-      </div>
-      <div style={{ margin: 25 }}>
-        <Line
-          data={cfdChartData15days}
-          options={{
-            responsive: true,
-            plugins: {
-              title: {
-                display: true,
-                text: "Last 15 Days",
-              },
-            },
-            scales: {
-              y: {
-                stacked: true,
-              },
-            },
+        >
+          <div
+            style={{
+              padding: "1rem",
+              backgroundColor: "#8C1C3F",
+              color: "#fff",
+              borderRadius: "4px",
+              maxWidth: "80vw",
+              textAlign: "center",
+            }}
+          >
+            There was an error fetching the CFD data. Please refresh the page or
+            check your network.
+          </div>
+        </div>
+      ) : isLoading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
           }}
-        />
-      </div>
+        >
+          <PuffLoader color="#3f51b5" size={150} />
+        </div>
+      ) : (
+        <>
+          <div style={{ margin: 25 }}>
+            <Line
+              data={cfdChartData}
+              options={{
+                responsive: true,
+                plugins: {
+                  title: {
+                    display: true,
+                    text: "Last 30 Days",
+                  },
+                },
+                scales: {
+                  y: {
+                    stacked: true,
+                  },
+                },
+              }}
+            />
+          </div>
+          <div style={{ margin: 25 }}>
+            <Line
+              data={cfdChartData15days}
+              options={{
+                responsive: true,
+                plugins: {
+                  title: {
+                    display: true,
+                    text: "Last 15 Days",
+                  },
+                },
+                scales: {
+                  y: {
+                    stacked: true,
+                  },
+                },
+              }}
+            />
+          </div>
+        </>
+      )}
     </div>
-  )
+  );
+
 }
 
 export default CfdDiagram
