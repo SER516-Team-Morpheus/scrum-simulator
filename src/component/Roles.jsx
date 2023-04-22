@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Cookies from 'js-cookie';
-import { createRoles, getRoles } from '../apis';
+import { createRoles, getRoles, deleteRoles, updateRoles } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import CreateRoles from './CreateRoles';
 import { ThemeProvider, createTheme, } from '@mui/material';
@@ -122,10 +122,22 @@ const Roles = ({ showItem }) => {
       ];
       function handleDelete(rowData) {
         // Implement the code to delete the role
+        console.log(rowData)
+        deleteRoles(username, password, projectName, rowData.roleName)
+        .then(res => {
+            getRoles(username,password,projectName)
+            .then(res => {
+                setRoleList(res.data.roles)
+                setIsLoading(false);
+            })
+            .catch(function (error) {
+                setIsLoading(false);
+            })
+        })
       }
 
       function handleEdit(rowData) {
-        // Implement the code to edit the role
+        updateRoles()
       }
     const handleDialogRoles = () => {
         setShowDialogRoles(!showDialogRoles);}
