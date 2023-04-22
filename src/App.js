@@ -13,6 +13,7 @@ import SprintTab from "./component/SprintTab";
 import StoryDetails from "./component/StoryDetails";
 import Members from "./component/Members"
 import CurrentSprint from "./component/CurrentSprint";
+import CfdDiagram from "./component/CFD";
 
 
 const Wrapper = styled.div`
@@ -58,7 +59,7 @@ const App = () => {
               <Route  path="/current-sprint" element={<CurrentSprint/>} />
               <Route  path="/storyDetails/:name" element={<StoryDetails/>} />
               <Route  path="/members" element={<Members/>} />
-
+              <Route path="/cfd/:projectId" element={<CfdDiagram />} />
             </Routes>
           </Grid>
         </Grid>
