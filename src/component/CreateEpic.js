@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Collapse, makeStyles, MenuItem, TextField, Typography } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { green, red, yellow } from '@material-ui/core/colors';
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
@@ -66,6 +67,27 @@ const CreateEpic = ({ addEpic }) => {
     const [tasks, setTasks] = useState([]);
     const [open, setOpen] = useState(false);
     const [epics, setEpics] = useState([]);
+    const [deletingEpic, setDeletingEpic] = useState(null);
+    const handleDeleteEpic = async () => {
+        try {
+            const response = await axios.delete(`http://localhost:3006/deleteEpic/`, {
+                data: {
+                username: 'SERtestuser',
+                password: 'testuser',
+                epicId: deletingEpic.id,
+                },
+            });
+            setEpics(epics.filter((epic) => epic.id !== deletingEpic.id));
+            setDeletingEpic(null);
+            } catch (error) {
+            console.error(error);
+            }
+        };
+
+
+
+
+
 
     useEffect(() => {
 
@@ -74,7 +96,6 @@ const CreateEpic = ({ addEpic }) => {
             const response = await axios.post('http://localhost:3006/listEpics', {
                 username: 'SERtestuser',
                 password: 'testuser',
-                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgxNDM0NjQwLCJqdGkiOiJhYzkyMDBjMDEyYTM0ZGQ1ODQ0NjMzY2MyYjNjNmQ1YyIsInVzZXJfaWQiOjU1OTIxNX0._W4lEK9zTQQK1Jl01Sg9I2Xw75skJm6sTQiV92FuMBQ',
                 projectId: 733810,
             });
             setEpics(response.data.epics);
@@ -93,7 +114,6 @@ const CreateEpic = ({ addEpic }) => {
         const epicData = {
             username: 'SERtestuser',
             password: 'testuser',
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgxNDM0NjQwLCJqdGkiOiJhYzkyMDBjMDEyYTM0ZGQ1ODQ0NjMzY2MyYjNjNmQ1YyIsInVzZXJfaWQiOjU1OTIxNX0._W4lEK9zTQQK1Jl01Sg9I2Xw75skJm6sTQiV92FuMBQ',
             name,
             description,
             projectId: 733810,
@@ -113,18 +133,6 @@ const CreateEpic = ({ addEpic }) => {
             setStatus('New');
             setDescription('');
             setTasks([]);
-
-        //     const listEpicsResponse = await axios.post('http://localhost:3006/listEpics', {
-        //         username: 'SERtestuser',
-        //         password: 'testuser',
-        //         token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgxNDM0NjQwLCJqdGkiOiJhYzkyMDBjMDEyYTM0ZGQ1ODQ0NjMzY2MyYjNjNmQ1YyIsInVzZXJfaWQiOjU1OTIxNX0._W4lEK9zTQQK1Jl01Sg9I2Xw75skJm6sTQiV92FuMBQ',
-        //         projectId: 733810,
-        //     });
-        //     setEpics(listEpicsResponse.data);
-        //     setName('');
-        //     setStatus('New');
-        //     setDescription('');
-        //     setTasks([]);
         } catch (error) {
             console.error(error);
         }
@@ -145,7 +153,7 @@ const CreateEpic = ({ addEpic }) => {
 
     const handleTaskDelete = (index) => {
         setTasks([...tasks.slice(0, index), ...tasks.slice(index + 1)]);
-    };
+    };        
 
     return (
         <form onSubmit={handleSubmit} className={classes.form}>
