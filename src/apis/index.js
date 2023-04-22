@@ -112,7 +112,7 @@ export const updateRoles = (username, password, roleName, newRoleName, projectNa
 }
 
 export const deleteRoles = (username, password, projectName, roleName) => {
-  return axios.delete(`http://localhost:3008/deleteroles/:${roleName}?username=${username}&password=${password}&projectName=${projectName}`)
+  return axios.delete(`http://localhost:3008/deleteroles/${roleName}?username=${username}&password=${password}&projectName=${projectName}`)
 }
 
 

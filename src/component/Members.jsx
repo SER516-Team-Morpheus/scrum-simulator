@@ -3,10 +3,9 @@ import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Cookies from 'js-cookie';
-import { getMembers, getRoles } from '../apis';
+import { getMembers } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import CreateMember from './CreateMember';
-import CreateRoles from './CreateRoles';
 import MaterialTable from 'material-table';
 import { ThemeProvider, createTheme, } from '@mui/material';
 
@@ -119,31 +118,15 @@ const Members = () => {
     const handleDialog = () => {
         setShowDialog(!showDialog);
     }
-    const handleDialogRoles = () => {
-        setShowDialogRoles(!showDialogRoles);
-    }
     const addMember = (data) => {
         setMemberList(prevState => [...prevState, data])
-    }
-    const addRoles = (data) => {
-        setRoleList(prevState => [...prevState, data])
     }
 
     useEffect(() => {
         getMembers(username, password, projectId)
             .then(res => {
                 setMemberList(res.data.data)
-                setRoleList(res.data.data)
                 setIsLoading(false);
-                getRoles(username, password, projectName)
-                    .then(roleData => {
-                        setRoleData(roleData.roles)
-                        setMemberList(res.data.data)
-                        setIsLoading(false);
-                    })
-                    .catch(function (error) {
-                        setIsLoading(false);
-                    })
             })
             .catch(function (error) {
                 setIsLoading(false);
@@ -158,8 +141,6 @@ const Members = () => {
                 </Typography>
                 <div>
                     <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Add Members</Button>
-                    <Button className="create-btn" variant="contained" onClick={() => setShowDialogRoles(true)}>Add Roles</Button>
-
                 </div>
             </div>
             {
@@ -223,12 +204,6 @@ const Members = () => {
                             />
                         }
 
-                        {showDialogRoles &&
-                            <CreateRoles
-                                dialog={handleDialogRoles}
-                                addRoles={addRoles}
-                            />
-                        }
                     </div>
 
             }
