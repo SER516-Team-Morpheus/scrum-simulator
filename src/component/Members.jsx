@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Cookies from 'js-cookie';
-import { getMembers, getRoles } from '../apis';
+import { deleteMember, getMembers, getRoles } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import CreateMember from './CreateMember';
 import CreateRoles from './CreateRoles';
@@ -134,8 +134,14 @@ const Members = () => {
     const handleDialogRoles = () => {
         setShowDialogRoles(!showDialogRoles);
     }
-    const addMember = (data) => {
-        setMemberList(prevState => [...prevState, data])
+    const addMember = (data,mid) => {
+        const newData={
+            id:mid,
+            email:`${data}@asu.edu`,
+            full_name:data,
+            role:'UX'
+        }
+        setMemberList(prevState => [...prevState, newData])
     }
     const addRoles = (data) => {
         setRoleList(prevState => [...prevState, data])
@@ -196,7 +202,23 @@ const Members = () => {
                                 title=""
                                 columns={columns}
                                 data={memberList}
-                            
+                            editable={{
+                                onRowDelete: oldData =>
+                                    new Promise((resolve, reject) => {
+                                        setTimeout(() => {
+                                            console.log(oldData,'old')
+                                            deleteMember(username,password,oldData.id)
+                                            .then(res=>{
+                                                const dataDelete = [...memberList];
+                                                const index = oldData.tableData.id;
+                                                dataDelete.splice(index, 1);
+                                                setMemberList([...dataDelete]);
+                                            })
+
+                                            resolve()
+                                        }, 1000)
+                                    }),
+                            }}
                             />
 
                         </ThemeProvider>
@@ -205,8 +227,7 @@ const Members = () => {
                                 dialog={handleDialog}
                                 addMember={addMember}
                             />
-                        }
-
+                       }
                     </div>
 
             }

@@ -59,7 +59,7 @@ const CreateMember = ({ dialog, addMember }) => {
     let username = Cookies.get('username');
     let password = Cookies.get('password');
     let projectId = Cookies.get('projectId')
-    const [isCreateLoader] = useState(false);
+    const [isCreateLoader,setIsCreateLoader] = useState(false);
 
     return (
 
@@ -67,12 +67,15 @@ const CreateMember = ({ dialog, addMember }) => {
             <Formik
                 initialValues={{
                     memberName: '',
+                    email:''
                 }}
                 onSubmit={(values) => {
+                    setIsCreateLoader(true)
                     createMember(username,password,values.memberName,projectId)
                     .then(res=>{
                         dialog();
-                        addMember(values.memberName)
+                        setIsCreateLoader(false);
+                        addMember(values.memberName,res.data.memberId)
                     })
                 }}
             >
