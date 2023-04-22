@@ -116,6 +116,23 @@ const Roles = ({ showItem }) => {
       function handleDelete(rowData) {
         // Implement the code to delete the role
       }
+   
+    const columns1 = [
+       {
+          title: 'Role',
+          field: 'role'
+        },
+        {
+          title: 'Edit Role',
+          field: 'edit',
+          render: rowData => (
+            <button onClick={() => handleEdit(rowData)}>Edit</button>
+          )
+        }
+      ];
+      function handleEdit(rowData) {
+        // Implement the code to edit the role
+      }
     const handleDialogRoles = () => {
         setShowDialogRoles(!showDialogRoles);}
     // const addRoles = (data) => {
