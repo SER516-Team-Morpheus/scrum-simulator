@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Cookies from 'js-cookie';
 import { createRoles, getRoles } from '../apis';
-import { createRoles, getRoles } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import CreateRoles from './CreateRoles';
 
@@ -90,7 +89,7 @@ const Roles = ({ showItem }) => {
     useEffect(() => {
         getRoles(username,password,projectName)
             .then(res => {
-                setRoleList(res.data.roles.roleName)
+                setRoleList(res.data.roles)
                 setIsLoading(false);
             })
             .catch(function (error) {
@@ -105,7 +104,7 @@ const Roles = ({ showItem }) => {
                     Roles
                 </Typography>
                 <div>
-                    <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Create Role</Button>
+                    <Button className="create-btn" variant="contained" onClick={() => setShowDialogRoles(true)}>Create Role</Button>
                 </div>
             </div>
             {
@@ -125,8 +124,8 @@ const Roles = ({ showItem }) => {
                             RoleList.length > 0 ? (
                                 RoleList.map(data => (
                                     <div className="role-list">
-                                        <Typography className="heading" variant="h6" gutterBottom><Link onClick={() => selectRole(data.name,data.id)}>{data.name}</Link></Typography>
-                                        <Typography className="heading" variant="h9" gutterBottom>{data.description}</Typography>
+                                        <Typography className="heading" variant="h6" gutterBottom>{data.roleName}</Typography>
+
                                     </div>
                                 ))
                             )
@@ -137,7 +136,7 @@ const Roles = ({ showItem }) => {
                                 </>
 
                         }
-                        {showDialog &&
+                        {showDialogRoles &&
                             <CreateRoles
                                 dialog={handleDialogRoles}
                                 addRoles={addRoles}
