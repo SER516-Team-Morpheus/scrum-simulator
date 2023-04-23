@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import { createProject, getProject } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
+import Chip from '@mui/material/Chip';
+
 
 const Wrapper = styled.div`
 
@@ -149,6 +151,10 @@ const Project = ({ showItem }) => {
                                     <div className="project-list">
                                         <Typography className="heading" variant="h6" gutterBottom><Link onClick={() => selectProject(data.name,data.id)}>{data.name}</Link></Typography>
                                         <Typography className="heading" variant="h9" gutterBottom>{data.description}</Typography>
+                                        <div style={{marginTop:'20px'}}>
+                                        <Chip label="View CFD" onClick={()=>navigate(`/cfd/${data.id}`)}/>
+
+                                            </div>
                                     </div>
                                 ))
                             )
