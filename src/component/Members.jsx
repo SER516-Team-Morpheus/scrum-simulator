@@ -9,7 +9,7 @@ import CreateMember from './CreateMember';
 import CreateRoles from './CreateRoles';
 import MaterialTable from 'material-table';
 import { ThemeProvider, createTheme, } from '@mui/material';
-
+import Select from '@mui/material/Select';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -111,8 +111,20 @@ const Members = () => {
         { title: 'Name', field: 'full_name' },
         { title: 'Email', field: 'email' },
         {
-            title: 'Role', field: 'role'
-        }
+            title: 'Role',
+            field: 'role',
+            render: rowData => (
+                <Select id="role-name" className="subject-field" value={''} label="Roles" name="roleName" variant="outlined">
+                {
+                    roleData.map(role=> {
+                        return (<MenuItem value={role.roleName}>{role.roleName}</MenuItem>)
+                    }
+                    )
+                }
+        
+            </Select>
+            ),
+          },
     ]);
 
 
@@ -143,7 +155,8 @@ const Members = () => {
                 setIsLoading(false);
                 getRoles(username, password, projectName)
                     .then(roleData => {
-                        setRoleData(roleData.roles)
+                        {console.log(roleData)}
+                        setRoleData(roleData.data.roles)
                         setMemberList(res.data.data)
                         setIsLoading(false);
                     })
@@ -159,6 +172,7 @@ const Members = () => {
     return (
         <Wrapper>
             <div className='heading-bar'>
+                {console.log(roleData,'body role')}
                 <Typography className="heading" variant="h3" gutterBottom>
                     Members
                 </Typography>
@@ -206,25 +220,19 @@ const Members = () => {
                                     }),
                             }}
                             />
+
                         </ThemeProvider>
                         {showDialog &&
                             <CreateMember
                                 dialog={handleDialog}
                                 addMember={addMember}
                             />
-                        }
-
-                        {showDialogRoles &&
-                            <CreateRoles
-                                dialog={handleDialogRoles}
-                                addRoles={addRoles}
-                            />
-                        }
+                       }
                     </div>
 
             }
 
-
+             
 
         </Wrapper>
     )
