@@ -5,14 +5,15 @@ import { green, red, yellow } from '@material-ui/core/colors';
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import '../css/CreateEpic.css';
+import {Grid} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: theme.spacing(4),
-    },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+},
+
     input: {
         width: '100%',
         marginBottom: theme.spacing(2),
@@ -45,9 +46,7 @@ const useStyles = makeStyles((theme) => ({
     alert: {
         marginTop: theme.spacing(2),
     },
-    alert: {
-        marginTop: theme.spacing(2),
-    },
+  
     statusNew: {
         color: red[500],
     },
@@ -69,23 +68,26 @@ const CreateEpic = ({ addEpic }) => {
     const [epics, setEpics] = useState([]);
     const [deletingEpic, setDeletingEpic] = useState(null);
     const [showEpics, setShowEpics] = useState(false);
-
-    const handleDeleteEpic = async () => {
-        try {
-            const response = await axios.delete(`http://localhost:3006/deleteEpic/`, {
-                data: {
+    
+    
+     const handleDeleteEpic = async (id) => {
+         
+             await axios.post(`http://localhost:3006/deleteEpic/`, {
+                
                 username: 'SERtestuser',
                 password: 'testuser',
-                epicId: deletingEpic.id,
-                },
+                epicId: `${id}`,
+                
             });
-            setEpics(epics.filter((epic) => epic.id !== deletingEpic.id));
-            setDeletingEpic(null);
-            } catch (error) {
-            console.error(error);
-            }
+            // setEpics(epics.filter((epic) => epic.id !== deletingEpic.id));
+            // setDeletingEpic(null);
+            // } catch (error) {
+            // console.error(error);
+            // }
+    console.log('hello');
         };
-
+      
+  
 
 
 
@@ -187,10 +189,18 @@ const CreateEpic = ({ addEpic }) => {
             <div>
             
                 {epics.map(epic => (
-                    <div key = {epic.id}>
+                    <div key = {epic.id} className={classes.task}>
                         <Typography>{epic.subject}</Typography>
                         <Typography>{epic.status}</Typography>
                         <Typography>{epic.description}</Typography>
+          
+        <Button
+  className={classes.deleteButton}
+  onClick={() => handleDeleteEpic(epic.id)}
+>
+  Delete
+</Button>
+
                     </div>
                 ))}
             </div>
