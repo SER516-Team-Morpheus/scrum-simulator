@@ -97,6 +97,12 @@ export const createTask = (username, password, projectname, userstoryname, taskn
   })
   )
 }
+export const getSB = (token, sprintID) => {
+  return axios.post("http://localhost:3020/sb", {
+    token,
+    sprintID
+  })
+}
 
 export const getCFD = (token, projectId) => {
   return axios.post("http://localhost:3012/cfd", {

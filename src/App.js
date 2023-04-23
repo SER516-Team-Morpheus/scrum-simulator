@@ -13,6 +13,7 @@ import SprintTab from "./component/SprintTab";
 import StoryDetails from "./component/StoryDetails";
 import Members from "./component/Members"
 import CurrentSprint from "./component/CurrentSprint";
+import SBChart from "./component/SprintBurndownChart";
 import CfdDiagram from "./component/CFD";
 import Roles from "./component/Roles";
 
@@ -41,9 +42,9 @@ const App = () => {
   return (
     <Wrapper>
       <BrowserRouter>
-      <Routes>
-        <Route exact path="/" element={<Login/>} />
-      </Routes>
+        <Routes>
+          <Route exact path="/" element={<Login />} />
+        </Routes>
         <Grid container spacing={1}>
           <Grid item xs={3}>
             <Navbar />
@@ -62,6 +63,7 @@ const App = () => {
               <Route  path="/storyDetails/:name" element={<StoryDetails/>} />
               <Route  path="/members" element={<Members/>} />
               <Route path="/cfd/:projectId" element={<CfdDiagram />} />
+              <Route path="/sprintBurndown/:sprintID" element={<SBChart />} />
             </Routes>
           </Grid>
         </Grid>
