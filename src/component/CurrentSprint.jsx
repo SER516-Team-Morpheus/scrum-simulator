@@ -183,6 +183,8 @@ const CurrentSprint = () => {
             <div className="top-bar">
             <Button className="btn-chart" size="small" variant="contained" onClick={() => navigate(`/sprintBurndown/${Cookies.get('sprintID')}`)}>Burndown</Button>
             <Button className="btn-chart" size="small" variant="contained" onClick={() => navigate('/autosimulation')}>Auto Simulation</Button>
+            <Button className="btn-chart" size="small" variant="contained" onClick={() => navigate(`/issues`)}>Issues</Button>
+
 
             </div>
             {
