@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import {  useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button';
-import { Formik, Field, Form } from 'formik';
+import { Formik, Form } from 'formik';
 import { login } from "../apis";
 import Cookies from 'js-cookie';
 import { ColorRing } from 'react-loader-spinner';
@@ -108,7 +108,7 @@ const Login = () => {
                                             colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
                                         />
                                         :
-                                        'Create'
+                                        'Login'
                                 }
                     </Button>
                     </Form>

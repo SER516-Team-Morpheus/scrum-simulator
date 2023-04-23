@@ -7,9 +7,10 @@ import CreateProject from './CreateProject';
 import Link from '@mui/material/Link';
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-import { createProject, getProject } from '../apis';
+import { createIssue, createProject, getIssues } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import Chip from '@mui/material/Chip';
+import CreateIssue from './CreateIssue';
 
 
 const Wrapper = styled.div`
@@ -66,18 +67,18 @@ transform : translate(-40%, -70%)
 
 `;
 
-const Project = ({ showItem }) => {
+const Issues = ({ showItem }) => {
     let email = Cookies.get('username') || 'SERtestuser';
     let password = Cookies.get('password') || 'testuser';
     const [showDialog, setShowDialog] = useState(false);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [isCreateLoader, setIsCreateLoader] = useState(false);
-    const [projectList, setProjectList] = useState([]);
+    const [issueList, setIssueList] = useState([]);
 
 
     const storeProject = (data) => {
-        setProjectList([data]);
+        setIssueList([data]);
         setShowDialog(false);
     }
     const handleDialog = () => {
@@ -92,16 +93,17 @@ const Project = ({ showItem }) => {
     }
 
 
-    const createNewProject = (name, description) => {
+    const createNewProject = (name) => {
+        console.log(name,'name show')
         setIsCreateLoader(true);
-        createProject(email, password, name, description)
+        createIssue(email, password, name, Cookies.get('projectName'))
             .then(res => {
                 const data={
-                    name:res.data.projectName,
-                    description:res.data.description,
-                    id:res.data.projectId
+                    subject:name,
+                    status:"New",
+                    
                 }
-                setProjectList(prevState => [...prevState, data])
+                setIssueList(prevState => [...prevState, data])
                 setIsCreateLoader(false);
                 setShowDialog(false);
             })
@@ -111,9 +113,9 @@ const Project = ({ showItem }) => {
     }
 
     useEffect(() => {
-        getProject(email, password)
+        getIssues(email, password,Cookies.get('projectName'))
             .then(res => {
-                setProjectList(res.data.projects)
+                setIssueList(res.data.data)
                 setIsLoading(false);
             })
             .catch(function (error) {
@@ -126,10 +128,10 @@ const Project = ({ showItem }) => {
         <Wrapper>
             <div className='heading-bar'>
                 <Typography className="heading" variant="h3" gutterBottom>
-                    Projects
+                    Issues
                 </Typography>
                 <div>
-                    <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Create Project</Button>
+                    <Button className="create-btn" variant="contained" onClick={() => setShowDialog(true)}>Create Issues</Button>
                 </div>
             </div>
             {
@@ -146,15 +148,11 @@ const Project = ({ showItem }) => {
                     :
                     <div>
                         {
-                            projectList.length > 0 ? (
-                                projectList.map(data => (
+                            issueList.length > 0 ? (
+                                issueList.map((data,index) => (
                                     <div className="project-list">
-                                        <Typography className="heading" variant="h6" gutterBottom><Link onClick={() => selectProject(data.name,data.id)}>{data.name}</Link></Typography>
-                                        <Typography className="heading" variant="h9" gutterBottom>{data.description}</Typography>
-                                        <div style={{marginTop:'20px'}}>
-                                        <Chip label="View CFD" onClick={()=>navigate(`/cfd/${data.id}`)}/>
-
-                                            </div>
+                                        <Typography className="heading" variant="h6" gutterBottom>{index+1}.{data.subject}</Typography>
+                                        <Typography className="heading" variant="h9" gutterBottom>Status: {data.status}</Typography>
                                     </div>
                                 ))
                             )
@@ -162,13 +160,13 @@ const Project = ({ showItem }) => {
                                 <>
                                     <img src={projectImg} alt="project" />
                                     <Typography style={{ color: '#1976d2' }} className="heading" variant="h6" gutterBottom>
-                                        No Project. Please create new one.
+                                        No Issues. Please create new one.
                                     </Typography>
                                 </>
 
                         }
                         {showDialog &&
-                            <CreateProject
+                            <CreateIssue
                                 dialog={handleDialog}
                                 createNewProject={createNewProject}
                                 name={'Project'}
@@ -186,4 +184,4 @@ const Project = ({ showItem }) => {
     )
 }
 
-export default Project;
+export default Issues;

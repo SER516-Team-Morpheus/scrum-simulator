@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -6,7 +6,6 @@ import { Formik, Form } from 'formik';
 import TextField from '@mui/material/TextField';
 import { createUserstory } from '../apis/backlog';
 import Cookies from 'js-cookie';
-import Backlog from './Backlog';
 import { ColorRing } from 'react-loader-spinner';
 
 
@@ -92,7 +91,7 @@ const CreateUserStory = ({ dialog, storeUserStory }) => {
                     props => (
                         <Form className="UserStory-form">
                             <Typography className="heading" variant="h4" gutterBottom>Add User Story</Typography>
-                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} name="subject" variant="outlined" />
+                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} name="subject" label="Story name" variant="outlined" />
                             <Button variant="contained" className="crt-btn" type="submit">
                                 {
                                     isCreateLoader ?

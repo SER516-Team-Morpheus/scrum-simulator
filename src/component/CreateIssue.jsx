@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Formik, Form } from 'formik';
 import TextField from '@mui/material/TextField';
-// import { createUserstory } from '../apis/backlog';
 import Cookies from 'js-cookie';
-// import Backlog from './Backlog';
 import { ColorRing } from 'react-loader-spinner';
-import { createMember } from '../apis';
 
 
 const Wrapper = styled.div`
@@ -23,11 +20,7 @@ border-radius:20px;
 top:25%;
 left: 40%;
 
-.loaders {
-    height:30px;
-}
-
-.UserStory-form {
+.project-form {
     padding:20px;
     display:flex;
     flex-direction: column;
@@ -38,7 +31,7 @@ left: 40%;
         margin-bottom: 40px;
     }
 
-    .subject-field {
+    .name-field {
         margin-bottom: 20px;
     }
     .desc-field {
@@ -53,37 +46,29 @@ left: 40%;
     }
 }
 
+svg {
+    height:30px;
+}
+
 `;
 
-const CreateMember = ({ dialog, addMember }) => {
-    let username = Cookies.get('username');
-    let password = Cookies.get('password');
-    let projectId = Cookies.get('projectId')
-    const [isCreateLoader,setIsCreateLoader] = useState(false);
-
+const CreateIssue = ({ dialog, storeProject, name, createUserStory, createNewProject, isCreateLoader }) => {
     return (
 
         <Wrapper>
             <Formik
                 initialValues={{
-                    memberName: '',
-                    email:''
+                    subject: '',
                 }}
                 onSubmit={(values) => {
-                    setIsCreateLoader(true)
-                    createMember(username,password,values.memberName,projectId)
-                    .then(res=>{
-                        dialog();
-                        setIsCreateLoader(false);
-                        addMember(values.memberName,res.data.memberId)
-                    })
+                    createNewProject(values.subject)
                 }}
             >
                 {
                     props => (
-                        <Form className="UserStory-form">
-                            <Typography className="heading" variant="h4" gutterBottom>Add Member</Typography>
-                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} label="Username" name="memberName" variant="outlined" />
+                        <Form className="project-form">
+                            <Typography className="heading" variant="h4" gutterBottom>Create Issue</Typography>
+                            <TextField id="outlined-basic" className="name-field" onChange={props.handleChange} name="subject" required label="Subject" variant="outlined" />
                             <Button variant="contained" className="crt-btn" type="submit">
                                 {
                                     isCreateLoader ?
@@ -97,8 +82,9 @@ const CreateMember = ({ dialog, addMember }) => {
                                             colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
                                         />
                                         :
-                                        'Add'
+                                        'Create'
                                 }
+
                             </Button>
                             <Button variant="contained" className="cancel-btn" onClick={dialog}>Cancel</Button>
                         </Form>
@@ -109,4 +95,4 @@ const CreateMember = ({ dialog, addMember }) => {
     )
 }
 
-export default CreateMember;
+export default CreateIssue;

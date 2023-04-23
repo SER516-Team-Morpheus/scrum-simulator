@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Formik, Form } from 'formik';
 import TextField from '@mui/material/TextField';
-// import { createUserstory } from '../apis/backlog';
+import { createUserstory } from '../apis/backlog';
 import Cookies from 'js-cookie';
-// import Backlog from './Backlog';
+import Backlog from './Backlog';
 import { ColorRing } from 'react-loader-spinner';
-import { createMember } from '../apis';
-
+import { createRoles } from '../apis';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import { getMembers,getRoles } from '../apis';
 
 const Wrapper = styled.div`
 
@@ -55,35 +57,58 @@ left: 40%;
 
 `;
 
-const CreateMember = ({ dialog, addMember }) => {
+const AddAssignee = ({ dialog }) => {
     let username = Cookies.get('username');
     let password = Cookies.get('password');
+    let projectName = Cookies.get('projectName');
     let projectId = Cookies.get('projectId')
-    const [isCreateLoader,setIsCreateLoader] = useState(false);
+    const [isCreateLoader, setIsCreateLoader] = useState(false);
+    const [assigneeList, setAssigneeList] = useState([])
+    
+    useEffect(()=>{
+        getMembers(username,password,projectId)
+        .then(res=>{
+            setAssigneeList(res.data.data)
+        })
+        getRoles(username,password,projectName)
+        .then(res=>{
+            console.log(res.data,'roles')
+        })
+    },[])
+
 
     return (
 
         <Wrapper>
+            {console.log(assigneeList,'al')}
             <Formik
                 initialValues={{
-                    memberName: '',
-                    email:''
+                    assigneeName: ''
                 }}
                 onSubmit={(values) => {
-                    setIsCreateLoader(true)
-                    createMember(username,password,values.memberName,projectId)
-                    .then(res=>{
-                        dialog();
-                        setIsCreateLoader(false);
-                        addMember(values.memberName,res.data.memberId)
-                    })
+                    
                 }}
             >
                 {
                     props => (
                         <Form className="UserStory-form">
-                            <Typography className="heading" variant="h4" gutterBottom>Add Member</Typography>
-                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} label="Username" name="memberName" variant="outlined" />
+                            <Typography className="heading" variant="h4" gutterBottom>Select Assignee</Typography>
+                            {
+                                
+                                    <Select id="role-name" className="subject-field" onChange={props.handleChange} value={''} label="Roles" name="assigneeName" variant="outlined">
+                                    {
+                                        assigneeList.map(assignee=>
+                                            <MenuItem value={assignee.full_name}>{assignee.full_name}</MenuItem>
+    
+                                        )
+                                    }
+                            
+                                </Select>
+    
+                                
+                            }
+
+                           
                             <Button variant="contained" className="crt-btn" type="submit">
                                 {
                                     isCreateLoader ?
@@ -109,4 +134,4 @@ const CreateMember = ({ dialog, addMember }) => {
     )
 }
 
-export default CreateMember;
+export default AddAssignee;
