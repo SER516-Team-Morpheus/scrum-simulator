@@ -1,4 +1,4 @@
-form {
+/* form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -147,3 +147,8 @@ form {
   .statusCompleted {
     color: #4caf50;
   }
+
+    .description {
+    height: 100px;
+    } */
+

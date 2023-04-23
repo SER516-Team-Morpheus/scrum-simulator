@@ -21,6 +21,12 @@ export const navItems =()=> {return([
         isActive:false
     },
     {
+        name:'Current Sprint',
+        url:'/current-sprint',
+        isVisible:Cookies.get('projectName') ? true : false,
+        isActive:false
+    },
+    {
         name:'Sprints',
         url:'/sprints',
         isVisible:Cookies.get('projectName') ? true : false,
@@ -43,6 +49,13 @@ export const navItems =()=> {return([
         url: '/members',
         isVisible:Cookies.get('projectName') ? true : false,
         isActive:false
+    },
+    {
+    
+        name: 'Roles',
+        url: '/roles',
+        isVisible:true,
+        isActive:false  
     }
 ]
 )}
