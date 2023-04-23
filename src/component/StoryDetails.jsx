@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { InputLabel } from '@mui/material';
-import { updateUserstory, getStoryTask } from '../apis';
+import { updateUserstory, getStoryTask, updateTask } from '../apis';
 import Cookies from 'js-cookie';
 import AddIcon from '@mui/icons-material/Add';
 import CreateTask from './CreateTask';
+import AddAssignee from './AddAsignee';
 
 const Wrapper = styled.div`
 margin-top:20px;
@@ -17,6 +18,7 @@ margin-top:20px;
     color: #8C1D40;
     opacity:1
 }
+
 
 `;
 const TaskList = styled.div`
@@ -55,10 +57,19 @@ const TaskList = styled.div`
 }
 .assigned {
     width:20px;
+    a {
+        text-decoration:none;
+
+    }
     p {
         margin:0px;
         padding: 0px;
         text-align:center;
+
+    }
+    .assignee-change {
+        font-size: 12px;
+        color: #8C1D40
     }
 }
 hr {
@@ -95,6 +106,8 @@ padding: 20px 20px 50px 20px;
 }
 
 
+
+
 `;
 
 const StoryDetails = () => {
@@ -102,36 +115,47 @@ const StoryDetails = () => {
     let password = Cookies.get('password');
     let projectName = Cookies.get('projectName');
     const { name } = useParams();
-    const [taskState, setTaskState] = useState('New');
+    const [taskState, setTaskState] = useState(false);
     const [storyPoints, setStoryPoints] = useState('3');
     const [taskList, setTaskList] = useState([]);
     const [showDialog, setShowDialog] = useState(false);
-
+    const [showAssignee,setShowAssignee]=useState(false)
     const [data, setData] = useState({
         username: Cookies.get('username'),
         password: Cookies.get('password'),
         projectname: Cookies.get('projectName'),
         userstoryname: name,
         storypoints: {
-          UX: "0",
-          Back: "0",
-          Front: "0",
-          Design: "0"
+            UX: "0",
+            Back: "0",
+            Front: "0",
+            Design: "0"
         }
-      });
-    const handleChange = (event) => {
-        setTaskState(event.target.value)
+    });
+    const handleChange = (event, taskName) => {
+        setTaskState(true)
+        updateTask(username, password, projectName, name, taskName, event.target.value)
+            .then(res => {
+                getStoryTask(username, password, projectName, name)
+                    .then(res => {
+                        setTaskList(res.data.details)
+                        setTaskState(false)
+                    })
+            })
+
+
+
     }
     const handleStoryPoints = (event) => {
         const { name, value } = event.target;
         setData(prevState => ({
-          ...prevState,
-          storypoints: {
-            ...prevState.storypoints,
-            [name]: value
-          }
+            ...prevState,
+            storypoints: {
+                ...prevState.storypoints,
+                [name]: value
+            }
         }))
-      }
+    }
     const handleUpdateUserStory = (event) => {
         updateUserstory(data)
             .then(response => {
@@ -240,7 +264,6 @@ const StoryDetails = () => {
                         className="assignee-select"
                         value={storyPoints}
                         label="Assignee"
-                    // onChange={handleAssignee}
                     >
                         <MenuItem value={'1'}> Assignee 1</MenuItem>
                         <MenuItem value={'3'}>Assignee 2</MenuItem>
@@ -256,9 +279,9 @@ const StoryDetails = () => {
             <TaskList>
                 <div className='task-heading'>
                     <h3>
-                        Tasks <AddIcon size='10px' style={{cursor:'pointer'}} onClick={()=>{setShowDialog(true)}}/>
-                        </h3>
-                    
+                        Tasks <AddIcon size='10px' style={{ cursor: 'pointer' }} onClick={() => { setShowDialog(true) }} />
+                    </h3>
+
                     {
                         taskList.map((taskData, index) => {
                             return (
@@ -273,19 +296,27 @@ const StoryDetails = () => {
                                                     labelId="demo-simple-select-label"
                                                     id="demo-simple-select"
                                                     className="assignee-select"
-                                                    value={taskState}
+                                                    value={taskState ? 'Loading' : taskData.status_extra_info.name}
                                                     label="Age"
-                                                    onChange={handleChange}
+                                                    onChange={(event) => handleChange(event, taskData.taskName)}
                                                 >
                                                     <MenuItem value={'New'}>New</MenuItem>
-                                                    <MenuItem value={'Working'}>Working</MenuItem>
-                                                    <MenuItem value={'Testing'}>Testing</MenuItem>
+                                                    <MenuItem value={'In progress'}>In progress</MenuItem>
+                                                    <MenuItem value={'Ready for test'}>Ready for test</MenuItem>
                                                     <MenuItem value={'Done'}>Done</MenuItem>
+                                                    {
+                                                        taskState && <MenuItem value={'Loading'} disabled>Loading</MenuItem>
+
+                                                    }
 
                                                 </Select>
                                             </div>
                                             <div className='assigned'>
                                                 <p>{taskData.assigned_to_extra_info ? taskData.assigned_to_extra_info.full_name_display : 'No assignee'}</p>
+                                                <Link onClick={()=>setShowAssignee(true)}>
+                                                <p className="assignee-change">Change assignee</p>
+                                                </Link>
+
                                             </div>
                                         </div>
 
@@ -300,12 +331,18 @@ const StoryDetails = () => {
                 </div>
             </TaskList>
             {showDialog &&
-                            <CreateTask
-                                dialog={handleDialog}
-                                storeTask={storeTask}
-                                name={name}
-                            />
-                        }
+                <CreateTask
+                    dialog={handleDialog}
+                    storeTask={storeTask}
+                    name={name}
+                />
+            }
+             {showAssignee &&
+                <AddAssignee
+                    dialog={()=>setShowAssignee(!showAssignee)}
+                   
+                />
+            }
 
         </Wrapper>
     )
