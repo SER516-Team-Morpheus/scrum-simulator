@@ -33,6 +33,7 @@ function SBChart() {
   const { sprintID } = useParams();
   const token = Cookies.get("token");
   const [SBChartData, setSBChartData] = useState(null);
+  const [otherMetrics, setotherMetrics] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
@@ -41,11 +42,17 @@ function SBChart() {
       getSB(token, sprintID)
         .then((data) => {
           data = data.data;
-          console.log('data return', data)
+
           const labels = data.dayLabels;
           const openPoints = data.openPoints;
           const optimalPoints = data.optimalPoints;
-          console.log(labels,openPoints,optimalPoints);
+          const completedTasks = data.completedTasks;
+          const completedUS = data.completedUS;
+          const totalTasks = data.totalTasks;
+          const totalUS = data.totalUS;
+          const AUC = data.AUC;
+          const name = data.name;
+          console.log(AUC, totalUS, totalTasks, completedTasks, completedUS)
           const datasets = [
                             {
                                 label: 'Actual',
@@ -66,8 +73,17 @@ function SBChart() {
                                 tension: 0.4,
                             },
                             ]
+                            
 
           setSBChartData({ labels, datasets });
+          setotherMetrics({
+            AUC,
+            completedTasks,
+            totalTasks,
+            completedUS,
+            totalUS,
+            name
+          })
           setIsLoading(false);
         })
         .catch(function (error) {
@@ -78,6 +94,14 @@ function SBChart() {
 
     handleChart();
   }, [token, sprintID]);
+
+  const textStyle = {
+    fontFamily: "Roboto, sans-serif",
+    fontWeight: 300,
+    fontSize: "18px",
+    color: "#4a4a4a",
+    marginBottom: "8px",
+  };
 
   return (
     <div>
@@ -116,27 +140,53 @@ function SBChart() {
           <PuffLoader color="#3f51b5" size={150} />
         </div>
       ) : (
-        <div style={{ margin: 25 }}>
-          <Line
-            data={SBChartData}
-            options={{
-              responsive: true,
-              plugins: {
-                title: {
-                  display: true,
-                  text: "Sprint Burndown Chart",
+        <>
+          <div style={{ margin: 25 }}>
+            <Line
+              data={SBChartData}
+              options={{
+                responsive: true,
+                plugins: {
+                  title: {
+                    display: true,
+                    text: otherMetrics.name,
+                    font: {
+                      size: 24, // Adjust the font size (in pixels) as desired
+                      weight: "bold", // Set the font weight to bold
+                    },
+                  },
                 },
-              },
-              scales: {
-                y: {
-                  beginAtZero: true,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
                 },
-              },
-            }}
-            height={300}
-            width={1000}
-          />
-        </div>
+              }}
+              height={300}
+              width={1000}
+            />
+          </div>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ marginTop: 10 }}>
+              <p style={textStyle}>
+                Area Under Curve : <strong>{otherMetrics.AUC}</strong>
+              </p>
+              <p style={textStyle}>
+                Total Tasks : <strong>{otherMetrics.totalTasks}</strong>
+              </p>
+              <p style={textStyle}>
+                Completed Tasks : <strong>{otherMetrics.completedTasks}</strong>
+              </p>
+              <p style={textStyle}>
+                Total User Stories : <strong>{otherMetrics.totalUS}</strong>
+              </p>
+              <p style={textStyle}>
+                Completed User Stories :{" "}
+                <strong>{otherMetrics.completedUS}</strong>
+              </p>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
