@@ -14,6 +14,8 @@ import StoryDetails from "./component/StoryDetails";
 import Members from "./component/Members"
 import CurrentSprint from "./component/CurrentSprint";
 import SBChart from "./component/SprintBurndownChart";
+import CfdDiagram from "./component/CFD";
+import Roles from "./component/Roles";
 
 
 const Wrapper = styled.div`
@@ -49,25 +51,18 @@ const App = () => {
           </Grid>
           <Grid item xs={8}>
             <Routes>
-              <Route
-                path="/projects"
-                element={<Project showItem={showItem} />}
-              />
-              <Route path="/projects/:id" element={<Login />} />
-              <Route
-                path="/backlog"
-                element={<Backlog showItem={showItem} />}
-              />
-              <Route path="/simulator" element={<SimulatorGame />} />
-              <Route
-                path="/create-epic"
-                element={<CreateEpic addEpic={() => {}} />}
-              />
-              <Route path="/simulation" element={<SimulatorGame />} />
-              <Route path="/sprints" element={<SprintTab />} />
-              <Route path="/current-sprint" element={<CurrentSprint />} />
-              <Route path="/storyDetails/:name" element={<StoryDetails />} />
-              <Route path="/members" element={<Members />} />
+              <Route  path="/projects" element={<Project showItem={showItem}/>} />
+              <Route path="/projects/:id" element={<Login/>}/>
+              <Route  path="/backlog" element={<Backlog showItem={showItem}/>} />
+              <Route  path="/simulator" element={<SimulatorGame/>} />
+              <Route  path="/create-epic" element={<CreateEpic addEpic={() => {}}/>} />
+              <Route  path="/simulation" element={<SimulatorGame/>} />
+              <Route  path="/sprints" element={<SprintTab/>} />
+              <Route  path="/current-sprint" element={<CurrentSprint/>} />
+              <Route  path="/roles" element={<Roles/>} />
+              <Route  path="/storyDetails/:name" element={<StoryDetails/>} />
+              <Route  path="/members" element={<Members/>} />
+              <Route path="/cfd/:projectId" element={<CfdDiagram />} />
               <Route path="/sprintBurndown/:sprintID" element={<SBChart />} />
             </Routes>
           </Grid>
