@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Button, Collapse, makeStyles, MenuItem, TextField, Typography } from '@material-ui/core';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
@@ -66,6 +67,7 @@ const CreateEpic = ({ addEpic }) => {
     const [tasks, setTasks] = useState([]);
     const [open, setOpen] = useState(false);
     const [epics, setEpics] = useState([]);
+    // eslint-disable-next-line no-unused-vars
     const [deletingEpic, setDeletingEpic] = useState(null);
     const [showEpics, setShowEpics] = useState(false);
     
@@ -84,7 +86,7 @@ const CreateEpic = ({ addEpic }) => {
             // } catch (error) {
             // console.error(error);
             // }
-    console.log('hello');
+  
         };
       
   
