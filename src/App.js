@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from "react";
-import { BrowserRouter, Routes, Route, redirect, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./component/Login";
 import Navbar from "./component/Navbar";
 import Project from "./component/Project";
@@ -7,13 +7,15 @@ import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 import Cookies from "js-cookie";
 import Backlog from "./component/Backlog";
-import Authentication from "./component/Authentication";
-import ProjectDashboard from "./component/ProjectDashboard";
 import SimulatorGame from "./component/SimulatorGame";
 import CreateEpic from "./component/CreateEpic";
 import SprintTab from "./component/SprintTab";
 import StoryDetails from "./component/StoryDetails";
 import Members from "./component/Members"
+import CurrentSprint from "./component/CurrentSprint";
+import SBChart from "./component/SprintBurndownChart";
+import CfdDiagram from "./component/CFD";
+import Roles from "./component/Roles";
 
 
 const Wrapper = styled.div`
@@ -24,7 +26,8 @@ padding:0px;
 `;
 
 const App = () => {
-  const [itemVisible, setItemVisible]=useState(false);
+  // eslint-disable-next-line
+  const [itemVisible,setItemVisible]=useState(false);
   
   const showItem = ()=>{
     setItemVisible(true);
@@ -39,9 +42,9 @@ const App = () => {
   return (
     <Wrapper>
       <BrowserRouter>
-      <Routes>
-        <Route exact path="/" element={<Login/>} />
-      </Routes>
+        <Routes>
+          <Route exact path="/" element={<Login />} />
+        </Routes>
         <Grid container spacing={1}>
           <Grid item xs={3}>
             <Navbar />
@@ -55,9 +58,12 @@ const App = () => {
               <Route  path="/create-epic" element={<CreateEpic addEpic={() => {}}/>} />
               <Route  path="/simulation" element={<SimulatorGame/>} />
               <Route  path="/sprints" element={<SprintTab/>} />
+              <Route  path="/current-sprint" element={<CurrentSprint/>} />
+              <Route  path="/roles" element={<Roles/>} />
               <Route  path="/storyDetails/:name" element={<StoryDetails/>} />
               <Route  path="/members" element={<Members/>} />
-
+              <Route path="/cfd/:projectId" element={<CfdDiagram />} />
+              <Route path="/sprintBurndown/:sprintID" element={<SBChart />} />
             </Routes>
           </Grid>
         </Grid>

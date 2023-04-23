@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
@@ -12,8 +12,11 @@ padding: 30px;
   }
   
   .main-container{
-    max-width: 800px;
+    // max-width: 800px;
+    height:30px;
     margin:0 auto;
+    display:flex;
+    justify-content: space-between;
   }
   
   .main-dice-container{
@@ -24,15 +27,15 @@ padding: 30px;
   }
   
   .dice-container{
-    height: 160px;
-    width:160px;
+    height: 20px;
+    width:20px;
     perspective: 1000px;
 
   }
   
   .dice{
-    width:160px;
-    height:160px;
+    width:20px;
+    height:20px;
     transform-style: preserve-3d;
     transition: all 200ms;
     &.face-1{
@@ -65,15 +68,15 @@ padding: 30px;
   .dot{
     background-color: black;
     border-radius: 50%;
-    height:10px;
-    width:10px;
+    height:4px;
+    width:4px;
   }
   
   .dice{
     [class^="face"]{
       position:absolute;
-      width:160px;
-      height:160px;
+      width:20px;
+      height:20px;
       outline: 2px solid #00BBFF;
       outline-offset: -2px;
       background-color: rgba(255,255,255,0.9);
@@ -206,6 +209,10 @@ padding: 30px;
   .button-container{
     display:flex;
     justify-content:center;
+    margin-top:40px;
+    button {
+      height:30px;
+    }
     
   }
   
@@ -318,13 +325,9 @@ const SimulatorGame = () => {
     return (
         <Wrapper>
             <div className="main-container">
-                <Typography className="heading" variant="h4" gutterBottom>
-                    Roll the dice
-                </Typography>
                 <div className="main-dice-container">
                     {dice}
                 </div>
-
                 <div className="button-container">
                     {rollButton}
                 </div>                

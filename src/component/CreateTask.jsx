@@ -4,11 +4,10 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Formik, Form } from 'formik';
 import TextField from '@mui/material/TextField';
-// import { createUserstory } from '../apis/backlog';
+import { createUserstory } from '../apis/backlog';
 import Cookies from 'js-cookie';
-// import Backlog from './Backlog';
 import { ColorRing } from 'react-loader-spinner';
-import { createMember } from '../apis';
+import { createTask } from '../apis';
 
 
 const Wrapper = styled.div`
@@ -55,35 +54,48 @@ left: 40%;
 
 `;
 
-const CreateMember = ({ dialog, addMember }) => {
-    let username = Cookies.get('username');
-    let password = Cookies.get('password');
-    let projectId = Cookies.get('projectId')
-    const [isCreateLoader,setIsCreateLoader] = useState(false);
+const CreateTask = ({ dialog, storeTask,name }) => {
+    const [isCreateLoader, setIsCreateLoader] = useState(false);
 
     return (
 
         <Wrapper>
             <Formik
                 initialValues={{
-                    memberName: '',
-                    email:''
+                    subject: '',
                 }}
                 onSubmit={(values) => {
-                    setIsCreateLoader(true)
-                    createMember(username,password,values.memberName,projectId)
-                    .then(res=>{
-                        dialog();
-                        setIsCreateLoader(false);
-                        addMember(values.memberName,res.data.memberId)
-                    })
+                    let email = Cookies.get('username') || 'SERtestuser';
+                    let password = Cookies.get('password') || 'testuser';
+                    let project = Cookies.get('projectName')
+                    setIsCreateLoader(true);
+                    const storyData = {
+                        subject: values.subject
+                    }
+
+                    createTask(email, password, project,name, values.subject)
+                        .then(res => {
+                            setIsCreateLoader(false);
+                            const storyData = {
+                                taskName: values.subject,
+                                status_extra_info:{
+                                    name:'New'
+                                }
+                            }
+                            storeTask(storyData)
+                            setIsCreateLoader(false)
+                        })
+                        .catch(error => {
+                            setIsCreateLoader(false);
+                        })
+                        // .catch(error => setLoginError('Unable to login. Username or Password is incorrect'))
                 }}
             >
                 {
                     props => (
                         <Form className="UserStory-form">
-                            <Typography className="heading" variant="h4" gutterBottom>Add Member</Typography>
-                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} label="Username" name="memberName" variant="outlined" />
+                            <Typography className="heading" variant="h4" gutterBottom>Add Task</Typography>
+                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} name="subject" label="Task name" variant="outlined" />
                             <Button variant="contained" className="crt-btn" type="submit">
                                 {
                                     isCreateLoader ?
@@ -97,7 +109,7 @@ const CreateMember = ({ dialog, addMember }) => {
                                             colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
                                         />
                                         :
-                                        'Add'
+                                        'Create'
                                 }
                             </Button>
                             <Button variant="contained" className="cancel-btn" onClick={dialog}>Cancel</Button>
@@ -109,4 +121,4 @@ const CreateMember = ({ dialog, addMember }) => {
     )
 }
 
-export default CreateMember;
+export default CreateTask;

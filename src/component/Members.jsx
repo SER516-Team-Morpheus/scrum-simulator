@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import projectImg from '../img/project-img.jpg';
-import CreateProject from './CreateProject';
-import Link from '@mui/material/Link';
-import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-import { createProject, getMembers, getProject } from '../apis';
+import { deleteMember, getMembers, getRoles } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import CreateMember from './CreateMember';
 import MaterialTable from 'material-table';
-import { ThemeProvider, createTheme } from '@mui/material';
-
+import { ThemeProvider, createTheme, } from '@mui/material';
+import Select from '@mui/material/Select';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -28,9 +24,6 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import { forwardRef } from 'react';
-
-
 
 const Wrapper = styled.div`
 
@@ -106,22 +99,48 @@ const Members = () => {
     let projectName = Cookies.get('projectName');
     let projectId = Cookies.get('projectId')
     const [showDialog, setShowDialog] = useState(false);
+    const [showDialogRoles, setShowDialogRoles] = useState(false);
     const [memberList, setMemberList] = useState([]);
+    const [RoleList, setRoleList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [roleData, setRoleData] = useState([]);
     const defaultMaterialTheme = createTheme();
 
     const [columns, setColumns] = useState([
         { title: 'Name', field: 'full_name' },
         { title: 'Email', field: 'email' },
-        { title: 'Role', field: 'role' }
+        {
+            title: 'Role',
+            field: 'role',
+            render: rowData => (
+                <Select id="role-name" className="subject-field" value={''} label="Roles" name="roleName" variant="outlined">
+                {
+                    roleData.map(role=> {
+                        return (<MenuItem value={role.roleName}>{role.roleName}</MenuItem>)
+                    }
+                    )
+                }
+        
+            </Select>
+            ),
+          },
     ]);
 
 
     const handleDialog = () => {
         setShowDialog(!showDialog);
     }
-    const addMember = (data) => {
-        setMemberList(prevState => [...prevState, data])
+    const handleDialogRoles = () => {
+        setShowDialogRoles(!showDialogRoles);
+    }
+    const addMember = (data,mid) => {
+        const newData={
+            id:mid,
+            email:`${data}@asu.edu`,
+            full_name:data,
+            role:'UX'
+        }
+        setMemberList(prevState => [...prevState, newData])
     }
 
     useEffect(() => {
@@ -129,14 +148,26 @@ const Members = () => {
             .then(res => {
                 setMemberList(res.data.data)
                 setIsLoading(false);
+                getRoles(username, password, projectName)
+                    .then(roleData => {
+                        {console.log(roleData)}
+                        setRoleData(roleData.data.roles)
+                        setMemberList(res.data.data)
+                        setIsLoading(false);
+                    })
+                    .catch(function (error) {
+                        setIsLoading(false);
+                    })
             })
             .catch(function (error) {
                 setIsLoading(false);
             })
+
     }, [])
     return (
         <Wrapper>
             <div className='heading-bar'>
+                {console.log(roleData,'body role')}
                 <Typography className="heading" variant="h3" gutterBottom>
                     Members
                 </Typography>
@@ -164,51 +195,37 @@ const Members = () => {
                                 title=""
                                 columns={columns}
                                 data={memberList}
-                            // editable={{
-                            //     onRowAdd: newData =>
-                            //         new Promise((resolve, reject) => {
-                            //             setTimeout(() => {
-                            //                 setData([...data, newData]);
+                            editable={{
+                                onRowDelete: oldData =>
+                                    new Promise((resolve, reject) => {
+                                        setTimeout(() => {
+                                            console.log(oldData,'old')
+                                            deleteMember(username,password,oldData.id)
+                                            .then(res=>{
+                                                const dataDelete = [...memberList];
+                                                const index = oldData.tableData.id;
+                                                dataDelete.splice(index, 1);
+                                                setMemberList([...dataDelete]);
+                                            })
 
-                            //                 resolve();
-                            //             }, 1000)
-                            //         }),
-                            //     onRowUpdate: (newData, oldData) =>
-                            //         new Promise((resolve, reject) => {
-                            //             setTimeout(() => {
-                            //                 const dataUpdate = [...data];
-                            //                 const index = oldData.tableData.id;
-                            //                 dataUpdate[index] = newData;
-                            //                 setData([...dataUpdate]);
-
-                            //                 resolve();
-                            //             }, 1000)
-                            //         }),
-                            //     onRowDelete: oldData =>
-                            //         new Promise((resolve, reject) => {
-                            //             setTimeout(() => {
-                            //                 const dataDelete = [...data];
-                            //                 const index = oldData.tableData.id;
-                            //                 dataDelete.splice(index, 1);
-                            //                 setData([...dataDelete]);
-
-                            //                 resolve()
-                            //             }, 1000)
-                            //         }),
-                            // }}
+                                            resolve()
+                                        }, 1000)
+                                    }),
+                            }}
                             />
+
                         </ThemeProvider>
                         {showDialog &&
                             <CreateMember
                                 dialog={handleDialog}
                                 addMember={addMember}
                             />
-                        }
-                         </div>
-                        
-            }
-                   
+                       }
+                    </div>
 
+            }
+
+             
 
         </Wrapper>
     )
