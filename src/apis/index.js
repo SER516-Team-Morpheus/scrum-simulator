@@ -104,6 +104,14 @@ export const getSB = (token, sprintID) => {
   })
 }
 
+export const getCFD = (token, projectId) => {
+  return axios.post("http://localhost:3012/cfd", {
+    token,
+    projectId,
+  })
+}
+
+
 export const createRoles = ( username, password, roleName, projectName) => {
   return (axios.post("http://localhost:3008/createroles", {
     username, 
