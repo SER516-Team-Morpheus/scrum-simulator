@@ -98,6 +98,29 @@ export const createTask = (username, password, projectname, userstoryname, taskn
   )
 }
 
+export const createRoles = ( username, password, roleName, projectName) => {
+  return (axios.post("http://localhost:3008/createroles", {
+    username, 
+    password, 
+    roleName, 
+    projectName
+  })
+  )
+}
 
+export const updateRoles = (username, password, roleName, newRoleName, projectName) => {
+  return ( axios.patch(`http://localhost:3008/updateroles`, {
+    username, 
+    password, 
+    roleName,
+    newRoleName, 
+    projectName
+  })
+  )
+}
+
+export const deleteRoles = (username, password, projectName, roleName) => {
+  return axios.delete(`http://localhost:3008/deleteroles/${roleName}?username=${username}&password=${password}&projectName=${projectName}`)
+}
 
 

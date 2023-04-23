@@ -49,6 +49,13 @@ export const navItems =()=> {return([
         url: '/members',
         isVisible:Cookies.get('projectName') ? true : false,
         isActive:false
+    },
+    {
+    
+        name: 'Roles',
+        url: '/roles',
+        isVisible:true,
+        isActive:false  
     }
 ]
 )}
