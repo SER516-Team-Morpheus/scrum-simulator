@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Cookies from 'js-cookie';
-import { createRoles, getRoles, deleteRoles, updateRoles } from '../apis';
+import { createRoles, getRoles } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import CreateRoles from './CreateRoles';
 import { ThemeProvider, createTheme, } from '@mui/material';
@@ -101,12 +101,32 @@ const Roles = ({ showItem }) => {
     const [isCreateLoader, setIsCreateLoader] = useState(false);
     const defaultMaterialTheme = createTheme();
     const columns = [
+       {
+          title: 'Role',
+          field: 'roleName'
+        },
         {
-            title: 'Role',
-            field: 'roleName'
-        }
-    ];
+          title: 'Delete Role',
+          field: 'delete',
+          render: rowData => (
+            <button onClick={() => handleDelete(rowData)}>Delete</button>
+          )
+        },
+        {
+            title: 'Edit Role',
+            field: 'edit',
+            render: rowData => (
+              <button onClick={() => handleEdit(rowData)}>Edit</button>
+            )
+          }
+      ];
+      function handleDelete(rowData) {
+        // Implement the code to delete the role
+      }
 
+      function handleEdit(rowData) {
+        // Implement the code to edit the role
+      }
     const handleDialogRoles = () => {
         setShowDialogRoles(!showDialogRoles);}
     // const addRoles = (data) => {
@@ -166,47 +186,26 @@ const Roles = ({ showItem }) => {
                     <div className="table">
                         {
                             <ThemeProvider theme={defaultMaterialTheme}>
-                                <MaterialTable
-                                    icons={tableIcons}
-                                    title=""
-                                    columns={columns}
-                                    data={RoleList}
-                                    editable={{
-                                        onRowUpdate: (newData, oldData) =>
-                                            new Promise((resolve, reject) => {
-                                                // update code goes here
-                                                console.log(newData)
-                                                setTimeout(function() {
-                                                    resolve(updateRoles(username, password, oldData.roleName, newData.roleName, projectName)
-                                                        .then(res => {
-                                                            getRoles(username,password,projectName)
-                                                                .then(res => {
-                                                                    setRoleList(res.data.roles)
-                                                                })
-                                                                .catch(function (error) {
-                                                                })
-                                                        }));
-                                                }, 2000);
-                                            }),
-                                        onRowDelete: oldData =>
-                                            new Promise((resolve, reject) => {
-                                                // handle row delete logic here
-                                                setTimeout(function() {
-                                                    resolve(deleteRoles(username, password, projectName, oldData.roleName)
-                                                        .then(res => {
-                                                            getRoles(username,password,projectName)
-                                                                .then(res => {
-                                                                    setRoleList(res.data.roles)
-                                                                })
-                                                                .catch(function (error) {
-                                                                })
-                                                        }));
-                                                }, 2000);
-                                            })
-                                    }}
-                                />
+                            <MaterialTable
+                                icons={tableIcons}
+                                title=""
+                                columns={columns}
+                                data={RoleList}
+                            /*RoleList.length > 0 ? (
+                                RoleList.map(data => (
+                                    <div className="role-list">
+                                        <Typography className="heading" variant="h6" gutterBottom>{data.roleName}</Typography>
 
-                            </ThemeProvider>
+                                    </div>
+                                ))
+                            )
+                                :
+                                <>
+                                 
+ 
+                                </>*/
+                                 />
+                        </ThemeProvider>
 
                         }
                         {showDialogRoles &&
