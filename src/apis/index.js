@@ -77,12 +77,12 @@ export const createIssue = (username, password, subject,projectName) => {
     blocked_note:'', 
     description:'', 
     projectName,
-    severity:'', 
+    severity:'Normal', 
     status:'New', 
     subject, 
     is_blocked:false, 
-    priority:'', 
-    type:'', 
+    priority:'Normal', 
+    type:'Bug', 
     is_closed:false
   })
   )

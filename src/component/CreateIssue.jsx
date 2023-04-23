@@ -61,7 +61,7 @@ const CreateIssue = ({ dialog, storeProject, name, createUserStory, createNewPro
                     subject: '',
                 }}
                 onSubmit={(values) => {
-                    createNewProject(values.name)
+                    createNewProject(values.subject)
                 }}
             >
                 {
