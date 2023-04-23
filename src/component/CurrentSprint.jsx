@@ -5,9 +5,9 @@ import Button from '@mui/material/Button';
 import projectImg from '../img/project-img.jpg';
 import CreateProject from './CreateProject';
 import Link from '@mui/material/Link';
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-import { createProject, getProject, getStoryTask, updateTask } from '../apis';
+import { createProject, getProject, getSprint, getStoryTask, updateTask } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
@@ -57,6 +57,7 @@ const CurrentSprint = () => {
     let email = Cookies.get('username') || 'SERtestuser';
     let password = Cookies.get('password') || 'testuser';
     let projectName = Cookies.get('projectName')
+    let projectId = Cookies.get('projectId')
     const [storyList, setStoryList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [taskList, setTaskList] = useState([]);
@@ -65,11 +66,13 @@ const CurrentSprint = () => {
     const [readyTest, setReadyTest] = useState([]);
     const [doneTask, setDoneTask] = useState([]);
     const [clickedStory, setClickedStory] = useState('');
+    const [sprintDetails, setSprintDetails] = useState({});
+    const navigate = useNavigate();
 
-    const updatingTask = (taskName, status) => {
-        updateTask(email, password, projectName, 'test US3', taskName, status)
+    const updatingTask = (taskName, status,storyName) => {
+        updateTask(email, password, projectName, Cookies.get('selectedStory'), taskName, status)
             .then(res => {
-                getStoryTask(email, password, projectName, 'test US3')
+                getStoryTask(email, password, projectName,Cookies.get('selectedStory') )
                     .then(res => {
                         // setTaskList(res.data.details)
                         const newTask1 = [];
@@ -91,8 +94,6 @@ const CurrentSprint = () => {
 
                             }
                         })
-                        console.log(newTask1.length, 'new length')
-                        console.log(progressTask.length, 'prog length')
                         setInProgressTask(progressTask)
                         setReadyTest(readyT)
                         setDoneTask(doneT)
@@ -104,9 +105,9 @@ const CurrentSprint = () => {
 
     const getTaskList = (stName) => {
         setClickedStory(stName)
+        Cookies.set('selectedStory',stName)
         getStoryTask(email, password, projectName, stName)
             .then(res => {
-                // setTaskList(res.data.details)
                 const newTask1 = [];
                 const progressTask = [];
                 const readyT = [];
@@ -126,8 +127,6 @@ const CurrentSprint = () => {
 
                     }
                 })
-                console.log(newTask1.length, 'new length')
-                console.log(progressTask.length, 'prog length')
                 setInProgressTask(progressTask)
                 setReadyTest(readyT)
                 setDoneTask(doneT)
@@ -139,11 +138,28 @@ const CurrentSprint = () => {
 
 
     useEffect(() => {
-        getUserStory(email, password, projectName)
+        getSprint(email, password, projectId)
             .then(res => {
-                setStoryList(res.data.userStory)
+                const userStoryArray=[];
                 setIsLoading(false);
-
+                const latestSprint = res.data.sprints[res.data.sprints.length - 1];
+                Cookies.set("sprintID",latestSprint.id)
+                setSprintDetails(latestSprint)
+                latestSprint.user_stories.map(data=>{
+                    const userStory = {
+                        assignee:data.assigned_to,
+                        id:data.id,
+                        status:data.status_extra_info.name,
+                        subject:data.subject,
+                        totalPoints:data.totalPoints
+                    }
+                    
+                    userStoryArray.push(userStory)
+                })
+                setStoryList(userStoryArray)
+               
+                
+                
             })
 
 
@@ -151,11 +167,13 @@ const CurrentSprint = () => {
     return (
         <Wrapper>
             <div className="top-heading">
+                {console.log(storyList,'check list story')}
                 <Typography className="heading" variant="h6" gutterBottom>
                     Sprint
                 </Typography>
+                <Button className="create-btn" variant="contained" onClick={() => navigate(`/sprintBurndown/${Cookies.get('sprintID')}`)}>Burndown chart</Button>
                 <div className="simulator-game">
-        <SimulatorGame/>
+                    <SimulatorGame />
                 </div>
             </div>
 
