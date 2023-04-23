@@ -112,17 +112,17 @@ const Members = () => {
         {
             title: 'Role',
             field: 'role',
-            render: rowData => (
-                <Select id="role-name" className="subject-field" value={''} label="Roles" name="roleName" variant="outlined">
-                {
-                    roleData.map(role=> {
-                        return (<MenuItem value={role.roleName}>{role.roleName}</MenuItem>)
-                    }
-                    )
-                }
+            // render: rowData => (
+            //     <Select id="role-name" className="subject-field" value={''} label="Roles" name="roleName" variant="outlined">
+            //     {
+            //         roleData.map(role=> {
+            //             return (<MenuItem value={role.roleName}>{role.roleName}</MenuItem>)
+            //         }
+            //         )
+            //     }
         
-            </Select>
-            ),
+            // </Select>
+            // ),
           },
     ]);
 

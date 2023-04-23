@@ -65,6 +65,30 @@ export const getRoles = (username, password, projectName) => {
   `)
 }
 
+export const getIssues = (username, password, projectName) => {
+  return axios.get(`http://localhost:3009/getIssues?username=${username}&password=${password}&projectName=${projectName}
+  `)
+}
+export const createIssue = (username, password, subject,projectName) => {
+  return (axios.post("http://localhost:3009/createIssue", {
+    username, 
+    password, 
+    assigned_to:'', 
+    blocked_note:'', 
+    description:'', 
+    projectName,
+    severity:'', 
+    status:'New', 
+    subject, 
+    is_blocked:false, 
+    priority:'', 
+    type:'', 
+    is_closed:false
+  })
+  )
+}
+
+
 export const getStoryTask = (username, password, projectname, userstoryname) => {
   return (axios.post("http://localhost:3005/getUserStoryTaskDetails", {
     username,
@@ -127,6 +151,14 @@ export const createRoles = ( username, password, roleName, projectName) => {
     password, 
     roleName, 
     projectName
+  })
+  )
+}
+
+export const autoPilot = ( username, password) => {
+  return (axios.post("http://localhost:3015/autoPilot", {
+    username, 
+    password
   })
   )
 }
