@@ -4,19 +4,14 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Formik, Form } from 'formik';
 import TextField from '@mui/material/TextField';
-import { createUserstory } from '../apis/backlog';
-import Cookies from 'js-cookie';
-import Backlog from './Backlog';
 import { ColorRing } from 'react-loader-spinner';
-import { createRoles } from '../apis';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 
 
 const Wrapper = styled.div`
 
-height: 300px;
-width:600px;
+// height: 300px;
+// width:600px;
+width: 30%;
 background-color: #f7f3f2;
 border: 2px solid #8C1D40;
 position:absolute;
@@ -57,40 +52,24 @@ left: 40%;
 
 `;
 
-const CreateRoles = ({ dialog, addRoles }) => {
-    let username = Cookies.get('username');
-    let password = Cookies.get('password');
-    let projectName = Cookies.get('projectName');
-    let projectId = Cookies.get('projectId')
-    const [isCreateLoader, setIsCreateLoader] = useState(false);
+const CreateRoles = ({ dialog, addRoles, isCreateLoader }) => {
 
     return (
 
         <Wrapper>
             <Formik
                 initialValues={{
-                    memberName: '',
                     roleName:'',
                 }}
                 onSubmit={(values) => {
-                    CreateRoles(username,password,values.memberName,projectId,values.roleName)
-                    .then(res=>{
-                        dialog();
-                        addRoles(values.memberName,values.roleName)
-                    })
+                    addRoles(values.roleName)
                 }}
             >
                 {
                     props => (
                         <Form className="UserStory-form">
                             <Typography className="heading" variant="h4" gutterBottom>Add Role</Typography>
-                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} label="Username" name="memberName" variant="outlined" />
-                            <Select id="role-name" className="subject-field" onChange={props.handleChange} value={props.values.roleName} label="Roles" name="roleName" variant="outlined">
-                                <MenuItem value="">Select a role</MenuItem>
-                                <MenuItem value="role1">Developer</MenuItem>
-                                <MenuItem value="role2">Stakeholer</MenuItem>
-                                <MenuItem value="role3">UX Designer</MenuItem>
-                            </Select>
+                            <TextField id="outlined-basic" className="subject-field" onChange={props.handleChange} label="Role" name="roleName" variant="outlined" />
 
                             <Button variant="contained" className="crt-btn" type="submit">
                                 {
