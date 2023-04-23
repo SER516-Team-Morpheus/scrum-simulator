@@ -13,6 +13,7 @@ import SprintTab from "./component/SprintTab";
 import StoryDetails from "./component/StoryDetails";
 import Members from "./component/Members"
 import CurrentSprint from "./component/CurrentSprint";
+import Roles from "./component/Roles";
 
 
 const Wrapper = styled.div`
@@ -56,6 +57,7 @@ const App = () => {
               <Route  path="/simulation" element={<SimulatorGame/>} />
               <Route  path="/sprints" element={<SprintTab/>} />
               <Route  path="/current-sprint" element={<CurrentSprint/>} />
+              <Route  path="/roles" element={<Roles/>} />
               <Route  path="/storyDetails/:name" element={<StoryDetails/>} />
               <Route  path="/members" element={<Members/>} />
 
