@@ -7,7 +7,7 @@ import CreateProject from './CreateProject';
 import Link from '@mui/material/Link';
 import { Navigate, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-import { createProject, getProject, getSprint, getStoryTask, updateTask } from '../apis';
+import { autoPilot, getProject, getSprint, getStoryTask, updateTask } from '../apis';
 import { ColorRing } from 'react-loader-spinner';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
@@ -57,8 +57,54 @@ margin-left:-30px;
 
 `;
 
+const InfoCard = styled.div`
 
-const CurrentSprint = () => {
+height: 300px;
+width:600px;
+padding:15px;
+background-color: #f7f3f2;
+border: 2px solid #8C1D40;
+position:absolute;
+z-index:100;
+border-radius:20px;
+top:25%;
+left: 40%;
+
+.loaders {
+    height:30px;
+    margin-left:50%;
+}
+
+.UserStory-form {
+    padding:20px;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .heading {
+        color: #8C1D40;
+        margin-bottom: 40px;
+    }
+
+    .subject-field {
+        margin-bottom: 20px;
+    }
+    .desc-field {
+        margin-bottom: 40px;
+    }
+    .crt-btn {
+        background-color:#8C1D40;
+    }
+    .cancel-btn {
+        margin-top:20px;
+        background-color:grey;
+    }
+}
+
+`;
+
+
+const AutoSimulation = () => {
     let email = Cookies.get('username') || 'SERtestuser';
     let password = Cookies.get('password') || 'testuser';
     let projectName = Cookies.get('projectName')
@@ -72,12 +118,14 @@ const CurrentSprint = () => {
     const [doneTask, setDoneTask] = useState([]);
     const [clickedStory, setClickedStory] = useState('');
     const [sprintDetails, setSprintDetails] = useState({});
+    const [initalSimulation, setInitalSimulation] = useState([]);
+    const [isSimulation, setIsSimulation] = useState(false);
     const navigate = useNavigate();
 
-    const updatingTask = (taskName, status,storyName) => {
+    const updatingTask = (taskName, status, storyName) => {
         updateTask(email, password, projectName, Cookies.get('selectedStory'), taskName, status)
             .then(res => {
-                getStoryTask(email, password, projectName,Cookies.get('selectedStory') )
+                getStoryTask(email, password, projectName, Cookies.get('selectedStory'))
                     .then(res => {
                         // setTaskList(res.data.details)
                         const newTask1 = [];
@@ -110,7 +158,7 @@ const CurrentSprint = () => {
 
     const getTaskList = (stName) => {
         setClickedStory(stName)
-        Cookies.set('selectedStory',stName)
+        Cookies.set('selectedStory', stName)
         getStoryTask(email, password, projectName, stName)
             .then(res => {
                 const newTask1 = [];
@@ -140,31 +188,39 @@ const CurrentSprint = () => {
             })
     }
 
+    const startSimulation = () => {
+        setIsSimulation(true);
+        autoPilot(email,password)
+        .then(res=>{
+            setIsSimulation(false);
+        })
+    }
+
 
 
     useEffect(() => {
         getSprint(email, password, projectId)
             .then(res => {
-                const userStoryArray=[];
+                const userStoryArray = [];
                 setIsLoading(false);
                 const latestSprint = res.data.sprints[res.data.sprints.length - 1];
-                Cookies.set("sprintID",latestSprint.id)
+                Cookies.set("sprintID", latestSprint.id)
                 setSprintDetails(latestSprint)
-                latestSprint.user_stories.map(data=>{
+                latestSprint.user_stories.map(data => {
                     const userStory = {
-                        assignee:data.assigned_to,
-                        id:data.id,
-                        status:data.status_extra_info.name,
-                        subject:data.subject,
-                        totalPoints:data.totalPoints
+                        assignee: data.assigned_to,
+                        id: data.id,
+                        status: data.status_extra_info.name,
+                        subject: data.subject,
+                        totalPoints: data.totalPoints
                     }
-                    
+
                     userStoryArray.push(userStory)
                 })
                 setStoryList(userStoryArray)
-               
-                
-                
+
+
+
             })
 
 
@@ -181,8 +237,8 @@ const CurrentSprint = () => {
             </div>
 
             <div className="top-bar">
-            <Button className="btn-chart" size="small" variant="contained" onClick={() => navigate(`/sprintBurndown/${Cookies.get('sprintID')}`)}>Burndown</Button>
-            <Button className="btn-chart" size="small" variant="contained" onClick={() => navigate('/autosimulation')}>Auto Simulation</Button>
+                <Button className="btn-chart" size="small" variant="contained" onClick={() => startSimulation()}>Start Simulation</Button>
+                <Button className="btn-chart" size="small" variant="contained" onClick={() => navigate(`/sprintBurndown/${Cookies.get('sprintID')}`)}>Stop Simulation</Button>
 
             </div>
             {
@@ -327,8 +383,34 @@ const CurrentSprint = () => {
                         </Grid>
                     </div>
             }
+            {
+                isSimulation &&
+                <InfoCard>
+                    <Typography className="heading" variant="h6" gutterBottom>
+                        Project getting created.
+                    </Typography>
+                    <Typography className="heading" variant="h6" gutterBottom>
+                        User Story getting created.
+                    </Typography>
+                    <Typography className="heading" variant="h6" gutterBottom>
+                        Sprint getting created.
+                    </Typography>
+                    <Typography className="heading" variant="h6" gutterBottom>
+                        Task getting created.
+                    </Typography>
+                    <ColorRing
+                        visible={true}
+                        className="loader"
+                        height="80"
+                        width="80"
+                        ariaLabel="blocks-loading"
+                        wrapperClass="loaders"
+                        colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                    />
+                </InfoCard>
+            }
         </Wrapper>
     )
 }
 
-export default CurrentSprint;
+export default AutoSimulation;

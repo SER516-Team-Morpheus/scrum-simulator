@@ -131,6 +131,14 @@ export const createRoles = ( username, password, roleName, projectName) => {
   )
 }
 
+export const autoPilot = ( username, password) => {
+  return (axios.post("http://localhost:3015/autoPilot", {
+    username, 
+    password
+  })
+  )
+}
+
 export const updateRoles = (username, password, roleName, newRoleName, projectName) => {
   return ( axios.patch(`http://localhost:3008/updateroles`, {
     username, 

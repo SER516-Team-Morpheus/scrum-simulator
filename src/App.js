@@ -16,6 +16,7 @@ import CurrentSprint from "./component/CurrentSprint";
 import SBChart from "./component/SprintBurndownChart";
 import CfdDiagram from "./component/CFD";
 import Roles from "./component/Roles";
+import AutoSimulation from "./component/AutoSimulation";
 
 
 const Wrapper = styled.div`
@@ -62,8 +63,10 @@ const App = () => {
               <Route  path="/roles" element={<Roles/>} />
               <Route  path="/storyDetails/:name" element={<StoryDetails/>} />
               <Route  path="/members" element={<Members/>} />
+              <Route path="/autosimulation" element={<AutoSimulation />} />
               <Route path="/cfd/:projectId" element={<CfdDiagram />} />
               <Route path="/sprintBurndown/:sprintID" element={<SBChart />} />
+
             </Routes>
           </Grid>
         </Grid>
