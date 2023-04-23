@@ -13,6 +13,7 @@ import SprintTab from "./component/SprintTab";
 import StoryDetails from "./component/StoryDetails";
 import Members from "./component/Members"
 import CurrentSprint from "./component/CurrentSprint";
+import SBChart from "./component/SprintBurndownChart";
 
 
 const Wrapper = styled.div`
@@ -39,26 +40,35 @@ const App = () => {
   return (
     <Wrapper>
       <BrowserRouter>
-      <Routes>
-        <Route exact path="/" element={<Login/>} />
-      </Routes>
+        <Routes>
+          <Route exact path="/" element={<Login />} />
+        </Routes>
         <Grid container spacing={1}>
           <Grid item xs={3}>
             <Navbar />
           </Grid>
           <Grid item xs={8}>
             <Routes>
-              <Route  path="/projects" element={<Project showItem={showItem}/>} />
-              <Route path="/projects/:id" element={<Login/>}/>
-              <Route  path="/backlog" element={<Backlog showItem={showItem}/>} />
-              <Route  path="/simulator" element={<SimulatorGame/>} />
-              <Route  path="/create-epic" element={<CreateEpic addEpic={() => {}}/>} />
-              <Route  path="/simulation" element={<SimulatorGame/>} />
-              <Route  path="/sprints" element={<SprintTab/>} />
-              <Route  path="/current-sprint" element={<CurrentSprint/>} />
-              <Route  path="/storyDetails/:name" element={<StoryDetails/>} />
-              <Route  path="/members" element={<Members/>} />
-
+              <Route
+                path="/projects"
+                element={<Project showItem={showItem} />}
+              />
+              <Route path="/projects/:id" element={<Login />} />
+              <Route
+                path="/backlog"
+                element={<Backlog showItem={showItem} />}
+              />
+              <Route path="/simulator" element={<SimulatorGame />} />
+              <Route
+                path="/create-epic"
+                element={<CreateEpic addEpic={() => {}} />}
+              />
+              <Route path="/simulation" element={<SimulatorGame />} />
+              <Route path="/sprints" element={<SprintTab />} />
+              <Route path="/current-sprint" element={<CurrentSprint />} />
+              <Route path="/storyDetails/:name" element={<StoryDetails />} />
+              <Route path="/members" element={<Members />} />
+              <Route path="/sprintBurndown/:sprintID" element={<SBChart />} />
             </Routes>
           </Grid>
         </Grid>
