@@ -77,12 +77,12 @@ export const createIssue = (username, password, subject,projectName) => {
     blocked_note:'', 
     description:'', 
     projectName,
-    severity:'', 
+    severity:'Normal', 
     status:'New', 
     subject, 
     is_blocked:false, 
-    priority:'', 
-    type:'', 
+    priority:'Normal', 
+    type:'Bug', 
     is_closed:false
   })
   )
@@ -95,6 +95,18 @@ export const getStoryTask = (username, password, projectname, userstoryname) => 
     password,
     projectname,
     userstoryname
+  })
+  )
+}
+
+export const moveTasks = (username, password, roll, strategy, projectName, sprintId) => {
+  return (axios.post("http://localhost:3015/moveTasks", {
+    username,
+    password,
+    roll,
+    strategy,
+    projectName,
+    sprintId
   })
   )
 }

@@ -94,18 +94,19 @@ const Issues = ({ showItem }) => {
 
 
     const createNewProject = (name) => {
+        console.log(name,'name show')
         setIsCreateLoader(true);
         createIssue(email, password, name, Cookies.get('projectName'))
-            // .then(res => {
-            //     const data={
-            //         name:res.data.projectName,
-            //         description:res.data.description,
-            //         id:res.data.projectId
-            //     }
-            //     setProjectList(prevState => [...prevState, data])
-            //     setIsCreateLoader(false);
-            //     setShowDialog(false);
-            // })
+            .then(res => {
+                const data={
+                    subject:name,
+                    status:"New",
+                    
+                }
+                setIssueList(prevState => [...prevState, data])
+                setIsCreateLoader(false);
+                setShowDialog(false);
+            })
             .catch(function(error){
                 setIsCreateLoader(false);
             })

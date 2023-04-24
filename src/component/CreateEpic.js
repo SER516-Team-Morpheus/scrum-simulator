@@ -1,17 +1,20 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Button, Collapse, makeStyles, MenuItem, TextField, Typography } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { green, red, yellow } from '@material-ui/core/colors';
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import '../css/CreateEpic.css';
+import {Grid} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: theme.spacing(4),
-    },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+},
+
     input: {
         width: '100%',
         marginBottom: theme.spacing(2),
@@ -44,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     alert: {
         marginTop: theme.spacing(2),
     },
+
     statusNew: {
         color: red[500],
     },
@@ -63,6 +67,33 @@ const CreateEpic = ({ addEpic }) => {
     const [tasks, setTasks] = useState([]);
     const [open, setOpen] = useState(false);
     const [epics, setEpics] = useState([]);
+    // eslint-disable-next-line no-unused-vars
+    const [deletingEpic, setDeletingEpic] = useState(null);
+    const [showEpics, setShowEpics] = useState(false);
+    
+    
+     const handleDeleteEpic = async (id) => {
+         
+             await axios.post(`http://localhost:3006/deleteEpic/`, {
+                
+                username: 'SERtestuser',
+                password: 'testuser',
+                epicId: `${id}`,
+                
+            });
+            // setEpics(epics.filter((epic) => epic.id !== deletingEpic.id));
+            // setDeletingEpic(null);
+            // } catch (error) {
+            // console.error(error);
+            // }
+  
+        };
+      
+  
+
+
+
+
 
     useEffect(() => {
 
@@ -71,7 +102,6 @@ const CreateEpic = ({ addEpic }) => {
             const response = await axios.post('http://localhost:3006/listEpics', {
                 username: 'SERtestuser',
                 password: 'testuser',
-                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgxNDM0NjQwLCJqdGkiOiJhYzkyMDBjMDEyYTM0ZGQ1ODQ0NjMzY2MyYjNjNmQ1YyIsInVzZXJfaWQiOjU1OTIxNX0._W4lEK9zTQQK1Jl01Sg9I2Xw75skJm6sTQiV92FuMBQ',
                 projectId: 733810,
             });
             setEpics(response.data.epics);
@@ -90,7 +120,6 @@ const CreateEpic = ({ addEpic }) => {
         const epicData = {
             username: 'SERtestuser',
             password: 'testuser',
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgxNDM0NjQwLCJqdGkiOiJhYzkyMDBjMDEyYTM0ZGQ1ODQ0NjMzY2MyYjNjNmQ1YyIsInVzZXJfaWQiOjU1OTIxNX0._W4lEK9zTQQK1Jl01Sg9I2Xw75skJm6sTQiV92FuMBQ',
             name,
             description,
             projectId: 733810,
@@ -110,22 +139,11 @@ const CreateEpic = ({ addEpic }) => {
             setStatus('New');
             setDescription('');
             setTasks([]);
-
-        //     const listEpicsResponse = await axios.post('http://localhost:3006/listEpics', {
-        //         username: 'SERtestuser',
-        //         password: 'testuser',
-        //         token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgxNDM0NjQwLCJqdGkiOiJhYzkyMDBjMDEyYTM0ZGQ1ODQ0NjMzY2MyYjNjNmQ1YyIsInVzZXJfaWQiOjU1OTIxNX0._W4lEK9zTQQK1Jl01Sg9I2Xw75skJm6sTQiV92FuMBQ',
-        //         projectId: 733810,
-        //     });
-        //     setEpics(listEpicsResponse.data);
-        //     setName('');
-        //     setStatus('New');
-        //     setDescription('');
-        //     setTasks([]);
         } catch (error) {
             console.error(error);
         }
     };
+    
 
 
     const handleAddTask = () => {
@@ -142,7 +160,7 @@ const CreateEpic = ({ addEpic }) => {
 
     const handleTaskDelete = (index) => {
         setTasks([...tasks.slice(0, index), ...tasks.slice(index + 1)]);
-    };
+    };        
 
     return (
         <form onSubmit={handleSubmit} className={classes.form}>
@@ -161,15 +179,34 @@ const CreateEpic = ({ addEpic }) => {
                 rows={4}
                 className={classes.input}
             />
+            <Button 
+    variant="contained"
+    color="primary"
+    onClick={() => setShowEpics(!showEpics)}
+    style={{ marginTop: '1rem' }}
+>
+    {showEpics ? 'Hide Epics' : 'Show Epics'}
+</Button>
+            <Collapse in={showEpics}>
             <div>
+            
                 {epics.map(epic => (
-                    <div key = {epic.id}>
+                    <div key = {epic.id} className={classes.task}>
                         <Typography>{epic.subject}</Typography>
                         <Typography>{epic.status}</Typography>
                         <Typography>{epic.description}</Typography>
+          
+        <Button
+  className={classes.deleteButton}
+  onClick={() => handleDeleteEpic(epic.id)}
+>
+  Delete
+</Button>
+
                     </div>
                 ))}
             </div>
+            </Collapse>
 
         
             {tasks.map((task, index) => (

@@ -72,13 +72,18 @@ const CurrentSprint = () => {
     const [doneTask, setDoneTask] = useState([]);
     const [clickedStory, setClickedStory] = useState('');
     const [sprintDetails, setSprintDetails] = useState({});
+    const [isTaskLoader, setisTaskLoader] = useState(false);
+
     const navigate = useNavigate();
 
-    const updatingTask = (taskName, status,storyName) => {
+    const updatingTask = (taskName, status, storyName) => {
+        setisTaskLoader(true);
         updateTask(email, password, projectName, Cookies.get('selectedStory'), taskName, status)
             .then(res => {
-                getStoryTask(email, password, projectName,Cookies.get('selectedStory') )
+                getStoryTask(email, password, projectName, Cookies.get('selectedStory'))
                     .then(res => {
+                        setisTaskLoader(false);
+
                         // setTaskList(res.data.details)
                         const newTask1 = [];
                         const progressTask = [];
@@ -110,9 +115,11 @@ const CurrentSprint = () => {
 
     const getTaskList = (stName) => {
         setClickedStory(stName)
-        Cookies.set('selectedStory',stName)
+        Cookies.set('selectedStory', stName)
+        setisTaskLoader(true)
         getStoryTask(email, password, projectName, stName)
             .then(res => {
+                setisTaskLoader(false)
                 const newTask1 = [];
                 const progressTask = [];
                 const readyT = [];
@@ -145,26 +152,26 @@ const CurrentSprint = () => {
     useEffect(() => {
         getSprint(email, password, projectId)
             .then(res => {
-                const userStoryArray=[];
+                const userStoryArray = [];
                 setIsLoading(false);
                 const latestSprint = res.data.sprints[res.data.sprints.length - 1];
-                Cookies.set("sprintID",latestSprint.id)
+                Cookies.set("sprintID", latestSprint.id)
                 setSprintDetails(latestSprint)
-                latestSprint.user_stories.map(data=>{
+                latestSprint.user_stories.map(data => {
                     const userStory = {
-                        assignee:data.assigned_to,
-                        id:data.id,
-                        status:data.status_extra_info.name,
-                        subject:data.subject,
-                        totalPoints:data.totalPoints
+                        assignee: data.assigned_to,
+                        id: data.id,
+                        status: data.status_extra_info.name,
+                        subject: data.subject,
+                        totalPoints: data.totalPoints
                     }
-                    
+
                     userStoryArray.push(userStory)
                 })
                 setStoryList(userStoryArray)
-               
-                
-                
+
+
+
             })
 
 
@@ -181,9 +188,9 @@ const CurrentSprint = () => {
             </div>
 
             <div className="top-bar">
-            <Button className="btn-chart" size="small" variant="contained" onClick={() => navigate(`/sprintBurndown/${Cookies.get('sprintID')}`)}>Burndown</Button>
-            <Button className="btn-chart" size="small" variant="contained" onClick={() => navigate('/autosimulation')}>Auto Simulation</Button>
-            <Button className="btn-chart" size="small" variant="contained" onClick={() => navigate(`/issues`)}>Issues</Button>
+                <Button className="btn-chart" size="small" variant="contained" onClick={() => navigate(`/sprintBurndown/${Cookies.get('sprintID')}`)}>Burndown</Button>
+                <Button className="btn-chart" size="small" variant="contained" onClick={() => navigate('/autosimulation')}>Auto Simulation</Button>
+                <Button className="btn-chart" size="small" variant="contained" onClick={() => navigate(`/issues`)}>Issues</Button>
 
 
             </div>
@@ -214,6 +221,18 @@ const CurrentSprint = () => {
                                                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                                         {data.subject}
                                                     </Typography>
+                                                    {
+                                                            isTaskLoader && clickedStory == data.subject && <ColorRing
+                                                            visible={true}
+                                                            className="loader"
+                                                            height="20"
+                                                            width="80"
+                                                            ariaLabel="blocks-loading"
+                                                            wrapperClass="loader"
+                                                            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                                                        />
+                                                        }
+                                                        
 
                                                 </CardContent>
                                             </Card>
@@ -238,6 +257,7 @@ const CurrentSprint = () => {
                                                         <ArrowForwardIosIcon color="grey" fontSize='5px'
                                                             onClick={() => updatingTask(data.taskName, 'In progress')}
                                                         />
+                                                       
                                                     </div>
 
 
