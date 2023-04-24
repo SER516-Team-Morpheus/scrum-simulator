@@ -99,6 +99,18 @@ export const getStoryTask = (username, password, projectname, userstoryname) => 
   )
 }
 
+export const moveTasks = (username, password, roll, strategy, projectName, sprintId) => {
+  return (axios.post("http://localhost:3015/moveTasks", {
+    username,
+    password,
+    roll,
+    strategy,
+    projectName,
+    sprintId
+  })
+  )
+}
+
 export const updateTask = (username, password, projectname, userstoryname, taskname, status) => {
   return (axios.post("http://localhost:3005/updateTask", {
     username,
