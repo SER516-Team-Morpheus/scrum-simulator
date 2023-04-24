@@ -120,7 +120,8 @@ const Backlog = ({ showItem }) => {
         if (data == "New") return <Chip label="New" color="primary" />
         else if (data == "In progress") return <Chip label="In progress" color="primary" />
         else if (data == "Ready for test") return <Chip label="Ready for test" color="primary" />
-        else return <Chip label="Done" color="success" />
+        else if (data == "Done") return  <Chip label="Done" color="success" />
+        else return <Chip label="New" color="primary" />
 
     }
 

@@ -1,7 +1,9 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 const Wrapper = styled.div`
 
@@ -59,7 +61,7 @@ function SprintTab() {
   const handleClose = () => {
     setOpen(false);
   };
-  
+
   const handleSprintNameChange = (event) => {
     setSprintName(event.target.value);
   };
@@ -77,15 +79,63 @@ function SprintTab() {
   };
 
   const handleCreateSprint = () => {
-    const data = {
-      name: sprintName,
-      goal: sprintGoal,
-      startDate: sprintStartDate,
-      endDate: sprintEndDate,
-    };
-    console.log(data);
-    setSprintData([data]);
+    axios.post('http://localhost:3010/createSprint', {
+      username: Cookies.get('username'),
+      password: Cookies.get('password'),
+      sprint: {
+        estimated_start: sprintStartDate,
+        estimated_finish: sprintEndDate,
+        name: sprintName,
+        project: Cookies.get('projectId')
+
+      }
+    })
+      .then(res => {
+        const data = {
+          name: sprintName,
+          startDate: sprintStartDate,
+          endDate: sprintEndDate,
+        };
+        setOpen(false);
+        setSprintData(prevState => [...prevState, data])
+      })
   };
+
+  const [sName,setSName]=useState('');
+
+  const handleStoryName = (event)=>{
+    setSName(event.target.value);
+  }
+
+  // const moveStory=()=>{
+  //   axios.post('http://localhost:3003/moveUserStory',{
+
+  //   })
+  //   .then(res=>{
+
+  //   })
+  //   {
+  //     "username": "SERtestuser",
+  //     "password": "testuser",
+  //     "projectId": 733810,
+  //     "sprintId": 347607,
+  //     "userStoryID": [
+  //         4524779
+  //     ]
+  // }
+  // }
+
+  useEffect(() => {
+    axios.post('http://localhost:3010/sprints', {
+      username: Cookies.get('username'),
+      password: Cookies.get('password'),
+      projectID: Cookies.get('projectId')
+    })
+      .then(res => {
+        console.log(res.data)
+        setSprintData(res.data.sprints)
+      })
+  }, [])
 
   return (
     <Wrapper>
@@ -102,79 +152,89 @@ function SprintTab() {
           sprintData.map((data, index) => {
             return (
               <div key={index}>
-                <h3 style={{color: "#8C1D40"}} >Sprint Created!</h3>
                 <p>Sprint Name: {data.name}</p>
-                <p>Sprint Goal: {data.goal}</p>
-                <p>Sprint Start Date: {data.startDate}</p>
-                <p>Sprint End Date: {data.endDate}</p>
-              </div> 
+                <p>Sprint Start Date: {data.estimated_start}</p>
+                <p>Sprint End Date: {data.estimated_finish}</p>
+                {/* <TextField
+                  id="sprintName"
+                  label="Sprint Name"
+                  variant="outlined"
+                  margin="normal"
+                  value={sName}
+                  onChange={handleStoryName}
+                  fullWidth
+                /> */}
+                {/* <button onClick={()=>}>Add story to sprint</button> */}
+                <hr />
+              </div>
+
             );
           })
         }
       </div>
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Create Sprint</DialogTitle>
-      <DialogContent>
-        <div>
-          <TextField
-          id="sprintName"
-          label="Sprint Name"
-          variant="outlined"
-          margin="normal"
-          value={sprintName}
-          onChange={handleSprintNameChange}
-          fullWidth
-          />
-        </div>
-        <div>
-          <TextField
-          id="sprintGoal"
-          label="Sprint Goal"
-          variant="outlined"
-          margin="normal"
-          value={sprintGoal}
-          onChange={handleSprintGoalChange}
-          fullWidth
-          />
-        </div>
-        <div>
-          <TextField
-          id="sprintStartDate"
-          label="Sprint Start Date"
-          variant="outlined"
-          margin="normal"
-          type="date"
-          value={sprintStartDate}
-          onChange={handleSprintStartDateChange}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          fullWidth
-          />
-        </div>
-        <div>
-          <TextField
-          id="sprintEndDate"
-          label="Sprint End Date"
-          variant="outlined"
-          margin="normal"
-          type="date"
-          value={sprintEndDate}
-          onChange={handleSprintEndDateChange}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          fullWidth
-          />
-        </div>
-        <button onClick={handleCreateSprint} style={{ float: "left" }}>Create Sprint</button>
-      <div/>
-      </DialogContent>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Create Sprint</DialogTitle>
+        <DialogContent>
+          <div>
+            <TextField
+              id="sprintName"
+              label="Sprint Name"
+              variant="outlined"
+              margin="normal"
+              value={sprintName}
+              onChange={handleSprintNameChange}
+              fullWidth
+            />
+          </div>
+          <div>
+            <TextField
+              id="sprintGoal"
+              label="Sprint Goal"
+              variant="outlined"
+              margin="normal"
+              value={sprintGoal}
+              onChange={handleSprintGoalChange}
+              fullWidth
+            />
+          </div>
+          <div>
+            <TextField
+              id="sprintStartDate"
+              label="Sprint Start Date"
+              variant="outlined"
+              margin="normal"
+              type="date"
+              value={sprintStartDate}
+              onChange={handleSprintStartDateChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              fullWidth
+            />
+          </div>
+          <div>
+            <TextField
+              id="sprintEndDate"
+              label="Sprint End Date"
+              variant="outlined"
+              margin="normal"
+              type="date"
+              value={sprintEndDate}
+              onChange={handleSprintEndDateChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              fullWidth
+            />
+          </div>
+          <button onClick={handleCreateSprint} style={{ float: "left" }}>Create Sprint</button>
+          <div />
+        </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
         </DialogActions>
       </Dialog>
-  </Wrapper>
+    </Wrapper>
   );
 }
 
